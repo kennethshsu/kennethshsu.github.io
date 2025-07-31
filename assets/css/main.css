@@ -3257,6 +3257,14 @@ button,
 	text-align: center;
 	text-decoration: none;
 	white-space: nowrap;
+
+	min-width: 10em;
+	max-width: 100%;
+	width: auto;
+	padding: 0 1.5em;
+	white-space: nowrap;
+	text-align: center;
+	box-sizing: border-box;
 }
 
 input[type="submit"]:hover,
