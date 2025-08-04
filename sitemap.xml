@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+<url>
+  <loc>https://kennethhsu.com/</loc>
+  <lastmod>2025-08-04T21:05:52+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://kennethhsu.com/index.html</loc>
+  <lastmod>2025-08-04T21:05:52+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://kennethhsu.com/technical_projects.html</loc>
+  <lastmod>2025-08-04T21:05:52+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://kennethhsu.com/keynote.html</loc>
+  <lastmod>2025-08-04T21:05:52+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://kennethhsu.com/publications.html</loc>
+  <lastmod>2025-08-04T21:05:52+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://kennethhsu.com/volunteerism.html</loc>
+  <lastmod>2025-08-04T21:05:52+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+
+
+</urlset>
