@@ -3784,7 +3784,7 @@ body.is-menu-visible #menu .inner {
 /* Banner */
 
 #banner {
-	padding: 10em 0 10em 0;
+	padding: 10em 0 0em 0;
 }
 
 #banner .inner {
