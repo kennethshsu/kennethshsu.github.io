@@ -3073,13 +3073,13 @@ body.is-preload .items.onload-fade-in>*>.inner {
 	width: 128px;
 	height: 128px;
 	/* background-color: white; */
-	padding: 0.5rem;
+	padding: 0.3rem;
 	/* optional, to give spacing inside white box */
 	border-radius: 0.5rem;
 	/* optional, softens edges */
 	filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
 	display: block;
-	margin: 3rem auto;
+	margin: 0.25rem auto;
 }
 
 /* Items (transitions) */
