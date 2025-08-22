@@ -3785,6 +3785,7 @@ body.is-menu-visible #menu .inner {
 
 #banner {
 	padding: 10em 0 0em 0;
+	height: 100vh
 }
 
 #banner .inner {
