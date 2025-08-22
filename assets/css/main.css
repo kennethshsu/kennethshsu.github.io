@@ -3233,6 +3233,7 @@ body.is-preload .items.onload-fade-in>*>.inner {
 	height: auto;
 	display: block;
 	border: 1px solid white;
+	border-radius: 10px;
 }
 
 
