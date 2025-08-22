@@ -4,48 +4,69 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Message sent!</title>
+    <title>Message Sent</title>
+    <link rel="stylesheet" href="assets/css/main.css" />
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f7f8;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            color: #333;
-            text-align: center;
-            padding: 20px;
         }
 
         .message-box {
-            background: #fff;
-            padding: 40px 60px;
-            border-radius: 8px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
+            background: rgba(46, 49, 65, 0.85);
+            padding: 3em 2.5em;
+            border-radius: 0.5em;
+            max-width: 480px;
             width: 100%;
+            text-align: center;
+            box-shadow: 0 0 1.5em rgba(0, 0, 0, 0.6);
         }
 
-        h1 {
-            color: #28a745;
-            margin-bottom: 20px;
+        .message-box h1 {
+            font-family: Raleway, Helvetica, sans-serif;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            margin-bottom: 1em;
+            color: #ffffff;
+            font-size: 1.6em;
         }
 
-        p {
-            font-size: 1.1em;
-            line-height: 1.5;
+        .message-box p {
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 300;
+            color: #ffffff;
+            margin-bottom: 1.5em;
+        }
+
+        .message-box a {
+            font-weight: 600;
+            border-bottom: dotted 1px rgba(255, 255, 255, 0.35);
+            color: #ffffff;
+            text-decoration: none;
+            transition: border-bottom-color 0.2s ease, color 0.2s ease;
+        }
+
+        .message-box a:hover {
+            border-bottom-color: transparent;
+            color: #ffffff;
         }
     </style>
 </head>
 
 <body>
-    <div class="message-box">
+    <section class="message-box">
         <h1>Thank you for your message!</h1>
-        <p>If you're not a bot, I'll be in touch soon.</p>
-        <p><a href="www.kennethhsu.com">← Back to Home</a></p>
-    </div>
+        <p>
+            If you aren’t a robot and requested a reply, I’ll be in touch soon.
+        </p>
+        <input type="submit" class="button primary" value="Send Message" />
+        <form action="https://www.kennethhsu.com">
+            <input type="submit" class="button primary" value="Back to Home" />
+        </form>
+    </section>
 </body>
 
 </html>
