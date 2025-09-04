@@ -1,0 +1,62 @@
+<div class="inner">
+    <h2 class="major">Write to me</h2>
+    <p>
+        Did we just meet at a conference and you’d like to continue the conversation? Or did you see
+        something on my site that looks a little off?
+    </p>
+    <p>
+        Either way, drop me a message and say hello!
+    </p>
+
+    <form method="POST" action="https://api.web3forms.com/submit">
+        <input type="hidden" name="access_key" value="af3ab1bc-6cfb-4b63-a891-4f37b04a2bbe">
+        <input type="hidden" name="redirect" value="https://www.kennethhsu.com/contact_success.html">
+
+        <div class="fields">
+            <div class="field half">
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name" placeholder="Full name" required />
+            </div>
+            <div class="field half">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email"
+                    placeholder="post@domain.com (required if requesting a reply)" />
+            </div>
+            <div class="field">
+                <label for="subject">Subject</label>
+                <textarea name="subject" id="subject" rows="1" placeholder="Hello" required></textarea>
+            </div>
+            <div class="field">
+                <label for="message">Message</label>
+                <textarea name="message" id="message" rows="6" placeholder="A short message." required></textarea>
+            </div>
+            <div class="field">
+                <input type="hidden" name="reply-request" value="False">
+                <input type="checkbox" id="reply-request" name="reply-request" value="True">
+                <label for="reply-request">I would like a reply.</label>
+            </div>
+
+            <div class="h-captcha" data-captcha="true"></div>
+        </div>
+
+        <ul class="actions special default">
+            <li><input type="submit" class="button primary" value="Send Message" /></li>
+            <li><input type="reset" class="button" value="Clear Form" /></li>
+        </ul>
+    </form>
+
+    <ul class="copyright">
+        <li>Launched in 2025.</li>
+        <li>&copy; Kenneth Hsu. All rights reserved.</li>
+    </ul>
+</div>
+<!-- 
+<script>
+    // Conditional email requirement
+    const replyCheckbox = document.getElementById('reply-request');
+    const emailField = document.getElementById('email');
+
+    replyCheckbox.addEventListener('change', () => {
+        emailField.required = replyCheckbox.checked;
+    });
+</script> -->
