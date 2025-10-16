@@ -4589,11 +4589,9 @@ body.is-preload #banner p {
 }
 
 /* Popup Banner */
-
 #popup-banner {
 	background: rgba(250, 250, 250, 0.3);
 	color: #ffffff;
-	/* Darker text for readability */
 	text-align: center;
 	padding: 1em;
 	position: relative;
@@ -4602,32 +4600,35 @@ body.is-preload #banner p {
 	justify-content: center;
 	align-items: center;
 	border-radius: 10px;
-	/* Makes the corners round */
 	max-width: 80%;
-	/* Limits the banner's width */
 	margin: 0 auto;
-	/* Centers the banner horizontally */
 	display: none;
 }
 
 #popup-banner p {
 	margin: 0;
 	padding-right: 2em;
-
 }
 
 #popup-banner-close {
 	position: absolute;
-	top: 50%;
-	right: 1em;
-	transform: translateY(-50%);
+	top: 0.3em;
+	right: 0.5em;
 	background: none;
 	border: none;
-	color: #333;
-	font-size: 1em;
-	cursor: pointer;
-	/* border: none;
 	outline: none;
-	background: none;
-	box-shadow: none; */
+	color: #ffffff;
+	font-size: 1.2em;
+	width: 1.5em;
+	height: 1.5em;
+	cursor: pointer;
+	box-shadow: none;
+	padding: 0;
+	margin: 0;
+	width: auto;
+	height: auto;
+	line-height: 1;
+	display: block;
+	align-items: center;
+	justify-content: center;
 }
