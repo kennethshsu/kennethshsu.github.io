@@ -145,7 +145,7 @@
 
 	// Popup Banner
 	$('#popup-banner-close').on('click', function () {
-		$('#popup-banner').hide();
+		$('#popup-banner').fadeOut(150);
 	});
 
 })(jQuery);
