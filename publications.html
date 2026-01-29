@@ -9,6 +9,7 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<link rel="stylesheet" href="assets/css/main.css" />
+	<link rel="stylesheet" href="assets/css/reveal.css" />
 	<noscript>
 		<link rel="stylesheet" href="assets/css/noscript.css" />
 	</noscript>
@@ -46,8 +47,8 @@
 		<section id="wrapper">
 			<header>
 				<div class="inner">
-					<h2>My Publications</h2>
-					<p>
+					<h2 class="reveal" data-delay="150ms">My Publications</h2>
+					<p class="reveal" data-delay="300ms">
 						I'm not a great technical writer, but I enjoy writing on topics that are relevant and
 						accessible to a broad audience of my fellow colleagues. I try to focus on subjects that many
 						find interesting and important, such as professionalism in the field, or open-source initiatives
@@ -55,7 +56,7 @@
 						others can easily engage with.
 					</p>
 
-					<p>
+					<p class="reveal" data-delay="450ms">
 						Here, you’ll find some of the pieces I’ve published in the past. I hope they not only offer you
 						a few hours of continuing education credits but also spark some thought or curiosity along the
 						way. Even more, I’d love it if something you read here inspires you to reach out, whether to
@@ -70,20 +71,20 @@
 
 					<h3 class="major">In the CAS <i>Actuarial Review</i></h3>
 					<section class="features">
-						<article>
+						<article class="reveal" data-delay="500ms">
 							<h3 class="major">Mission Impossible: Becoming a CAS Member</h3>
 							<h4>November, 2025</h4>
 							<a href="https://ar.casact.org/mission-impossible-becoming-a-cas-member/" class="special"
 								target="_blank">Read
 								article</a>
 						</article>
-						<article>
+						<article class="reveal" data-delay="550ms">
 							<h3 class="major">Actuarial Judgment</h3>
 							<h4>September, 2025</h4>
 							<a href="https://ar.casact.org/actuarial-judgment/" class="special" target="_blank">Read
 								article</a>
 						</article>
-						<article>
+						<article class="reveal" data-delay="600ms">
 							<h3 class="major">Monograph Author Explains Why Mixed Models Matter for Actuaries</h3>
 							<h4>September, 2025</h4>
 							<a href="https://ar.casact.org/monograph-author-explains-why-mixed-models-matter-for-actuaries/"
@@ -183,6 +184,7 @@
 	<script src="assets/js/breakpoints.min.js"></script>
 	<script src="assets/js/util.js"></script>
 	<script src="assets/js/main.js"></script>
+	<script src="assets/js/reveal.js"></script>
 	<script>
 		fetch('contact_footer.html')
 			.then(response => response.text())

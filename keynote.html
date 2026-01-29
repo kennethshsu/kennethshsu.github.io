@@ -9,6 +9,7 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<link rel="stylesheet" href="assets/css/main.css" />
+	<link rel="stylesheet" href="assets/css/reveal.css" />
 	<noscript>
 		<link rel="stylesheet" href="assets/css/noscript.css" />
 	</noscript>
@@ -46,8 +47,8 @@
 		<section id="wrapper">
 			<header>
 				<div class="inner">
-					<h2>My Presentations</h2>
-					<p>
+					<h2 class="reveal" data-delay="150ms">My Presentations</h2>
+					<p class="reveal" data-delay="300ms">
 						My presentation and teaching style is all about clarity and simplicity. I aim to make complex
 						ideas easy to grasp by cutting out jargon and focusing on the essentials. My slides and
 						materials are intentional, with minimal text and clear visuals. I use attention grabbing
@@ -66,9 +67,9 @@
 					<div class="items style1 medium">
 						<section>
 							<img src="images/keynote_icon/crypto.svg" alt="Ratemaking & Reserving Icon"
-								class="svg-icon" />
-							<h3>Blockchain & Digital Asset Risks</h3>
-							<p>
+								class="svg-icon reveal" data-delay="400ms" />
+							<h3 class="reveal" data-delay="450ms">Blockchain & Digital Asset Risks</h3>
+							<p class="reveal" data-delay="500ms">
 								Blockchain and digital asset security risk is still not well understood, largely due to
 								the technology’s immaturity and the limited data available. I break down how digital
 								assets and private key management work, how to think about security in this context, and
@@ -76,9 +77,10 @@
 							</p>
 						</section>
 						<section>
-							<img src="images/keynote_icon/python.svg" alt="Capital Management Icon" class="svg-icon" />
-							<h3>Python & Open-Source Tools</h3>
-							<p>
+							<img src="images/keynote_icon/python.svg" alt="Capital Management Icon"
+								class="svg-icon reveal" data-delay="600ms" />
+							<h3 class="reveal" data-delay="650ms">Python & Open-Source Tools</h3>
+							<p class="reveal" data-delay="700ms">
 								Many actuaries today still lack hands-on experience with the rapidly evolving ecosystem
 								of technical tools. I enjoy demonstrating how Python and other open-source libraries can
 								simplify tasks, improve efficiency, and make data work more transparent and repeatable,
@@ -86,9 +88,10 @@
 							</p>
 						</section>
 						<section>
-							<img src="images/keynote_icon/briefcase.svg" alt="Data Engineering Icon" class="svg-icon" />
-							<h3>Professionalism</h3>
-							<p>
+							<img src="images/keynote_icon/briefcase.svg" alt="Data Engineering Icon"
+								class="svg-icon reveal" data-delay="800ms" />
+							<h3 class="reveal" data-delay="850ms">Professionalism</h3>
+							<p class="reveal" data-delay="900ms">
 								Some actuaries today focus heavily on technical work but may overlook the importance of
 								professional conduct. I clarify the established standards from regulatory bodies,
 								highlight any new rules as they arise, and use fictional scenarios to challenge
@@ -127,6 +130,7 @@
 	<script src="assets/js/breakpoints.min.js"></script>
 	<script src="assets/js/util.js"></script>
 	<script src="assets/js/main.js"></script>
+	<script src="assets/js/reveal.js"></script>
 	<script>
 		fetch('contact_footer.html')
 			.then(response => response.text())

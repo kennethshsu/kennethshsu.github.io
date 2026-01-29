@@ -9,6 +9,7 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<link rel="stylesheet" href="assets/css/main.css" />
+	<link rel="stylesheet" href="assets/css/reveal.css" />
 	<noscript>
 		<link rel="stylesheet" href="assets/css/noscript.css" />
 	</noscript>
@@ -46,8 +47,8 @@
 		<section id="wrapper">
 			<header>
 				<div class="inner">
-					<h2>My Technical Projects</h2>
-					<p>
+					<h2 class="reveal" data-delay="150ms">My Technical Projects</h2>
+					<p class="reveal" data-delay="300ms">
 						I love messing around with code and tech just for the fun of it. Whether it's contributing to
 						open-source projects, hacking together electronic gadgets, or wiring up old school breadboards,
 						I enjoy building things that are both cool and useful. It's a hobby driven by curiosity. I’m
@@ -62,9 +63,9 @@
 				<div class="inner">
 					<h3 class="major">Project Gallery</i></h3>
 					<section class="features">
-						<article>
+						<article class="reveal" data-delay="400ms">
 							<h3 class="major">chainladder-python</h3>
-							<p>
+							<p class="reveal" data-delay="450ms">
 								<i>chainladder-python</i> is a Python package designed to handle all core actuarial
 								reserving
 								tasks, including triangle data manipulation, link ratio calculations, and IBNR
@@ -148,6 +149,7 @@
 	<script src="assets/js/breakpoints.min.js"></script>
 	<script src="assets/js/util.js"></script>
 	<script src="assets/js/main.js"></script>
+	<script src="assets/js/reveal.js"></script>
 	<script>
 		fetch('contact_footer.html')
 			.then(response => response.text())
