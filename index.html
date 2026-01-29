@@ -19,6 +19,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 
 	<link rel="stylesheet" href="assets/css/main.css" />
+	<link rel="stylesheet" href="assets/css/reveal.css" />
 	<noscript>
 		<link rel="stylesheet" href="assets/css/noscript.css" />
 	</noscript>
@@ -69,13 +70,13 @@
 			<div class="inner">
 				<div class="logo">
 					<img src="images/profile_picture.webp" alt="Kenneth Hsu's Profile Photo"
-						style="border: 2px solid white;" />
+						class="reveal from-left slow" data-delay="100ms" style="border: 2px solid white;" />
 				</div>
-				<h2>Hi, I'm Kenneth.</h2>
-				<p>
+				<h2 class="reveal" data-delay="200ms">Hi, I'm Kenneth.</h2>
+				<p class="reveal" data-delay="300ms">
 					I'm a Property and Casualty Actuary, FCAS, CSPA, MAAA, based in San Francisco, California.
 				</p>
-				<p>
+				<p class="reveal" data-delay="400ms">
 					I develop innovative, code-first risk management solutions tailored for insurtechs, startups, and
 					emerging risk carriers.
 				</p>
@@ -100,19 +101,20 @@
 			<!-- My Work -->
 			<section id="work" class="wrapper spotlight style1">
 				<div class="inner">
-					<a href="https://www.breachinsured.com" class="image" target="_blank" rel="noopener noreferrer"><img
-							src="images/company_logo/breach_insurance.png" alt="Breach Insurance's Logo"
-							style="border: 2px solid white;" /></a>
+					<a href="https://www.breachinsured.com" class="image" target="_blank" rel="noopener noreferrer">
+						<img src="images/company_logo/breach_insurance.png" alt="Breach Insurance's Logo"
+							class="reveal from-left" data-delay="250ms" style="border: 2px solid white;" />
+					</a>
 					<div class="content">
-						<h2 class="major">My Current Work</h2>
-						<p>
+						<h2 class="major reveal" data-delay="300ms">My Current Work</h2>
+						<p class="reveal" data-delay="350ms">
 							I am currently the Head of Actuarial at Breach Insurance, an insurtech
 							start-up focused on building regulated insurance solutions for the crypto
 							and web3 industry. We develop proprietary technology and risk management
 							tools for retail and institutional clients holding digital assets.
 						</p>
 
-						<p>
+						<p class="reveal" data-delay="450ms">
 							There are currently critical coverage gaps in traditional cyber policies, where
 							digital asset losses are typically excluded. By combining modern
 							technology, deep industry expertise, and a commitment to fair responsible
@@ -121,8 +123,8 @@
 							economy.
 						</p>
 
-						<a href="https://www.breachinsured.com" class="special" target="_blank"
-							rel="noopener noreferrer">Learn more</a>
+						<a href="https://www.breachinsured.com" class="special reveal" data-delay="550ms"
+							target="_blank" rel="noopener noreferrer">Learn more</a>
 					</div>
 				</div>
 			</section>
@@ -133,21 +135,21 @@
 					<!-- <a href="#" class="image"><img src="images/pic02.jpg" alt="" /></a> -->
 					<div class="content">
 
-						<h2 class="major">My Expertise</h2>
-						<p>
+						<h2 class="major reveal" data-delay="200ms">My Expertise</h2>
+						<p class="reveal" data-delay="300ms">
 							I’m a modern actuary with strong technical skills. I combine deep domain knowledge with
 							modern tools and techniques to deliver value for the whole enterprise.
 						</p>
-						<p>
+						<p class="reveal" data-delay="400ms">
 							My core skills include:
 						</p>
 
 						<div class="items style1 medium">
 							<section>
 								<img src="images/expertise_icon/hand-holding-dollar-solid.svg"
-									alt="Ratemaking & Reserving Icon" class="svg-icon" />
-								<h3>Ratemaking & Reserving</h3>
-								<p>
+									alt="Ratemaking & Reserving Icon" class="svg-icon reveal" data-delay="450ms" />
+								<h3 class="reveal" data-delay="500ms">Ratemaking & Reserving</h3>
+								<p class="reveal" data-delay="550ms">
 									Crunching complex data to price risks accurately and building reliable models to
 									forecast future claims are at the core of my work. I also design business specific
 									diagnostic tools to detect early signs of model deviation to enable the leadership
@@ -156,9 +158,9 @@
 							</section>
 							<section>
 								<img src="images/expertise_icon/building-columns-solid.svg"
-									alt="Capital Management Icon" class="svg-icon" />
-								<h3>Capital Management</h3>
-								<p>
+									alt="Capital Management Icon" class="svg-icon reveal" data-delay="600ms" />
+								<h3 class="reveal" data-delay="650ms">Capital Management</h3>
+								<p class="reveal" data-delay="700ms">
 									I perform stress tests and extreme scenario modeling to optimize an entity's capital
 									allocation, keeping it both robust and efficient. This work blends financial
 									engineering and risk management, all while making sure we satisfy the ever-changing
@@ -167,9 +169,9 @@
 							</section>
 							<section>
 								<img src="images/expertise_icon/chart-simple-solid.svg" alt="Data Engineering Icon"
-									class="svg-icon" />
-								<h3>Data Engineering</h3>
-								<p>
+									class="svg-icon reveal" data-delay="750ms" />
+								<h3 class="reveal" data-delay="800ms">Data Engineering</h3>
+								<p class="reveal" data-delay="850ms">
 									I am proficient in modern programming languages, such as Python and SQL. I build
 									scalable data pipelines, and deploy models that automatically transform raw data
 									into beautiful visuals that are easy to understand. I bring full-stack capabilities
@@ -198,9 +200,9 @@
 				<div class="inner">
 					<!-- <a href="#" class="image"><img src="images/pic03.jpg" alt="" /></a> -->
 					<div class="content">
-						<h2 class="major">Industry Experience</h2>
+						<h2 class="major reveal" data-delay="200ms">Industry Experience</h2>
 
-						<p>
+						<p class="reveal" data-delay="300ms">
 							With a strong foundation in pricing, reserving, and reinsurance, I’ve held key actuarial
 							roles across high growth and established companies. In my most recent role as Lead
 							Actuary at Cover, I led initiatives in pricing strategy, product launches, and profitability
@@ -213,14 +215,16 @@
 						<div class="company-logo-row">
 							<a href="https://www.crunchbase.com/organization/cover-5" target="_blank"
 								rel="noopener noreferrer">
-								<img src="images/company_logo/cover.jpeg" alt="Cover Financial's Logo" class="icon" />
+								<img src="images/company_logo/cover.jpeg" alt="Cover Financial's Logo"
+									class="icon reveal" data-delay="450ms" />
 							</a>
 							<a href="https://www.uber.com" target="_blank" rel="noopener noreferrer">
-								<img src="images/company_logo/uber.jpeg" alt="Uber Technologies's Logo" class="icon" />
+								<img src="images/company_logo/uber.jpeg" alt="Uber Technologies's Logo"
+									class="icon reveal" data-delay="500ms" />
 							</a>
 							<a href="https://www.allstate.com" target="_blank" rel="noopener noreferrer">
 								<img src="images/company_logo/allstate.jpeg" alt="Allstate Insurance's Logo"
-									class="icon" />
+									class="icon reveal" data-delay="550ms" />
 							</a>
 						</div>
 
@@ -233,7 +237,7 @@
 			<!-- Public Work -->
 			<section id="public" class="wrapper alt style1">
 				<div class="inner">
-					<h2 class="major">My Public Portfolio</h2>
+					<h2 class="major reveal" data-delay="200ms">My Public Portfolio</h2>
 					<p>
 						I'm passionate about the actuarial community and I actively seek opportunities to support its
 						growth through collaboration and knowledge sharing. Contributing in this way is one small way I
@@ -246,9 +250,10 @@
 
 					<section class="features">
 						<article>
-							<img src="images/publicwork_icon/code.svg" alt="Code Icon" class="svg-icon-large" />
-							<h3 class="major">Technical Projects</h3>
-							<p>
+							<img src="images/publicwork_icon/code.svg" alt="Code Icon" class="svg-icon-large reveal"
+								data-delay="300ms" />
+							<h3 class="major reveal" data-delay="350ms">Technical Projects</h3>
+							<p class="reveal" data-delay="400ms">
 								I enjoy coding, open-source work, and hardware tinkering, contributing to the
 								chainladder-python library, customizing devices like routers and Raspberry Pis, and
 								staying current with new technologies.
@@ -256,9 +261,10 @@
 							<a href="technical_projects.html" class="special">Technical projects</a>
 						</article>
 						<article>
-							<img src="images/publicwork_icon/keynote.svg" alt="Keynote Icon" class="svg-icon-large" />
-							<h3 class="major">Keynotes & Presentations</h3>
-							<p>
+							<img src="images/publicwork_icon/keynote.svg" alt="Keynote Icon"
+								class="svg-icon-large reveal" data-delay="450ms" />
+							<h3 class="major reveal" data-delay="500ms">Keynotes & Presentations</h3>
+							<p class="reveal" data-delay="550ms">
 								I present on digital asset risks, actuarial professionalism, and open-source tools. I
 								also support the CAS on various presentations, spreading knowledge to actuaries of all
 								expertise levels.
@@ -267,9 +273,9 @@
 						</article>
 						<article>
 							<img src="images/publicwork_icon/publication.svg" alt="Publication Icon"
-								class="svg-icon-large" />
-							<h3 class="major">Publications</h3>
-							<p>
+								class="svg-icon-large reveal" data-delay="650ms" />
+							<h3 class="major reveal" data-delay="700ms">Publications</h3>
+							<p class="reveal" data-delay="750ms">
 								I write for the <i>Actuarial Review</i>, focusing on professionalism, standards,
 								disciplinary processes, and trends in conduct. Are you looking for some easy
 								Continuing Education credits?
@@ -278,9 +284,9 @@
 						</article>
 						<article>
 							<img src="images/publicwork_icon/volunteer.svg" alt="Volunteer Icon"
-								class="svg-icon-large" />
-							<h3 class="major">Volunteering Work</h3>
-							<p>
+								class="svg-icon-large reveal" data-delay="850ms" />
+							<h3 class="major reveal" data-delay="900ms">Volunteering Work</h3>
+							<p class="reveal" data-delay="950ms">
 								I volunteer with the CAS on committees and initiatives that advance the profession.
 								Currently, I chair the Annual Meeting Working Group and support many other committees
 								on education efforts.
@@ -320,6 +326,7 @@
 	<script src="assets/js/breakpoints.min.js"></script>
 	<script src="assets/js/util.js"></script>
 	<script src="assets/js/main.js"></script>
+	<script src="assets/js/reveal.js"></script>
 	<script>
 		fetch('contact_footer.html')
 			.then(response => response.text())

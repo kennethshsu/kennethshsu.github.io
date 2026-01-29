@@ -1,0 +1,41 @@
+/* Reveal animations for index.html only */
+.reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 600ms cubic-bezier(.2, .9, .3, 1), transform 600ms cubic-bezier(.2, .9, .3, 1);
+    will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+    opacity: 1;
+    transform: none;
+}
+
+.reveal.from-left {
+    transform: translateX(-30px);
+}
+
+.reveal.from-right {
+    transform: translateX(30px);
+}
+
+.reveal.is-visible.from-left,
+.reveal.is-visible.from-right {
+    transform: none;
+}
+
+.reveal.slow {
+    transition-duration: 900ms;
+}
+
+.reveal.fast {
+    transition-duration: 350ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal {
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+    }
+}
