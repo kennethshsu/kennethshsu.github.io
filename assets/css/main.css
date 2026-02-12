@@ -4596,12 +4596,35 @@ body.is-preload #banner p {
 	opacity: 0;
 	transition: max-height 0.4s ease, opacity 0.4s ease;
 	margin: 0;
+	display: -moz-flex;
+	display: -webkit-flex;
+	display: -ms-flex;
+	display: flex;
+	-moz-flex-wrap: wrap;
+	-webkit-flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+	width: calc(100% + 3em);
+	margin-left: -1.5em;
 }
 
 .reply-fields-container.visible {
 	max-height: 200px;
 	opacity: 1;
-	margin: 0 0 1em 0;
+	margin: 0 0 1em -1.5em;
+}
+
+.reply-fields-container>.field {
+	-moz-flex-grow: 0;
+	-webkit-flex-grow: 0;
+	-ms-flex-grow: 0;
+	flex-grow: 0;
+	-moz-flex-shrink: 0;
+	-webkit-flex-shrink: 0;
+	-ms-flex-shrink: 0;
+	flex-shrink: 0;
+	padding: 1.5em 0 0 1.5em;
+	width: calc(50% - 0.75em);
 }
 
 /* Popup Banner */
