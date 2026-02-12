@@ -17,10 +17,6 @@
                 <label for="name">Name</label>
                 <input type="text" name="name" id="name" placeholder="Full name" required />
             </div>
-            <div class="field half">
-                <label for="email">Email</label>
-                <input type="email" name="email" id="email" placeholder="post@domain.com" />
-            </div>
             <div class="field">
                 <label for="message">Message</label>
                 <textarea name="message" id="message" rows="6" placeholder="A short message." required></textarea>
@@ -28,6 +24,17 @@
             <div class="field">
                 <input type="checkbox" id="reply-request" name="reply-request" value="True">
                 <label for="reply-request">I would like a reply.</label>
+            </div>
+
+            <div id="reply-fields" style="display:none;">
+                <div class="field half">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" placeholder="post@domain.com" />
+                </div>
+                <div class="field half">
+                    <label for="linkedin">LinkedIn URL</label>
+                    <input type="url" name="linkedin" id="linkedin" placeholder="linkedin.com/in/username" />
+                </div>
             </div>
 
             <div class="h-captcha" data-captcha="true"></div>
@@ -44,13 +51,26 @@
         <li>&copy; kennethhsu.com, all rights reserved.</li>
     </ul>
 </div>
-<!-- 
 <script>
-    // Conditional email requirement
-    const replyCheckbox = document.getElementById('reply-request');
-    const emailField = document.getElementById('email');
+    document.addEventListener('DOMContentLoaded', function () {
+        const replyCheckbox = document.getElementById('reply-request');
+        const replyFields = document.getElementById('reply-fields');
+        const emailField = document.getElementById('email');
+        const linkedinField = document.getElementById('linkedin');
 
-    replyCheckbox.addEventListener('change', () => {
-        emailField.required = replyCheckbox.checked;
+        function updateReplyFields() {
+            const show = replyCheckbox.checked;
+            replyFields.style.display = show ? '' : 'none';
+            if (show) {
+                emailField.setAttribute('required', '');
+                linkedinField.setAttribute('required', '');
+            } else {
+                emailField.removeAttribute('required');
+                linkedinField.removeAttribute('required');
+            }
+        }
+
+        replyCheckbox.addEventListener('change', updateReplyFields);
+        updateReplyFields();
     });
-</script> -->
+</script>
