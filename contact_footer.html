@@ -29,7 +29,7 @@
             <div id="reply-fields" style="display:none;">
                 <div class="field half">
                     <label for="email">Email</label>
-                    <input type="email" name="email" id="email" placeholder="post@domain.com" required />
+                    <input type="email" name="email" id="email" placeholder="post@domain.com" />
                 </div>
                 <div class="field half">
                     <label for="linkedin">LinkedIn URL</label>
@@ -52,25 +52,33 @@
     </ul>
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    function initReplyFields() {
         const replyCheckbox = document.getElementById('reply-request');
         const replyFields = document.getElementById('reply-fields');
         const emailField = document.getElementById('email');
         const linkedinField = document.getElementById('linkedin');
+        if (!replyCheckbox || !replyFields) return;
 
         function updateReplyFields() {
             const show = replyCheckbox.checked;
-            replyFields.style.display = show ? '' : 'none';
+            replyFields.style.display = show ? 'block' : 'none';
             if (show) {
-                emailField.setAttribute('required', '');
-                linkedinField.setAttribute('required', '');
+                emailField && emailField.setAttribute('required', '');
+                linkedinField && linkedinField.setAttribute('required', '');
             } else {
-                emailField.removeAttribute('required');
-                linkedinField.removeAttribute('required');
+                emailField && emailField.removeAttribute('required');
+                linkedinField && linkedinField.removeAttribute('required');
             }
         }
 
         replyCheckbox.addEventListener('change', updateReplyFields);
+        replyCheckbox.addEventListener('input', updateReplyFields);
         updateReplyFields();
-    });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initReplyFields);
+    } else {
+        initReplyFields();
+    }
 </script>
