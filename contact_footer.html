@@ -61,7 +61,7 @@
 
         function updateReplyFields() {
             const show = replyCheckbox.checked;
-            replyFields.style.display = show ? 'block' : 'none';
+            replyFields.style.display = show ? '' : 'none';
             if (show) {
                 emailField && emailField.setAttribute('required', '');
                 linkedinField && linkedinField.setAttribute('required', '');
