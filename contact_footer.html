@@ -26,7 +26,7 @@
                 <label for="reply-request">I would like a reply.</label>
             </div>
 
-            <div id="reply-fields" style="display:none;">
+            <div id="reply-fields">
                 <div class="field half">
                     <label for="email">Email</label>
                     <input type="email" name="email" id="email" placeholder="post@domain.com" />
@@ -51,34 +51,3 @@
         <li>kennethhsu.com &copy; , all rights reserved.</li>
     </ul>
 </div>
-<script>
-    function initReplyFields() {
-        const replyCheckbox = document.getElementById('reply-request');
-        const replyFields = document.getElementById('reply-fields');
-        const emailField = document.getElementById('email');
-        const linkedinField = document.getElementById('linkedin');
-        if (!replyCheckbox || !replyFields) return;
-
-        function updateReplyFields() {
-            const show = replyCheckbox.checked;
-            replyFields.style.display = show ? '' : 'none';
-            if (show) {
-                emailField && emailField.setAttribute('required', '');
-                linkedinField && linkedinField.setAttribute('required', '');
-            } else {
-                emailField && emailField.removeAttribute('required');
-                linkedinField && linkedinField.removeAttribute('required');
-            }
-        }
-
-        replyCheckbox.addEventListener('change', updateReplyFields);
-        replyCheckbox.addEventListener('input', updateReplyFields);
-        updateReplyFields();
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initReplyFields);
-    } else {
-        initReplyFields();
-    }
-</script>
