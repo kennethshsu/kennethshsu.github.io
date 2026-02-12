@@ -36,11 +36,15 @@
         const emailField = document.getElementById('email');
         const linkedinField = document.getElementById('linkedin');
 
-        if (!replyCheckbox || !replyFieldsContainer) return;
+        if (!replyCheckbox || !replyFieldsContainer) {
+            console.warn('[initReplyFields] Elements not found, retrying...');
+            return false;
+        }
 
         function updateReplyFields() {
             const isChecked = replyCheckbox.checked;
-            
+            console.log('[updateReplyFields] Checkbox checked:', isChecked);
+
             if (isChecked) {
                 replyFieldsContainer.classList.add('visible');
                 emailField && emailField.setAttribute('required', 'required');
@@ -53,18 +57,29 @@
         }
 
         replyCheckbox.addEventListener('change', updateReplyFields);
-        
+        replyCheckbox.addEventListener('click', updateReplyFields);
+
         // Initialize state on page load
         updateReplyFields();
+        console.log('[initReplyFields] Successfully initialized');
+        return true;
     }
 
-    // Initialize when page loads
+    function attemptInit() {
+        if (initReplyFields()) {
+            return; // Success
+        }
+        // Retry after a short delay if elements not yet available
+        setTimeout(attemptInit, 100);
+    }
+
+    // Try to initialize
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initReplyFields);
+        document.addEventListener('DOMContentLoaded', attemptInit);
     } else {
-        initReplyFields();
+        attemptInit();
     }
 
-    // Also expose globally if footer is loaded dynamically via fetch
+    // Also expose globally for manual trigger (e.g., after fetch)
     window.initReplyFields = initReplyFields;
 })();

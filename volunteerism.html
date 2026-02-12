@@ -159,6 +159,8 @@
 			.then(response => response.text())
 			.then(html => {
 				document.getElementById('contact-section-placeholder').innerHTML = html;
+				// Initialize reply fields toggle after footer is loaded
+				if (window.initReplyFields) window.initReplyFields();
 			})
 			.catch(err => console.error('Error loading contact section:', err));
 	</script>
