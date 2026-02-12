@@ -25,3 +25,46 @@
     Array.prototype.forEach.call(reveals, function (el) { io.observe(el); });
 
 })();
+
+/* Contact Form Reply Fields Toggle */
+(function () {
+    'use strict';
+
+    function initReplyFields() {
+        const replyCheckbox = document.getElementById('reply-request');
+        const replyFieldsContainer = document.getElementById('reply-fields');
+        const emailField = document.getElementById('email');
+        const linkedinField = document.getElementById('linkedin');
+
+        if (!replyCheckbox || !replyFieldsContainer) return;
+
+        function updateReplyFields() {
+            const isChecked = replyCheckbox.checked;
+            
+            if (isChecked) {
+                replyFieldsContainer.classList.add('visible');
+                emailField && emailField.setAttribute('required', 'required');
+                linkedinField && linkedinField.setAttribute('required', 'required');
+            } else {
+                replyFieldsContainer.classList.remove('visible');
+                emailField && emailField.removeAttribute('required');
+                linkedinField && linkedinField.removeAttribute('required');
+            }
+        }
+
+        replyCheckbox.addEventListener('change', updateReplyFields);
+        
+        // Initialize state on page load
+        updateReplyFields();
+    }
+
+    // Initialize when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initReplyFields);
+    } else {
+        initReplyFields();
+    }
+
+    // Also expose globally if footer is loaded dynamically via fetch
+    window.initReplyFields = initReplyFields;
+})();
