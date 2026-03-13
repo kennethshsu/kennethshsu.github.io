@@ -5,6 +5,14 @@
 
     if (!reveals || reveals.length === 0) return;
 
+    // if elements lack an explicit delay attribute, assign a staggered default
+    var baseDelay = 150; // ms between items
+    Array.prototype.forEach.call(reveals, function (el, idx) {
+        if (!el.hasAttribute('data-delay')) {
+            el.setAttribute('data-delay', (baseDelay * (idx + 1)) + 'ms');
+        }
+    });
+
     if (!('IntersectionObserver' in window)) {
         Array.prototype.forEach.call(reveals, function (el) { el.classList.add('is-visible'); });
         return;
