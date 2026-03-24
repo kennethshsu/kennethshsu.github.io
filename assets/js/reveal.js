@@ -6,10 +6,10 @@
     if (!reveals || reveals.length === 0) return;
 
     // if elements lack an explicit delay attribute, assign a staggered default
-    var baseDelay = 150; // ms between items
+    var baseDelay = 150; // ms between successive reveal starts (first starts immediately)
     Array.prototype.forEach.call(reveals, function (el, idx) {
         if (!el.hasAttribute('data-delay')) {
-            el.setAttribute('data-delay', (baseDelay * (idx + 1)) + 'ms');
+            el.setAttribute('data-delay', (baseDelay * idx) + 'ms');
         }
     });
 
