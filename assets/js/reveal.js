@@ -6,11 +6,6 @@
     if (!reveals || reveals.length === 0) return;
 
     var baseDelay = 150;
-    Array.prototype.forEach.call(reveals, function (el, idx) {
-        if (!el.hasAttribute('data-delay')) {
-            el.setAttribute('data-delay', (baseDelay * idx) + 'ms');
-        }
-    });
 
     if (!('IntersectionObserver' in window)) {
         Array.prototype.forEach.call(reveals, function (el) { el.classList.add('is-visible'); });
@@ -22,7 +17,7 @@
             if (entry.isIntersecting) {
                 var el = entry.target;
                 var delay = el.getAttribute('data-delay');
-                if (delay) el.style.transitionDelay = delay;
+                el.style.transitionDelay = delay != null && delay !== '' ? delay : (baseDelay + 'ms');
                 el.classList.add('is-visible');
                 observer.unobserve(el);
             }
