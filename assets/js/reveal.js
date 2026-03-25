@@ -5,7 +5,7 @@
 
     if (!reveals || reveals.length === 0) return;
 
-    var baseDelay = 150;
+    var baseDelay = 300;
 
     if (!('IntersectionObserver' in window)) {
         Array.prototype.forEach.call(reveals, function (el) { el.classList.add('is-visible'); });
