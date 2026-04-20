@@ -139,13 +139,12 @@
 	// Add a delay to show the popup banner
 	$(document).ready(function () {
 		setTimeout(function () {
-			$('#popup-banner').fadeIn();
+			$('#popup-banner').addClass('is-visible');
 		}, 2000);
 	});
 
-	// Popup Banner
 	$('#popup-banner-close').on('click', function () {
-		$('#popup-banner').fadeOut(150);
+		$('#popup-banner').removeClass('is-visible');
 	});
 
 })(jQuery);
