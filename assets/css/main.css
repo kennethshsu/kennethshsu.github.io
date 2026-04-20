@@ -3786,7 +3786,10 @@ body.is-menu-visible #menu .inner {
 
 #banner {
 	padding: 10em 0 0em 0;
-	height: 100vh
+	height: 100vh;
+	position: relative;
+	z-index: 2;
+	/* Same stack as body so this layer is not transparent over #wrapper (spotlight ::before bleed) */
 }
 
 #banner .inner {
@@ -3965,6 +3968,11 @@ body.is-preload #banner p {
 }
 
 /* Wrapper */
+
+#wrapper {
+	position: relative;
+	z-index: 1;
+}
 
 #wrapper>header {
 	padding: 11em 0 2.25em 0;
@@ -4631,13 +4639,10 @@ body.is-preload #banner p {
 #popup-banner {
 	background: rgba(250, 250, 250, 0.3);
 	color: #fff;
-	text-align: center;
+	text-align: left;
 	padding: 1em;
 	position: relative;
 	z-index: 1000;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 	border-radius: 10px;
 	max-width: 80%;
 	margin: 0 auto;
@@ -4647,7 +4652,46 @@ body.is-preload #banner p {
 #popup-banner p {
 	margin: 0;
 	padding-right: 2em;
+	font-weight: normal;
+}
+
+
+#popup-banner > *:not(#popup-banner-close) ~ *:not(#popup-banner-close) {
+	margin-top: 0.5em;
+}
+
+#popup-banner p:not(.popup-banner-greeting) {
+	font-family: "Source Sans Pro", Helvetica, sans-serif;
+	font-size: 0.9em;
+	font-weight: 300;
+	letter-spacing: normal;
+	line-height: 1.65;
+}
+
+#popup-banner .popup-banner-list {
+	margin: 0;
+	padding: 0 2em 0 1.25em;
+	list-style: disc;
+	font-family: "Source Sans Pro", Helvetica, sans-serif;
+	font-size: 0.9em;
+	font-weight: 300;
+	letter-spacing: normal;
+	line-height: 1.65;
+}
+
+#popup-banner .popup-banner-list li {
+	margin: 0;
+	padding: 0 0 0 0.25em;
+	line-height: inherit;
+}
+
+#popup-banner .popup-banner-greeting {
+	text-align: center;
 	font-weight: bold;
+	font-family: Raleway, Helvetica, sans-serif;
+	font-size: 1em;
+	letter-spacing: 0.1em;
+	line-height: 1.65;
 	text-shadow:
 		-1px -1px 0 #000,
 		1px -1px 0 #000,
