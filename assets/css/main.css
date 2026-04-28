@@ -4642,7 +4642,7 @@ body.is-preload #banner p {
 /* Popup Banner — stays in layout when hidden so #banner height (and background) does not reflow when shown */
 #popup-banner {
 	background: rgba(250, 250, 250, 0.3);
-	color: #fff;
+	color: #ffffff;
 	text-align: left;
 	padding: 1em;
 	position: relative;
@@ -4658,6 +4658,16 @@ body.is-preload #banner p {
 	-webkit-transition: opacity 0.4s ease;
 	-ms-transition: opacity 0.4s ease;
 	transition: opacity 0.4s ease;
+}
+
+#popup-banner p,
+#popup-banner li,
+#popup-banner i,
+#popup-banner a,
+#popup-banner a:visited,
+#popup-banner a:hover,
+#popup-banner a:active {
+	color: #ffffff;
 }
 
 #popup-banner.is-visible {
@@ -4706,11 +4716,7 @@ body.is-preload #banner p {
 #popup-banner .popup-banner-greeting {
 	text-align: center;
 	font-weight: bold;
-	text-shadow:
-		-1px -1px 0 #000,
-		1px -1px 0 #000,
-		-1px 1px 0 #000,
-		1px 1px 0 #000;
+	color: #ffffff;
 }
 
 #popup-banner-close {
