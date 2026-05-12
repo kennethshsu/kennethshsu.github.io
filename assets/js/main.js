@@ -136,10 +136,33 @@
 
 		});
 
-	// Add a delay to show the popup banner
+	// Popup banner: optional deadline from #popup-banner data-show-until (ISO 8601). Omit attribute for no expiry.
 	$(document).ready(function () {
+		var $banner = $('#popup-banner');
+		if (!$banner.length)
+			return;
+
+		var raw = $banner.attr('data-show-until');
+		var showUntilMs = raw ? Date.parse(raw) : Infinity;
+		if (Number.isNaN(showUntilMs))
+			showUntilMs = Infinity;
+
+		function hideIfExpired() {
+			if (Date.now() >= showUntilMs)
+				$banner.removeClass('is-visible');
+		}
+
+		if (Date.now() >= showUntilMs)
+			return;
+
 		setTimeout(function () {
-			$('#popup-banner').addClass('is-visible');
+			hideIfExpired();
+			if (Date.now() >= showUntilMs)
+				return;
+			$banner.addClass('is-visible');
+			var msLeft = showUntilMs - Date.now();
+			if (Number.isFinite(msLeft) && msLeft > 0)
+				setTimeout(hideIfExpired, msLeft);
 		}, 2000);
 	});
 
