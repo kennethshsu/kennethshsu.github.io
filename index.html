@@ -324,60 +324,7 @@
 
 		<!-- Footer -->
 		<section id="footer">
-			<div class="inner">
-				<h2 class="major">Write to me</h2>
-				<p>
-					Did we just meet at an event and you'd like to continue the conversation? Or did you see
-					something on my site that looks a little off?
-				</p>
-				<p>
-					Either way, drop me a message and say hello!
-				</p>
-
-				<form method="POST" action="https://api.web3forms.com/submit">
-					<input type="hidden" name="access_key" value="af3ab1bc-6cfb-4b63-a891-4f37b04a2bbe">
-					<input type="hidden" name="redirect" value="https://www.kennethhsu.com/contact_success.html">
-
-					<div class="fields">
-						<div class="field">
-							<label for="name">Name</label>
-							<input type="text" name="name" id="name" placeholder="Full name" required />
-						</div>
-						<div class="field">
-							<label for="message">Message</label>
-							<textarea name="message" id="message" rows="6" placeholder="A short message."
-								required></textarea>
-						</div>
-						<div class="field">
-							<input type="checkbox" id="reply-request" name="reply-request" value="True">
-							<label for="reply-request">I would like a reply.</label>
-						</div>
-						<div id="reply-fields" class="reply-fields-container">
-							<div class="field half">
-								<label for="email">Email (Required)</label>
-								<input type="email" name="email" id="email" placeholder="post@domain.com" />
-							</div>
-							<div class="field half">
-								<label for="linkedin">LinkedIn URL </label>
-								<input type="text" name="linkedin" id="linkedin"
-									placeholder="linkedin.com/in/username" />
-							</div>
-						</div>
-
-						<div class="h-captcha" data-captcha="true"></div>
-					</div>
-
-					<ul class="actions special default">
-						<li><input type="submit" class="button primary" value="Send Message" /></li>
-						<li><input type="reset" class="button" value="Clear Form" /></li>
-					</ul>
-				</form>
-
-				<ul class="copyright">
-					<li>Launched in 2025.</li>
-					<li>kennethhsu.com &copy; , all rights reserved.</li>
-				</ul>
-			</div>
+			<div id="contact-section-placeholder"></div>
 		</section>
 
 
@@ -391,6 +338,16 @@
 	<script src="assets/js/util.js"></script>
 	<script src="assets/js/main.js"></script>
 	<script src="assets/js/reveal.js"></script>
+	<script>
+		fetch('contact_footer.html')
+			.then(response => response.text())
+			.then(html => {
+				document.getElementById('contact-section-placeholder').innerHTML = html;
+				// Initialize reply fields toggle after footer is loaded
+				if (window.initReplyFields) window.initReplyFields();
+			})
+			.catch(err => console.error('Error loading contact section:', err));
+	</script>
 
 </body>
 
