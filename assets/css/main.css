@@ -3788,8 +3788,9 @@ body.is-menu-visible #menu .inner {
 	padding: 10em 0 0em 0;
 	min-height: 100vh;
 	position: relative;
-	z-index: 2;
-	/* Same stack as body so this layer is not transparent over #wrapper (spotlight ::before bleed) */
+	z-index: auto;
+	/* z-index:2; TODO Is this needed? */
+	
 }
 
 #banner .inner {
@@ -3893,7 +3894,6 @@ body.is-menu-visible #menu .inner {
 		background-position: center,
 			center;
 		margin-bottom: -6.5em;
-		z-index: auto;
 	}
 
 }
@@ -3903,7 +3903,6 @@ body.is-menu-visible #menu .inner {
 	#banner {
 		padding: 12em 3em 12.375em 3em;
 		margin-bottom: -4.75em;
-		z-index: auto;
 	}
 
 	#banner .inner {
@@ -3917,7 +3916,6 @@ body.is-menu-visible #menu .inner {
 	#banner {
 		padding: 5em 2em 4.25em 2em;
 		margin-bottom: -2.5em;
-		z-index: auto;
 	}
 
 	#banner .logo {
