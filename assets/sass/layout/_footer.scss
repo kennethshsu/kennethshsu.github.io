@@ -28,12 +28,27 @@
 				width: calc(50% - #{_size(section-spacing, large) * 0.5});
 			}
 
-			.copyright {
+			.footer-bar {
+				@include vendor('display', 'flex');
+				@include vendor('align-items', 'center');
+				@include vendor('justify-content', 'space-between');
 				border-top: solid 2px _palette(border);
-				list-style: none;
 				margin: (_size(element-margin) * 2) 0 _size(element-margin) 0;
 				padding: _size(element-margin) 0 0 0;
 				width: 100%;
+
+				.icons {
+					margin: 0;
+					padding: 0;
+				}
+			}
+
+			.copyright {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+				width: auto;
+				text-align: right;
 
 				li {
 					border-left: solid 2px _palette(border);
