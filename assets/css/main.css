@@ -1671,6 +1671,7 @@ body.is-preload .items.onload-fade-in>*>.inner {
 @media screen and (max-width: 736px) {
 	.items.style1>* {
 		width: 100%;
+		padding: 2.5rem 1rem;
 	}
 
 	.items.style1>*:nth-child(n) {
