@@ -110,7 +110,7 @@
 					margin: 0 0 (_size(element-margin) * 2) 0;
 				}
 
-				.copyright {
+				.footer-bar {
 					margin: (_size(element-margin) * 2) 0 _size(element-margin) 0;
 				}
 			}
@@ -135,7 +135,15 @@
 
 		@include breakpoint('<=xsmall') {
 			.inner {
+				.footer-bar {
+					@include vendor('flex-direction', 'column');
+					@include vendor('align-items', 'flex-start');
+				}
+
 				.copyright {
+					margin-top: 1.5em;
+					text-align: left;
+
 					li {
 						border-left: 0;
 						display: block;
