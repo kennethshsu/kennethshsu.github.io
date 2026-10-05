@@ -3137,6 +3137,25 @@ body.is-preload #banner p {
 
 .faq details {
 	border-top: solid 1px rgba(255, 255, 255, 0.12);
+	interpolate-size: allow-keywords;
+}
+
+.faq details::details-content {
+	block-size: 0;
+	overflow: clip;
+	transition:
+		block-size 0.35s ease,
+		content-visibility 0.35s ease allow-discrete;
+}
+
+.faq details[open]::details-content {
+	block-size: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.faq details::details-content {
+		transition: none;
+	}
 }
 
 .faq details:first-child {
