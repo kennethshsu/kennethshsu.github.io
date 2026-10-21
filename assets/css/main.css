@@ -3047,8 +3047,8 @@ body.is-preload #banner p {
 	display: none;
 	position: fixed;
 	inset: 0;
-	z-index: 999;
-	background: rgba(46, 49, 65, 0.82);
+	z-index: 10001;
+	background: #2e3141;
 }
 
 #popup-banner-backdrop.is-visible {
@@ -3061,10 +3061,12 @@ body.is-preload #banner p {
 	text-align: left;
 	padding: 1em;
 	position: fixed;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	z-index: 1000;
+	top: auto;
+	right: 1.25rem;
+	bottom: 1.25rem;
+	left: auto;
+	transform: none;
+	z-index: 10002;
 	border-radius: 10px;
 	width: max-content;
 	max-width: calc(100vw - 2rem);
@@ -3245,7 +3247,7 @@ body.is-preload #banner p {
 .puzzle-invite {
 	position: fixed;
 	right: 1.25rem;
-	bottom: 4.5rem;
+	bottom: 1.25rem;
 	z-index: 998;
 	border-bottom: 0;
 }
