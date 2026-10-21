@@ -22,7 +22,16 @@
 		<button class="new-game" type="button">New Game</button>
 	</main>
 	<script>
-		const COLORS = ["blue", "green", "gold", "rose", "violet", "teal"];
+		const COLORS = [
+		"#E6194B", // Crimson
+		"#3CB44B", // Green
+		"#FFE119", // Yellow
+		"#4363D8", // Blue
+		"#F58231", // Orange
+		"#911EB4", // Purple
+		// "#42D4F4", // Cyan
+		// "#F032E6"  // Magenta
+		];
 		const SET_SIZE = 4;
 		const FILLED_TUBES = 6;
 		const boxes = document.querySelectorAll(".box");
@@ -55,6 +64,38 @@
 			});
 		}
 
+		function tubeColors(tube) {
+			return [...tube.querySelectorAll(".cube")].map((cube) => cube.dataset.color);
+		}
+
+		function selectedTube() {
+			const cube = document.querySelector(".cube.is-selected");
+			return cube ? cube.closest(".box") : null;
+		}
+
+		function canMove(moving, destinationColors) {
+			if (!moving.length || moving.length + destinationColors.length > SET_SIZE) return false;
+			if (!destinationColors.length) return true;
+			return destinationColors[0] === moving[0];
+		}
+
+		function moveCubes(source, destination) {
+			const sourceColors = tubeColors(source);
+			const moving = [];
+			while (moving.length < sourceColors.length && sourceColors[moving.length] === sourceColors[0]) {
+				moving.push(sourceColors[0]);
+			}
+			const destinationColors = tubeColors(destination);
+			if (!canMove(moving, destinationColors)) {
+				clearSelection();
+				return false;
+			}
+			renderTube(destination, moving.concat(destinationColors));
+			renderTube(source, sourceColors.slice(moving.length));
+			clearSelection();
+			return true;
+		}
+
 		function selectTopRun(tube) {
 			const cubes = [...tube.querySelectorAll(".cube")];
 			const alreadySelected = cubes.some((cube) => cube.classList.contains("is-selected"));
@@ -78,6 +119,11 @@
 
 		boxes.forEach((box) => {
 			box.addEventListener("click", () => {
+				const source = selectedTube();
+				if (source && source !== box) {
+					moveCubes(source, box);
+					return;
+				}
 				selectTopRun(box);
 			});
 		});
