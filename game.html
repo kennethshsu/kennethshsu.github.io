@@ -4,7 +4,7 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title></title>
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:200,700|Source+Sans+Pro:300,600,300italic,600italic" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:700|Source+Sans+Pro:300" />
 	<link rel="stylesheet" href="assets/css/game.css" />
 	<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
 </head>
@@ -27,16 +27,7 @@
 	</main>
 	<canvas class="confetti" aria-hidden="true"></canvas>
 	<script>
-		const COLORS = [
-		"#E6194B", // Crimson
-		"#3CB44B", // Green
-		"#FFE119", // Yellow
-		"#4363D8", // Blue
-		"#F58231", // Orange
-		"#911EB4", // Purple
-		// "#42D4F4", // Cyan
-		// "#F032E6"  // Magenta
-		];
+		const COLORS = ["#E6194B", "#3CB44B", "#FFE119", "#4363D8", "#F58231", "#911EB4"];
 		const SET_SIZE = 4;
 		const FILLED_TUBES = 6;
 		const boxes = document.querySelectorAll(".box");
@@ -93,20 +84,19 @@
 			const destinationColors = tubeColors(destination);
 			if (!canMove(moving, destinationColors)) {
 				clearSelection();
-				return false;
+				return;
 			}
 			renderTube(destination, moving.concat(destinationColors));
 			renderTube(source, sourceColors.slice(moving.length));
 			clearSelection();
 			if (gameend()) launchConfetti();
 			else stopConfetti();
-			return true;
 		}
 
 		function gameend() {
 			return [...boxes].every((tube) => {
 				const colors = tubeColors(tube);
-				return colors.length === 0 || (colors.length === $ && colors.every((color) => color === colors[0]));
+				return colors.length === 0 || colors.every((color) => color === colors[0]);
 			});
 		}
 
@@ -212,46 +202,6 @@
 		});
 
 		document.querySelector(".new-game").addEventListener("click", newGame);
-
-		function realisticConfetti() {
-			const count = 200;
-			const defaults = {
-				origin: { y: 0.7 }
-			};
-
-			function fire(particleRatio, opts) {
-				confetti({
-					...defaults,
-					...opts,
-					particleCount: Math.floor(count * particleRatio)
-				});
-			}
-
-			fire(0.25, {
-				spread: 26,
-				startVelocity: 55
-			});
-			fire(0.2, {
-				spread: 60
-			});
-			fire(0.35, {
-				spread: 100,
-				decay: 0.91,
-				scalar: 0.8
-			});
-			fire(0.1, {
-				spread: 120,
-				startVelocity: 25,
-				decay: 0.92,
-				scalar: 1.2
-			});
-			fire(0.1, {
-				spread: 120,
-				startVelocity: 45
-			});
-		}
-
-		document.querySelector(".confetti-test").addEventListener("click", realisticConfetti);
 		newGame();
 	</script>
 </body>

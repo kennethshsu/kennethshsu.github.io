@@ -1,7 +1,5 @@
 :root {
-	--bg: #2e3141;
 	--panel: #353849;
-	--panel-hover: #3d4051;
 	--primary: #4c5c96;
 	--primary-hover: #53639e;
 	--primary-active: #45558d;
@@ -10,7 +8,6 @@
 
 html {
 	box-sizing: border-box;
-	scroll-behavior: smooth;
 }
 
 *,
@@ -66,7 +63,7 @@ main {
 	cursor: pointer;
 	overflow: hidden;
 	appearance: none;
-	transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+	transition: background-color 0.2s ease-in-out;
 }
 
 .stack {
@@ -114,11 +111,6 @@ main {
 	outline-offset: 3px;
 }
 
-.box.is-selected {
-	background: var(--panel-hover);
-	box-shadow: inset 0 0 0 2px var(--primary);
-}
-
 .confetti {
 	position: fixed;
 	inset: 0;
@@ -135,13 +127,14 @@ main {
 	margin-top: 1.25rem;
 }
 
-.new-game,
-.confetti-test {
+.new-game {
 	appearance: none;
 	display: inline-block;
 	margin: 0;
+	background-color: var(--primary);
 	border-radius: 5px;
 	border: 0;
+	box-shadow: none;
 	color: #ffffff;
 	cursor: pointer;
 	font-family: Raleway, Helvetica, sans-serif;
@@ -159,41 +152,21 @@ main {
 	transition: background-color 0.2s ease-in-out;
 }
 
-.new-game {
-	background-color: var(--primary);
-	box-shadow: none;
-}
-
-.confetti-test {
-	background-color: transparent;
-	box-shadow: inset 0 0 0 2px var(--line);
-}
-
 .new-game:hover {
 	background-color: var(--primary-hover);
-}
-
-.confetti-test:hover {
-	background-color: rgba(255, 255, 255, 0.025);
 }
 
 .new-game:active {
 	background-color: var(--primary-active);
 }
 
-.confetti-test:active {
-	background-color: rgba(255, 255, 255, 0.075);
-}
-
-.new-game:focus-visible,
-.confetti-test:focus-visible {
+.new-game:focus-visible {
 	outline: solid 2px rgba(255, 255, 255, 0.65);
 	outline-offset: 3px;
 }
 
 @media screen and (max-width: 736px) {
-	.new-game,
-	.confetti-test {
+	.new-game {
 		padding: 0;
 	}
 }
