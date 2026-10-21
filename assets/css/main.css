@@ -3210,6 +3210,22 @@ body.is-preload #banner p {
 	padding: 0 3.5em 1.25em 1.35em;
 }
 
+.puzzle-invite {
+	position: fixed;
+	right: 1.25rem;
+	bottom: 4.5rem;
+	z-index: 9999;
+	border-bottom: 0;
+}
+
+@media screen and (max-width: 736px) {
+
+	.puzzle-invite {
+		padding: 0 1em;
+	}
+
+}
+
 #popup-banner-close {
 	position: absolute;
 	top: 0.3em;
