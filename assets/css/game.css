@@ -68,61 +68,25 @@ main {
 }
 
 .cube {
-	--cube-light: #d5d9ea;
-	--cube-mid: #8b97c2;
-	--cube-deep: #4c5c96;
+	--cube-color: attr(data-color type(<color>), #4c5c96);
+	--cube-light: color-mix(in srgb, var(--cube-color) 55%, white);
+	--cube-deep: color-mix(in srgb, var(--cube-color) 70%, black);
 	height: 100%;
 	aspect-ratio: 1;
 	max-width: 100%;
 	border-radius: 4px;
 	background:
 		linear-gradient(180deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 40%),
-		linear-gradient(160deg, var(--cube-light) 0%, var(--cube-mid) 46%, var(--cube-deep) 100%);
+		linear-gradient(160deg, var(--cube-light) 0%, var(--cube-color) 46%, var(--cube-deep) 100%);
 	box-shadow:
 		inset 0 1px 0 rgba(255, 255, 255, 0.65),
-		0 2px 0 #2a3148;
-}
-
-.cube[data-color="blue"] {
-	--cube-light: #d5d9ea;
-	--cube-mid: #8b97c2;
-	--cube-deep: #4c5c96;
-}
-
-.cube[data-color="green"] {
-	--cube-light: #d5efe4;
-	--cube-mid: #6fbf9a;
-	--cube-deep: #2f7d5b;
-}
-
-.cube[data-color="gold"] {
-	--cube-light: #f6e7c2;
-	--cube-mid: #e2c16b;
-	--cube-deep: #b8882c;
-}
-
-.cube[data-color="rose"] {
-	--cube-light: #f6d5dc;
-	--cube-mid: #e08aa0;
-	--cube-deep: #b14b66;
-}
-
-.cube[data-color="violet"] {
-	--cube-light: #e6d8f6;
-	--cube-mid: #b48ad4;
-	--cube-deep: #7a4ea8;
-}
-
-.cube[data-color="teal"] {
-	--cube-light: #d2f3f4;
-	--cube-mid: #6ec4cc;
-	--cube-deep: #2f8f99;
+		0 2px 0 var(--cube-deep);
 }
 
 .cube.is-selected {
 	box-shadow:
 		inset 0 0 0 3px #ffffff,
-		0 2px 0 #2a3148;
+		0 2px 0 var(--cube-deep);
 }
 
 .box:hover {
