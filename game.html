@@ -56,9 +56,10 @@
 		}
 
 		function selectTopRun(tube) {
+			const cubes = [...tube.querySelectorAll(".cube")];
+			const alreadySelected = cubes.some((cube) => cube.classList.contains("is-selected"));
 			clearSelection();
-			const cubes = tube.querySelectorAll(".cube");
-			if (!cubes.length) return;
+			if (alreadySelected || !cubes.length) return;
 			const color = cubes[0].dataset.color;
 			for (const cube of cubes) {
 				if (cube.dataset.color !== color) break;
