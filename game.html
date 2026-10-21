@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title></title>
+	<link rel="stylesheet" href="assets/css/game.css" />
+</head>
+<body>
+	<main>
+		<div class="boxes" id="boxes">
+			<button class="box" type="button" aria-label="Box 1"><span class="stack"><span class="cube"></span><span class="cube"></span><span class="cube"></span><span class="cube"></span></span></button>
+			<button class="box" type="button" aria-label="Box 2"><span class="stack"><span class="cube"></span><span class="cube"></span><span class="cube"></span><span class="cube"></span></span></button>
+			<button class="box" type="button" aria-label="Box 3"><span class="stack"><span class="cube"></span><span class="cube"></span><span class="cube"></span><span class="cube"></span></span></button>
+			<button class="box" type="button" aria-label="Box 4"><span class="stack"><span class="cube"></span><span class="cube"></span><span class="cube"></span><span class="cube"></span></span></button>
+		</div>
+	</main>
+	<script>
+		const boxes = document.querySelectorAll(".box");
+
+		boxes.forEach((box) => {
+			box.addEventListener("click", () => {
+				boxes.forEach((other) => other.classList.remove("is-selected"));
+				box.classList.add("is-selected");
+			});
+		});
+	</script>
+</body>
+</html>
