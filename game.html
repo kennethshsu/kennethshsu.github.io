@@ -49,6 +49,23 @@
 			});
 		}
 
+		function clearSelection() {
+			document.querySelectorAll(".cube.is-selected").forEach((cube) => {
+				cube.classList.remove("is-selected");
+			});
+		}
+
+		function selectTopRun(tube) {
+			clearSelection();
+			const cubes = tube.querySelectorAll(".cube");
+			if (!cubes.length) return;
+			const color = cubes[0].dataset.color;
+			for (const cube of cubes) {
+				if (cube.dataset.color !== color) break;
+				cube.classList.add("is-selected");
+			}
+		}
+
 		function newGame() {
 			const pool = shuffle(COLORS.flatMap((color) => Array(SET_SIZE).fill(color)));
 			boxes.forEach((tube, index) => {
@@ -60,8 +77,7 @@
 
 		boxes.forEach((box) => {
 			box.addEventListener("click", () => {
-				boxes.forEach((other) => other.classList.remove("is-selected"));
-				box.classList.add("is-selected");
+				selectTopRun(box);
 			});
 		});
 
