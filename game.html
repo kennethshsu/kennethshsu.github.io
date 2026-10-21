@@ -40,17 +40,59 @@
 			// "#F032E6"  // Magenta
 		];
 		const SET_SIZE = 4;
-		const FILLED_TUBES = 6;
+		const SCRAMBLE_MOVES = 30;
 		const boxes = document.querySelectorAll(".box");
 
-		function shuffle(items) {
-			for (let i = items.length - 1; i > 0; i--) {
-				const j = Math.floor(Math.random() * (i + 1));
-				const current = items[i];
-				items[i] = items[j];
-				items[j] = current;
+		function createSolvableGame() {
+			function topRunLength(colors) {
+				let length = 1;
+				while (length < colors.length && colors[length] === colors[0]) length++;
+				return length;
 			}
-			return items;
+
+			function backwardMove(tubes, source, destination, count) {
+				tubes[destination].unshift(...tubes[source].splice(0, count));
+			}
+
+			while (true) {
+				let tubes = COLORS.map((color) => Array(SET_SIZE).fill(color));
+				while (tubes.length < boxes.length) tubes.push([]);
+				const seen = new Set([JSON.stringify(tubes)]);
+				let moves = 0;
+
+				while (moves < SCRAMBLE_MOVES) {
+					const candidates = [];
+
+					tubes.forEach((sourceColors, source) => {
+						if (!sourceColors.length) return;
+						const runLength = topRunLength(sourceColors);
+
+						for (let count = 1; count <= runLength; count++) {
+							const leavesEmpty = count === sourceColors.length;
+							const leavesMatchingTop = count < runLength;
+							if (!leavesEmpty && !leavesMatchingTop) continue;
+
+							tubes.forEach((destinationColors, destination) => {
+								if (source === destination || destinationColors.length + count > SET_SIZE) return;
+								if (destinationColors[0] === sourceColors[0]) return;
+
+								const next = tubes.map((tube) => [...tube]);
+								backwardMove(next, source, destination, count);
+								const key = JSON.stringify(next);
+								if (!seen.has(key)) candidates.push({ next, key });
+							});
+						}
+					});
+
+					if (!candidates.length) break;
+					const choice = candidates[Math.floor(Math.random() * candidates.length)];
+					tubes = choice.next;
+					seen.add(choice.key);
+					moves++;
+				}
+
+				if (moves === SCRAMBLE_MOVES) return tubes;
+			}
 		}
 
 		function renderTube(tube, colors) {
@@ -124,18 +166,16 @@
 		}
 
 		function newGame() {
-			const pool = shuffle(COLORS.flatMap((color) => Array(SET_SIZE).fill(color)));
+			const tubes = createSolvableGame();
 			boxes.forEach((tube, index) => {
-				const start = index * SET_SIZE;
-				const colors = index < FILLED_TUBES ? pool.slice(start, start + SET_SIZE) : [];
-				renderTube(tube, colors);
+				renderTube(tube, tubes[index]);
 			});
 			confetti.reset();
-			document.querySelector("main").classList.remove("is-ended");
+			document.querySelector("main").classList.remove("game-ended");
 		}
 
 		function endGame() {
-			document.querySelector("main").classList.add("is-ended");
+			document.querySelector("main").classList.add("game-ended");
 			realisticConfetti();
 		}
 
