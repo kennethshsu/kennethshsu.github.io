@@ -68,7 +68,7 @@ main {
 	cursor: pointer;
 	overflow: hidden;
 	appearance: none;
-	transition: background-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
+	transition: background-color 0.2s ease-in-out, opacity 0.8s ease-in-out;
 }
 
 .stack {
@@ -165,7 +165,7 @@ main.is-ended .confetti-test {
 	white-space: nowrap;
 	min-width: 10em;
 	max-width: 100%;
-	transition: background-color 0.2s ease-in-out;
+	transition: background-color 0.2s ease-in-out, opacity 0.8s ease-in-out;
 }
 
 .new-game {
