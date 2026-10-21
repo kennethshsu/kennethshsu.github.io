@@ -103,10 +103,27 @@ main {
 	box-shadow: inset 0 0 0 2px var(--primary);
 }
 
-.new-game {
+.confetti {
+	position: fixed;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	z-index: 5;
+}
+
+.game-actions {
+	display: flex;
+	justify-content: center;
+	gap: 1rem;
+	margin-top: 1.25rem;
+}
+
+.new-game,
+.confetti-test {
 	appearance: none;
 	display: block;
-	margin: 1.25rem auto 0;
+	margin: 0;
 	background-color: var(--primary);
 	border-radius: 5px;
 	border: 0;
@@ -127,15 +144,18 @@ main {
 	transition: background-color 0.2s ease-in-out;
 }
 
-.new-game:hover {
+.new-game:hover,
+.confetti-test:hover {
 	background-color: var(--primary-hover);
 }
 
-.new-game:active {
+.new-game:active,
+.confetti-test:active {
 	background-color: var(--primary-active);
 }
 
-.new-game:focus-visible {
+.new-game:focus-visible,
+.confetti-test:focus-visible {
 	outline: 2px solid #ffffff;
 	outline-offset: 3px;
 }

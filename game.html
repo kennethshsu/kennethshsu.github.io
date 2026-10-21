@@ -6,6 +6,7 @@
 	<title></title>
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:200,700|Source+Sans+Pro:300,600,300italic,600italic" />
 	<link rel="stylesheet" href="assets/css/game.css" />
+	<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 	<main>
@@ -19,8 +20,12 @@
 			<button class="box" type="button" aria-label="Tube 7"><span class="stack"></span></button>
 			<button class="box" type="button" aria-label="Tube 8"><span class="stack"></span></button>
 		</div>
-		<button class="new-game" type="button">New Game</button>
+		<div class="game-actions">
+			<button class="new-game" type="button">New Game</button>
+			<button class="confetti-test" type="button">Confetti</button>
+		</div>
 	</main>
+	<canvas class="confetti" aria-hidden="true"></canvas>
 	<script>
 		const COLORS = [
 		"#E6194B", // Crimson
@@ -93,7 +98,16 @@
 			renderTube(destination, moving.concat(destinationColors));
 			renderTube(source, sourceColors.slice(moving.length));
 			clearSelection();
+			if (gameend()) launchConfetti();
+			else stopConfetti();
 			return true;
+		}
+
+		function gameend() {
+			return [...boxes].every((tube) => {
+				const colors = tubeColors(tube);
+				return colors.length === 0 || (colors.length === $ && colors.every((color) => color === colors[0]));
+			});
 		}
 
 		function selectTopRun(tube) {
@@ -115,7 +129,76 @@
 				const colors = index < FILLED_TUBES ? pool.slice(start, start + SET_SIZE) : [];
 				renderTube(tube, colors);
 			});
+			stopConfetti();
 		}
+
+		const confettiCanvas = document.querySelector(".confetti");
+		const confettiCtx = confettiCanvas.getContext("2d");
+		let confettiPieces = [];
+		let confettiFrame = null;
+
+		function resizeConfetti() {
+			const ratio = window.devicePixelRatio || 1;
+			confettiCanvas.width = Math.floor(window.innerWidth * ratio);
+			confettiCanvas.height = Math.floor(window.innerHeight * ratio);
+			confettiCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
+		}
+
+		function stopConfetti() {
+			if (confettiFrame) cancelAnimationFrame(confettiFrame);
+			confettiFrame = null;
+			confettiPieces = [];
+			confettiCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+		}
+
+		function spawnConfetti(side) {
+			const width = window.innerWidth;
+			const height = window.innerHeight;
+			const direction = side === "left" ? 1 : -1;
+			for (let i = 0; i < 70; i++) {
+				confettiPieces.push({
+					x: side === "left" ? 0 : width,
+					y: height * (0.15 + Math.random() * 0.7),
+					vx: direction * (5 + Math.random() * 9),
+					vy: -4 - Math.random() * 10,
+					w: 6 + Math.random() * 7,
+					h: 8 + Math.random() * 8,
+					color: COLORS[Math.floor(Math.random() * COLORS.length)],
+					rot: Math.random() * Math.PI,
+					spin: (Math.random() - 0.5) * 0.3
+				});
+			}
+		}
+
+		function drawConfetti() {
+			confettiCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+			confettiPieces = confettiPieces.filter((piece) => piece.y < window.innerHeight + 40);
+			confettiPieces.forEach((piece) => {
+				piece.vy += 0.28;
+				piece.vx *= 0.992;
+				piece.x += piece.vx;
+				piece.y += piece.vy;
+				piece.rot += piece.spin;
+				confettiCtx.save();
+				confettiCtx.translate(piece.x, piece.y);
+				confettiCtx.rotate(piece.rot);
+				confettiCtx.fillStyle = piece.color;
+				confettiCtx.fillRect(-piece.w / 2, -piece.h / 2, piece.w, piece.h);
+				confettiCtx.restore();
+			});
+			confettiFrame = confettiPieces.length ? requestAnimationFrame(drawConfetti) : null;
+		}
+
+		function launchConfetti() {
+			if (confettiFrame) return;
+			resizeConfetti();
+			spawnConfetti("left");
+			spawnConfetti("right");
+			confettiFrame = requestAnimationFrame(drawConfetti);
+		}
+
+		window.addEventListener("resize", resizeConfetti);
+		resizeConfetti();
 
 		boxes.forEach((box) => {
 			box.addEventListener("click", () => {
@@ -129,6 +212,47 @@
 		});
 
 		document.querySelector(".new-game").addEventListener("click", newGame);
+
+		function realisticConfetti() {
+			const count = 200;
+			const defaults = {
+				origin: { y: 0.7 }
+			};
+
+			function fire(particleRatio, opts) {
+				confetti({
+					...defaults,
+					...opts,
+					particleCount: Math.floor(count * particleRatio)
+				});
+			}
+
+			fire(0.25, {
+				spread: 26,
+				startVelocity: 55
+			});
+			fire(0.2, {
+				spread: 60
+			});
+			fire(0.35, {
+				spread: 100,
+				decay: 0.91,
+				scalar: 0.8
+			});
+			fire(0.1, {
+				spread: 120,
+				startVelocity: 25,
+				decay: 0.92,
+				scalar: 1.2
+			});
+			fire(0.1, {
+				spread: 120,
+				startVelocity: 45
+			});
+		}
+
+		document.querySelector(".confetti-test").addEventListener("click", realisticConfetti);
+		newGame();
 	</script>
 </body>
 </html>
