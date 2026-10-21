@@ -129,7 +129,7 @@ main.game-ended .click-blocker {
 }
 
 main.game-ended .box {
-	opacity: 0.4;
+	opacity: 0.2;
 }
 
 main.game-ended .endGame {
