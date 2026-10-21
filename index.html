@@ -18,7 +18,7 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 
-	<link rel="stylesheet" href="assets/css/main.css" />
+	<link rel="stylesheet" href="assets/css/main.css?v=48" />
 	<link rel="stylesheet" href="assets/css/reveal.css" />
 	<noscript>
 		<link rel="stylesheet" href="assets/css/noscript.css" />
@@ -315,7 +315,14 @@
 
 	</div>
 
-	<a class="button primary puzzle-invite" href="game.html">🧩 Puzzle?</a>
+	<button class="button primary puzzle-invite" type="button">🧩 Puzzle?</button>
+	<div id="popup-banner-backdrop"></div>
+	<div id="popup-banner" data-manual>
+		<div class="popup-banner-game">
+			<iframe id="puzzle-frame" title="Puzzle"></iframe>
+		</div>
+		<span id="popup-banner-close">×</span>
+	</div>
 
 	<!-- Scripts -->
 	<script src="assets/js/jquery.min.js"></script>
@@ -323,7 +330,7 @@
 	<script src="assets/js/browser.min.js"></script>
 	<script src="assets/js/breakpoints.min.js"></script>
 	<script src="assets/js/util.js"></script>
-	<script src="assets/js/main.js"></script>
+	<script src="assets/js/main.js?v=45"></script>
 	<script src="assets/js/reveal.js"></script>
 	<script>
 		fetch('contact_footer.html')

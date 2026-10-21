@@ -137,9 +137,10 @@
 		});
 
 	// Popup banner: optional deadline from #popup-banner data-show-until (ISO 8601). Omit attribute for no expiry.
+	// data-manual banners stay hidden until something else adds .is-visible.
 	$(document).ready(function () {
 		var $banner = $('#popup-banner');
-		if (!$banner.length)
+		if (!$banner.length || $banner.is('[data-manual]'))
 			return;
 
 		var raw = $banner.attr('data-show-until');
@@ -166,8 +167,25 @@
 		}, 2000);
 	});
 
-	$('#popup-banner-close').on('click', function () {
-		$('#popup-banner').removeClass('is-visible');
+	function hidePopupBanner() {
+		$('#popup-banner, #popup-banner-backdrop').removeClass('is-visible');
+		var frame = document.getElementById('puzzle-frame');
+		if (frame)
+			frame.src = 'about:blank';
+	}
+
+	$('#popup-banner-close, #popup-banner-backdrop').on('click', hidePopupBanner);
+
+	$('.puzzle-invite').on('click', function () {
+		var frame = document.getElementById('puzzle-frame');
+		if (frame)
+			frame.src = 'game.html';
+		$('#popup-banner, #popup-banner-backdrop').addClass('is-visible');
+	});
+
+	$(document).on('keydown', function (event) {
+		if (event.keyCode == 27)
+			hidePopupBanner();
 	});
 
 })(jQuery);
