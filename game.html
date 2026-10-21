@@ -4,19 +4,59 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title></title>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:200,700|Source+Sans+Pro:300,600,300italic,600italic" />
 	<link rel="stylesheet" href="assets/css/game.css" />
 </head>
 <body>
 	<main>
 		<div class="boxes" id="boxes">
-			<button class="box" type="button" aria-label="Box 1"><span class="stack"><span class="cube"></span><span class="cube"></span><span class="cube"></span><span class="cube"></span></span></button>
-			<button class="box" type="button" aria-label="Box 2"><span class="stack"><span class="cube"></span><span class="cube"></span><span class="cube"></span><span class="cube"></span></span></button>
-			<button class="box" type="button" aria-label="Box 3"><span class="stack"><span class="cube"></span><span class="cube"></span><span class="cube"></span><span class="cube"></span></span></button>
-			<button class="box" type="button" aria-label="Box 4"><span class="stack"><span class="cube"></span><span class="cube"></span><span class="cube"></span><span class="cube"></span></span></button>
+			<button class="box" type="button" aria-label="Tube 1"><span class="stack"></span></button>
+			<button class="box" type="button" aria-label="Tube 2"><span class="stack"></span></button>
+			<button class="box" type="button" aria-label="Tube 3"><span class="stack"></span></button>
+			<button class="box" type="button" aria-label="Tube 4"><span class="stack"></span></button>
+			<button class="box" type="button" aria-label="Tube 5"><span class="stack"></span></button>
+			<button class="box" type="button" aria-label="Tube 6"><span class="stack"></span></button>
+			<button class="box" type="button" aria-label="Tube 7"><span class="stack"></span></button>
+			<button class="box" type="button" aria-label="Tube 8"><span class="stack"></span></button>
 		</div>
+		<button class="new-game" type="button">New Game</button>
 	</main>
 	<script>
+		const COLORS = ["blue", "green", "gold", "rose", "violet", "teal"];
+		const SET_SIZE = 4;
+		const FILLED_TUBES = 6;
 		const boxes = document.querySelectorAll(".box");
+
+		function shuffle(items) {
+			for (let i = items.length - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				const current = items[i];
+				items[i] = items[j];
+				items[j] = current;
+			}
+			return items;
+		}
+
+		function renderTube(tube, colors) {
+			const stack = tube.querySelector(".stack");
+			stack.replaceChildren();
+			colors.forEach((color, index) => {
+				const cube = document.createElement("span");
+				cube.className = "cube";
+				cube.dataset.color = color;
+				cube.style.gridRow = String(SET_SIZE - colors.length + 1 + index);
+				stack.appendChild(cube);
+			});
+		}
+
+		function newGame() {
+			const pool = shuffle(COLORS.flatMap((color) => Array(SET_SIZE).fill(color)));
+			boxes.forEach((tube, index) => {
+				const start = index * SET_SIZE;
+				const colors = index < FILLED_TUBES ? pool.slice(start, start + SET_SIZE) : [];
+				renderTube(tube, colors);
+			});
+		}
 
 		boxes.forEach((box) => {
 			box.addEventListener("click", () => {
@@ -24,6 +64,8 @@
 				box.classList.add("is-selected");
 			});
 		});
+
+		document.querySelector(".new-game").addEventListener("click", newGame);
 	</script>
 </body>
 </html>
