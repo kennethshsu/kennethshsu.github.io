@@ -10,15 +10,18 @@
 </head>
 <body>
 	<main>
-		<div class="boxes" id="boxes">
-			<button class="box" type="button" aria-label="Tube 1"><span class="stack"></span></button>
-			<button class="box" type="button" aria-label="Tube 2"><span class="stack"></span></button>
-			<button class="box" type="button" aria-label="Tube 3"><span class="stack"></span></button>
-			<button class="box" type="button" aria-label="Tube 4"><span class="stack"></span></button>
-			<button class="box" type="button" aria-label="Tube 5"><span class="stack"></span></button>
-			<button class="box" type="button" aria-label="Tube 6"><span class="stack"></span></button>
-			<button class="box" type="button" aria-label="Tube 7"><span class="stack"></span></button>
-			<button class="box" type="button" aria-label="Tube 8"><span class="stack"></span></button>
+		<div class="board">
+			<div class="boxes" id="boxes">
+				<button class="box" type="button" aria-label="Tube 1"><span class="stack"></span></button>
+				<button class="box" type="button" aria-label="Tube 2"><span class="stack"></span></button>
+				<button class="box" type="button" aria-label="Tube 3"><span class="stack"></span></button>
+				<button class="box" type="button" aria-label="Tube 4"><span class="stack"></span></button>
+				<button class="box" type="button" aria-label="Tube 5"><span class="stack"></span></button>
+				<button class="box" type="button" aria-label="Tube 6"><span class="stack"></span></button>
+				<button class="box" type="button" aria-label="Tube 7"><span class="stack"></span></button>
+				<button class="box" type="button" aria-label="Tube 8"><span class="stack"></span></button>
+			</div>
+			<div class="click-blocker" aria-hidden="true"></div>
 		</div>
 		<div class="game-actions">
 			<button class="new-game" type="button">New Game</button>
@@ -97,7 +100,7 @@
 			renderTube(destination, moving.concat(destinationColors));
 			renderTube(source, sourceColors.slice(moving.length));
 			clearSelection();
-			if (gameend()) realisticConfetti();
+			if (gameend()) endGame();
 			else confetti.reset();
 		}
 
@@ -128,6 +131,12 @@
 				renderTube(tube, colors);
 			});
 			confetti.reset();
+			document.querySelector("main").classList.remove("is-ended");
+		}
+
+		function endGame() {
+			document.querySelector("main").classList.add("is-ended");
+			realisticConfetti();
 		}
 
 		boxes.forEach((box) => {
