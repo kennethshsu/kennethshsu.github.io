@@ -1692,6 +1692,10 @@ body.is-preload .items.onload-fade-in>*>.inner {
 	margin-bottom: 2em;
 }
 
+.company-logo-row a {
+	border-bottom: 0;
+}
+
 .company-logo-row .icon {
 	width: 60px;
 	height: auto;
