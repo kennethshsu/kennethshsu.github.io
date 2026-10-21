@@ -127,14 +127,13 @@ main {
 	margin-top: 1.25rem;
 }
 
-.new-game {
+.new-game,
+.confetti-test {
 	appearance: none;
 	display: inline-block;
 	margin: 0;
-	background-color: var(--primary);
 	border-radius: 5px;
 	border: 0;
-	box-shadow: none;
 	color: #ffffff;
 	cursor: pointer;
 	font-family: Raleway, Helvetica, sans-serif;
@@ -152,21 +151,41 @@ main {
 	transition: background-color 0.2s ease-in-out;
 }
 
+.new-game {
+	background-color: var(--primary);
+	box-shadow: none;
+}
+
+.confetti-test {
+	background-color: transparent;
+	box-shadow: inset 0 0 0 2px var(--line);
+}
+
 .new-game:hover {
 	background-color: var(--primary-hover);
+}
+
+.confetti-test:hover {
+	background-color: rgba(255, 255, 255, 0.025);
 }
 
 .new-game:active {
 	background-color: var(--primary-active);
 }
 
-.new-game:focus-visible {
+.confetti-test:active {
+	background-color: rgba(255, 255, 255, 0.075);
+}
+
+.new-game:focus-visible,
+.confetti-test:focus-visible {
 	outline: solid 2px rgba(255, 255, 255, 0.65);
 	outline-offset: 3px;
 }
 
 @media screen and (max-width: 736px) {
-	.new-game {
+	.new-game,
+	.confetti-test {
 		padding: 0;
 	}
 }
