@@ -8,8 +8,15 @@
 	--line: rgba(255, 255, 255, 0.125);
 }
 
-* {
+html {
 	box-sizing: border-box;
+	scroll-behavior: smooth;
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: inherit;
 }
 
 body {
@@ -17,12 +24,17 @@ body {
 	min-height: 100vh;
 	display: grid;
 	place-items: center;
-	background-color: var(--bg);
+	background-color: #2e3141;
+	background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/background.jpg");
+	background-size: auto, cover;
+	background-attachment: fixed, fixed;
+	background-position: center, center;
 	color: #ffffff;
 	font-family: "Source Sans Pro", Helvetica, sans-serif;
 	font-size: clamp(13pt, 1vw, 16.5pt);
 	font-weight: 300;
 	line-height: 1.65;
+	-webkit-text-size-adjust: none;
 }
 
 @media screen and (max-width: 980px) {
@@ -74,7 +86,7 @@ main {
 	height: 100%;
 	aspect-ratio: 1;
 	max-width: 100%;
-	border-radius: 4px;
+	border-radius: 5px;
 	background:
 		linear-gradient(180deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 40%),
 		linear-gradient(160deg, var(--cube-light) 0%, var(--cube-color) 46%, var(--cube-deep) 100%);
@@ -90,11 +102,15 @@ main {
 }
 
 .box:hover {
-	background: var(--panel-hover);
+	background-color: color-mix(in srgb, var(--panel), white 2.5%);
+}
+
+.box:active {
+	background-color: color-mix(in srgb, var(--panel), white 7.5%);
 }
 
 .box:focus-visible {
-	outline: 2px solid #ffffff;
+	outline: solid 2px rgba(255, 255, 255, 0.65);
 	outline-offset: 3px;
 }
 
@@ -122,12 +138,10 @@ main {
 .new-game,
 .confetti-test {
 	appearance: none;
-	display: block;
+	display: inline-block;
 	margin: 0;
-	background-color: var(--primary);
 	border-radius: 5px;
 	border: 0;
-	box-shadow: none;
 	color: #ffffff;
 	cursor: pointer;
 	font-family: Raleway, Helvetica, sans-serif;
@@ -141,21 +155,45 @@ main {
 	text-decoration: none;
 	white-space: nowrap;
 	min-width: 10em;
+	max-width: 100%;
 	transition: background-color 0.2s ease-in-out;
 }
 
-.new-game:hover,
-.confetti-test:hover {
+.new-game {
+	background-color: var(--primary);
+	box-shadow: none;
+}
+
+.confetti-test {
+	background-color: transparent;
+	box-shadow: inset 0 0 0 2px var(--line);
+}
+
+.new-game:hover {
 	background-color: var(--primary-hover);
 }
 
-.new-game:active,
-.confetti-test:active {
+.confetti-test:hover {
+	background-color: rgba(255, 255, 255, 0.025);
+}
+
+.new-game:active {
 	background-color: var(--primary-active);
+}
+
+.confetti-test:active {
+	background-color: rgba(255, 255, 255, 0.075);
 }
 
 .new-game:focus-visible,
 .confetti-test:focus-visible {
-	outline: 2px solid #ffffff;
+	outline: solid 2px rgba(255, 255, 255, 0.65);
 	outline-offset: 3px;
+}
+
+@media screen and (max-width: 736px) {
+	.new-game,
+	.confetti-test {
+		padding: 0;
+	}
 }
