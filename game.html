@@ -25,7 +25,7 @@
 		</div>
 		<div class="game-actions">
 			<button class="new-game" type="button">New Game</button>
-			<button class="confetti-test" type="button">Confetti</button>
+			<button class="endGame" type="button">Confetti</button>
 		</div>
 	</main>
 	<script>
@@ -53,7 +53,6 @@
 			}
 			return items;
 		}
-
 
 		function createSolvableGame() {
 			const tubes = COLORS.map((color) => Array(SET_SIZE).fill(color));
@@ -238,7 +237,7 @@
 			});
 		}
 
-		document.querySelector(".confetti-test").addEventListener("click", endGame);
+		document.querySelector(".endGame").addEventListener("click", endGame);
 		newGame();
 	</script>
 </body>
