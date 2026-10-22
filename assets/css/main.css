@@ -3171,7 +3171,6 @@ body.is-preload #banner p {
 
 #popup-banner p {
 	margin: 0;
-	padding-right: 2em;
 	font-size: 0.9em;
 	line-height: 1.5;
 }
@@ -3192,7 +3191,7 @@ body.is-preload #banner p {
 
 #popup-banner .popup-banner-list {
 	margin: 0;
-	padding: 0 2em 0 1.25em;
+	padding: 0 0 0 1.25em;
 	list-style: disc;
 	list-style-position: outside;
 }
