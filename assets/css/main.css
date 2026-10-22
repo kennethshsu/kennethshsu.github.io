@@ -3077,6 +3077,14 @@ body.is-preload #banner p {
 	transition: opacity 0.4s ease;
 }
 
+@media screen and (max-width: 736px) {
+	#popup-banner {
+		padding-left: 0.75em;
+		padding-right: 0.75em;
+		max-width: 92%;
+	}
+}
+
 #popup-banner p,
 #popup-banner li,
 #popup-banner i,
