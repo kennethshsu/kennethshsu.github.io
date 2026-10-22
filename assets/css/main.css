@@ -3048,7 +3048,7 @@ body.is-preload #banner p {
 	position: fixed;
 	inset: 0;
 	z-index: 10001;
-	background: #2e3141;
+	background: rgba(46, 49, 65, 0.72);
 }
 
 #popup-banner-backdrop.is-visible {

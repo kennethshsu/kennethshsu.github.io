@@ -132,20 +132,13 @@ main.game-ended .box {
 	opacity: 0.2;
 }
 
-main.game-ended .endGame {
-	opacity: 0.35;
-	pointer-events: none;
-}
-
 .game-actions {
 	display: flex;
 	justify-content: center;
-	gap: 1rem;
 	margin-top: 1.25rem;
 }
 
-.new-game,
-.endGame {
+.new-game {
 	appearance: none;
 	display: inline-block;
 	margin: 0;
@@ -173,36 +166,21 @@ main.game-ended .endGame {
 	box-shadow: none;
 }
 
-.endGame {
-	background-color: transparent;
-	box-shadow: inset 0 0 0 2px var(--line);
-}
-
 .new-game:hover {
 	background-color: var(--primary-hover);
-}
-
-.endGame:hover {
-	background-color: rgba(255, 255, 255, 0.025);
 }
 
 .new-game:active {
 	background-color: var(--primary-active);
 }
 
-.endGame:active {
-	background-color: rgba(255, 255, 255, 0.075);
-}
-
-.new-game:focus-visible,
-.endGame:focus-visible {
+.new-game:focus-visible {
 	outline: solid 2px rgba(255, 255, 255, 0.65);
 	outline-offset: 3px;
 }
 
 @media screen and (max-width: 736px) {
-	.new-game,
-	.endGame {
+	.new-game {
 		padding: 0;
 	}
 }
