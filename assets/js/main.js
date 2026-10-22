@@ -186,20 +186,25 @@
 	}
 
 	function hidePopupBanner() {
-		var wasOpen = $('#popup-banner').hasClass('is-visible');
-		$('#popup-banner, #popup-banner-backdrop').removeClass('is-visible');
+		$('#popup-banner').removeClass('is-visible');
+	}
+
+	function hidePuzzle() {
+		var wasOpen = $('#puzzle-popup').hasClass('is-visible');
+		$('#puzzle-popup, #popup-banner-backdrop').removeClass('is-visible');
 		if (wasOpen)
 			unlockPageScroll();
 		var frame = document.getElementById('puzzle-frame');
 		if (!frame)
 			return;
 		window.setTimeout(function () {
-			if (!$('#popup-banner').hasClass('is-visible'))
+			if (!$('#puzzle-popup').hasClass('is-visible'))
 				frame.src = 'about:blank';
 		}, 400);
 	}
 
-	$('#popup-banner-close, #popup-banner-backdrop').on('click', hidePopupBanner);
+	$('#popup-banner-close').on('click', hidePopupBanner);
+	$('#puzzle-popup-close, #popup-banner-backdrop').on('click', hidePuzzle);
 
 	$window.on('load', function () {
 		window.setTimeout(function () {
@@ -211,13 +216,15 @@
 		var frame = document.getElementById('puzzle-frame');
 		if (frame)
 			frame.src = 'game.html';
-		$('#popup-banner, #popup-banner-backdrop').addClass('is-visible');
+		$('#puzzle-popup, #popup-banner-backdrop').addClass('is-visible');
 		lockPageScroll();
 	});
 
 	$(document).on('keydown', function (event) {
-		if (event.keyCode == 27)
+		if (event.keyCode == 27) {
 			hidePopupBanner();
+			hidePuzzle();
+		}
 	});
 
 })(jQuery);
