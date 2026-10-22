@@ -1,4 +1,4 @@
-@import url(fontawesome-all.min.css);
+/* @import url(fontawesome-all.min.css); — disabled for faster load; re-enable for footer icon glyphs */
 @import url("https://fonts.googleapis.com/css?family=Raleway:200,700|Source+Sans+Pro:300,600,300italic,600italic");
 
 /*
@@ -205,9 +205,22 @@ body::before {
 	z-index: -1;
 	pointer-events: none;
 	background-color: #2e3141;
-	background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/background.jpg");
+	background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8));
 	background-size: auto, cover;
 	background-position: center, center;
+}
+
+body.has-background-image::before {
+	background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/background.jpg");
+}
+
+/* Font Awesome off: footer social links show text labels instead of icon fonts */
+.footer-bar .icon:before {
+	display: none;
+}
+
+.footer-bar .icon > .label {
+	display: inline;
 }
 
 body.is-preload *,
