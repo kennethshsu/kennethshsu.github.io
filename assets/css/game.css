@@ -23,7 +23,7 @@ body {
 	--pad-y: 0rem;
 	--game-gap: 1rem;
 	--game-actions: 1.25rem;
-	--tube-from-width: calc((100cqw - 2 * var(--pad-x) - 3 * var(--game-gap)) / 4);
+	--tube-from-width: calc((100cqw - 2 * var(--pad-x) - 4 * var(--game-gap)) / 5);
 	--tube-from-height: calc((100cqh - 2 * var(--pad-y) - var(--game-actions) - 3em - var(--game-gap) - 0.25rem) / 2 * 6.5 / 17.5);
 	margin: 0;
 	height: 100%;
@@ -57,7 +57,7 @@ main {
 
 .boxes {
 	display: grid;
-	grid-template-columns: repeat(4, max-content);
+	grid-template-columns: repeat(5, max-content);
 	justify-content: center;
 	gap: 1rem;
 }
@@ -270,7 +270,7 @@ main.game-ended .how-to-play-button {
 	.boxes {
 		width: 100%;
 		min-width: 0;
-		grid-template-columns: repeat(4, max-content);
+		grid-template-columns: repeat(5, max-content);
 		justify-content: center;
 		gap: var(--game-gap);
 	}
