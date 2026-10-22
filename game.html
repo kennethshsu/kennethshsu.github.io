@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title></title>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:700|Source+Sans+Pro:300" />
+	<link rel="stylesheet" href="assets/css/game.css" />
+	<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+	<main>
+		<div class="board">
+			<div class="boxes" id="boxes">
+				<button class="box" type="button" aria-label="Tube 1"><span class="stack"></span></button>
+				<button class="box" type="button" aria-label="Tube 2"><span class="stack"></span></button>
+				<button class="box" type="button" aria-label="Tube 3"><span class="stack"></span></button>
+				<button class="box" type="button" aria-label="Tube 4"><span class="stack"></span></button>
+				<button class="box" type="button" aria-label="Tube 5"><span class="stack"></span></button>
+				<button class="box" type="button" aria-label="Tube 6"><span class="stack"></span></button>
+				<button class="box" type="button" aria-label="Tube 7"><span class="stack"></span></button>
+				<button class="box" type="button" aria-label="Tube 8"><span class="stack"></span></button>
+			</div>
+			<div class="click-blocker" aria-hidden="true"></div>
+		</div>
+		<div class="game-actions">
+			<button class="new-game" type="button">New Game</button>
+		</div>
+	</main>
+	<script>
+		const COLORS = [
+			"#E6194B", // Crimson
+			"#3CB44B", // Green
+			"#FFE119", // Yellow
+			"#4363D8", // Blue
+			"#F58231", // Orange
+			"#911EB4", // Purple
+			// "#42D4F4", // Cyan
+			// "#F032E6"  // Magenta
+		];
+		const SET_SIZE = 4;
+		const FILLED_TUBES = 6;
+		const SCRAMBLE_MOVES = 100;
+		const boxes = document.querySelectorAll(".box");
+
+		function shuffle(items) {
+			for (let i = items.length - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				const current = items[i];
+				items[i] = items[j];
+				items[j] = current;
+			}
+			return items;
+		}
+
+		function createSolvableGame() {
+			const tubes = COLORS.map((color) => Array(SET_SIZE).fill(color));
+			while (tubes.length < boxes.length) tubes.push([]);
+
+			for (let move = 0; move < SCRAMBLE_MOVES; move++) {
+				const options = [];
+
+				tubes.forEach((source, sourceIndex) => {
+					if (!source.length) return;
+
+					let sameColorCount = 1;
+					while (
+						sameColorCount < source.length &&
+						source[sameColorCount] === source[0]
+					) {
+						sameColorCount++;
+					}
+
+					tubes.forEach((destination, destinationIndex) => {
+						const space = SET_SIZE - destination.length;
+						if (sourceIndex === destinationIndex || !space) return;
+						options.push({
+							sourceIndex,
+							destinationIndex,
+							maxCount: Math.min(sameColorCount, space)
+						});
+					});
+				});
+
+				const option = options[Math.floor(Math.random() * options.length)];
+				const count = 1 + Math.floor(Math.random() * option.maxCount);
+				const moving = tubes[option.sourceIndex].splice(0, count);
+				tubes[option.destinationIndex].unshift(...moving);
+			}
+
+			// move the cubes in the last two tubes to available spaces
+			const filled = tubes.slice(0, -2);
+			tubes.slice(-2).forEach((source) => {
+				while (source.length) {
+					const open = filled.filter((tube) => tube.length < SET_SIZE);
+					const destination = open[Math.floor(Math.random() * open.length)];
+					destination.unshift(source.shift());
+				}
+			});
+
+			return shuffle(filled).concat(tubes.slice(-2));
+		}
+
+		function renderTube(tube, colors) {
+			const stack = tube.querySelector(".stack");
+			stack.replaceChildren();
+			colors.forEach((color, index) => {
+				const cube = document.createElement("span");
+				cube.className = "cube";
+				cube.dataset.color = color;
+				cube.style.gridRow = String(SET_SIZE - colors.length + 1 + index);
+				stack.appendChild(cube);
+			});
+		}
+
+		function clearSelection() {
+			document.querySelectorAll(".cube.is-selected").forEach((cube) => {
+				cube.classList.remove("is-selected");
+			});
+		}
+
+		function tubeColors(tube) {
+			return [...tube.querySelectorAll(".cube")].map((cube) => cube.dataset.color);
+		}
+
+		function selectedTube() {
+			const cube = document.querySelector(".cube.is-selected");
+			return cube ? cube.closest(".box") : null;
+		}
+
+		function canMove(moving, destinationColors) {
+			if (!moving.length || moving.length + destinationColors.length > SET_SIZE) return false;
+			if (!destinationColors.length) return true;
+			return destinationColors[0] === moving[0];
+		}
+
+		function moveCubes(source, destination) {
+			const sourceColors = tubeColors(source);
+			const moving = [];
+			while (moving.length < sourceColors.length && sourceColors[moving.length] === sourceColors[0]) {
+				moving.push(sourceColors[0]);
+			}
+			const destinationColors = tubeColors(destination);
+			if (!canMove(moving, destinationColors)) {
+				clearSelection();
+				return;
+			}
+			renderTube(destination, moving.concat(destinationColors));
+			renderTube(source, sourceColors.slice(moving.length));
+			clearSelection();
+			if (gameend()) endGame();
+			else confetti.reset();
+		}
+
+		function gameend() {
+			return [...boxes].every((tube) => {
+				const colors = tubeColors(tube);
+				return colors.length === 0 || (colors.length === SET_SIZE && colors.every((color) => color === colors[0]));
+			});
+		}
+
+		function selectTopRun(tube) {
+			const cubes = [...tube.querySelectorAll(".cube")];
+			const alreadySelected = cubes.some((cube) => cube.classList.contains("is-selected"));
+			clearSelection();
+			if (alreadySelected || !cubes.length) return;
+			const color = cubes[0].dataset.color;
+			for (const cube of cubes) {
+				if (cube.dataset.color !== color) break;
+				cube.classList.add("is-selected");
+			}
+		}
+
+		function newGame() {
+			const tubes = createSolvableGame();
+			boxes.forEach((tube, index) => {
+				renderTube(tube, tubes[index]);
+			});
+			confetti.reset();
+			document.querySelector("main").classList.remove("game-ended");
+		}
+
+		function endGame() {
+			document.querySelector("main").classList.add("game-ended");
+			realisticConfetti();
+		}
+
+		boxes.forEach((box) => {
+			box.addEventListener("click", () => {
+				const source = selectedTube();
+				if (source && source !== box) {
+					moveCubes(source, box);
+					return;
+				}
+				selectTopRun(box);
+			});
+		});
+
+		document.querySelector(".new-game").addEventListener("click", newGame);
+
+		function realisticConfetti() {
+			const count = 200;
+			const defaults = {
+				origin: { y: 0.7 }
+			};
+
+			function fire(particleRatio, opts) {
+				confetti({
+					...defaults,
+					...opts,
+					particleCount: Math.floor(count * particleRatio)
+				});
+			}
+
+			fire(0.25, {
+				spread: 26,
+				startVelocity: 55
+			});
+			fire(0.2, {
+				spread: 60
+			});
+			fire(0.35, {
+				spread: 100,
+				decay: 0.91,
+				scalar: 0.8
+			});
+			fire(0.1, {
+				spread: 120,
+				startVelocity: 25,
+				decay: 0.92,
+				scalar: 1.2
+			});
+			fire(0.1, {
+				spread: 120,
+				startVelocity: 45
+			});
+		}
+
+		newGame();
+	</script>
+</body>
+</html>

@@ -137,9 +137,10 @@
 		});
 
 	// Popup banner: optional deadline from #popup-banner data-show-until (ISO 8601). Omit attribute for no expiry.
+	// data-manual banners stay hidden until something else adds .is-visible.
 	$(document).ready(function () {
 		var $banner = $('#popup-banner');
-		if (!$banner.length)
+		if (!$banner.length || $banner.is('[data-manual]'))
 			return;
 
 		var raw = $banner.attr('data-show-until');
@@ -166,8 +167,64 @@
 		}, 2000);
 	});
 
-	$('#popup-banner-close').on('click', function () {
+	var pageScrollY = 0;
+
+	function lockPageScroll() {
+		pageScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+		document.body.style.top = '-' + pageScrollY + 'px';
+		document.documentElement.classList.add('puzzle-open');
+	}
+
+	function unlockPageScroll() {
+		var root = document.documentElement;
+		root.classList.remove('puzzle-open');
+		document.body.style.top = '';
+		var previous = root.style.scrollBehavior;
+		root.style.scrollBehavior = 'auto';
+		window.scrollTo(0, pageScrollY);
+		root.style.scrollBehavior = previous;
+	}
+
+	function hidePopupBanner() {
 		$('#popup-banner').removeClass('is-visible');
+	}
+
+	function hidePuzzle() {
+		var wasOpen = $('#puzzle-popup').hasClass('is-visible');
+		$('#puzzle-popup, #popup-banner-backdrop').removeClass('is-visible');
+		if (wasOpen)
+			unlockPageScroll();
+		var frame = document.getElementById('puzzle-frame');
+		if (!frame)
+			return;
+		window.setTimeout(function () {
+			if (!$('#puzzle-popup').hasClass('is-visible'))
+				frame.src = 'about:blank';
+		}, 400);
+	}
+
+	$('#popup-banner-close').on('click', hidePopupBanner);
+	$('#puzzle-popup-close, #popup-banner-backdrop').on('click', hidePuzzle);
+
+	$window.on('load', function () {
+		window.setTimeout(function () {
+			$('.puzzle-invite').addClass('is-visible');
+		}, 5000);
+	});
+
+	$('.puzzle-invite').on('click', function () {
+		var frame = document.getElementById('puzzle-frame');
+		if (frame)
+			frame.src = 'game.html';
+		$('#puzzle-popup, #popup-banner-backdrop').addClass('is-visible');
+		lockPageScroll();
+	});
+
+	$(document).on('keydown', function (event) {
+		if (event.keyCode == 27) {
+			hidePopupBanner();
+			hidePuzzle();
+		}
 	});
 
 })(jQuery);

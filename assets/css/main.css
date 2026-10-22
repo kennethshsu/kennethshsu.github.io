@@ -3043,6 +3043,23 @@ body.is-preload #banner p {
 }
 
 /* Popup banner: no layout space when hidden (expired, dismissed, or before delayed show) */
+#popup-banner-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 10001;
+	background: rgba(46, 49, 65, 0.72);
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+#popup-banner-backdrop.is-visible {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+}
+
 #popup-banner {
 	background: rgba(250, 250, 250, 0.3);
 	color: #ffffff;
@@ -3057,14 +3074,7 @@ body.is-preload #banner p {
 	opacity: 0;
 	visibility: hidden;
 	pointer-events: none;
-	-moz-transition: opacity 0.4s ease;
-	-webkit-transition: opacity 0.4s ease;
-	-ms-transition: opacity 0.4s ease;
 	transition: opacity 0.4s ease;
-}
-
-#popup-banner:not(.is-visible) {
-	display: none;
 }
 
 #popup-banner p,
@@ -3081,6 +3091,82 @@ body.is-preload #banner p {
 	opacity: 1;
 	visibility: visible;
 	pointer-events: auto;
+}
+
+#puzzle-popup {
+	background: rgba(250, 250, 250, 0.3);
+	color: #ffffff;
+	text-align: left;
+	padding: 1em;
+	position: fixed;
+	top: auto;
+	right: 1.25rem;
+	bottom: 1.25rem;
+	left: auto;
+	z-index: 10002;
+	border-radius: 10px;
+	width: max-content;
+	max-width: calc(100vw - 2rem);
+	margin: 0;
+	overflow: hidden;
+	font: inherit;
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transform: translateY(0.75rem);
+	transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
+}
+
+#puzzle-popup.is-visible {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+	transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#popup-banner,
+	#popup-banner-backdrop,
+	#puzzle-popup {
+		transition: none;
+	}
+
+	#puzzle-popup {
+		transform: none;
+	}
+}
+
+#puzzle-popup .popup-banner-game {
+	width: 390px;
+	height: min(740px, calc(100vh - 4.5rem));
+	overflow: hidden;
+}
+
+#puzzle-popup iframe {
+	display: block;
+	width: 100%;
+	height: 100%;
+	border: 0;
+}
+
+@media screen and (max-width: 736px) {
+	#puzzle-popup {
+		top: 0.5rem;
+		right: 0.5rem;
+		bottom: 0.5rem;
+		left: 0.5rem;
+		width: auto;
+		max-width: none;
+		display: flex;
+		flex-direction: column;
+	}
+
+	#puzzle-popup .popup-banner-game {
+		width: 100%;
+		flex: 1;
+		height: auto;
+		min-height: 0;
+	}
 }
 
 #popup-banner p {
@@ -3210,25 +3296,63 @@ body.is-preload #banner p {
 	padding: 0 3.5em 1.25em 1.35em;
 }
 
-#popup-banner-close {
+.puzzle-invite {
+	position: fixed;
+	right: 1.25rem;
+	bottom: 1.25rem;
+	z-index: 998;
+	border: 2px solid #ffffff;
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transition: background-color 0.2s ease-in-out, opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.puzzle-invite.is-visible {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+}
+
+html.puzzle-open,
+html.puzzle-open body {
+	overflow: hidden;
+}
+
+html.puzzle-open body {
+	position: fixed;
+	left: 0;
+	right: 0;
+	width: 100%;
+}
+
+@media screen and (max-width: 736px) {
+
+	.puzzle-invite {
+		padding: 0 1em;
+	}
+
+}
+
+.popup-close {
 	position: absolute;
 	top: 0.3em;
-	right: 0.5em;
-	background: none;
-	border: none;
-	outline: none;
-	color: #ffffff;
-	font-size: 1.2em;
-	width: 1.5em;
-	height: 1.5em;
-	cursor: pointer;
-	box-shadow: none;
+	right: 0.3em;
+	z-index: 2;
+	width: 1.1em;
+	height: 1.1em;
 	padding: 0;
 	margin: 0;
-	width: auto;
-	height: auto;
-	line-height: 1;
+	border: none;
+	outline: none;
+	box-shadow: none;
+	background-color: #ffffff;
+	-webkit-mask: url("../../images/close_icon.svg") center / contain no-repeat;
+	mask: url("../../images/close_icon.svg") center / contain no-repeat;
+	font-size: 1.2em;
+	overflow: hidden;
+	text-indent: 100%;
+	white-space: nowrap;
+	cursor: pointer;
 	display: block;
-	align-items: center;
-	justify-content: center;
 }
