@@ -209,7 +209,7 @@
 	$window.on('load', function () {
 		window.setTimeout(function () {
 			$('.puzzle-invite').addClass('is-visible');
-		}, 5000);
+		}, 3000);
 	});
 
 	$('.puzzle-invite').on('click', function () {
