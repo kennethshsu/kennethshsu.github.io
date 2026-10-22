@@ -23,7 +23,7 @@ body {
 	--pad-y: 0rem;
 	--game-gap: 1rem;
 	--game-actions: 1.25rem;
-	--tube-from-width: calc((100cqw - 2 * var(--pad-x) - 3 * var(--game-gap)) / 4);
+	--tube-from-width: calc((100cqw - 2 * var(--pad-x) - 4 * var(--game-gap)) / 5);
 	--tube-from-height: calc((100cqh - 2 * var(--pad-y) - var(--game-actions) - 3em - var(--game-gap) - 0.25rem) / 2 * 6.5 / 17.5);
 	margin: 0;
 	height: 100%;
@@ -57,7 +57,7 @@ main {
 
 .boxes {
 	display: grid;
-	grid-template-columns: repeat(4, max-content);
+	grid-template-columns: repeat(5, max-content);
 	justify-content: center;
 	gap: 1rem;
 }
@@ -212,7 +212,6 @@ main.game-ended .box {
 
 .how-to-play {
 	width: min(22rem, calc(100% - 2rem));
-	min-height: 15rem;
 	padding: 2.5rem 1.5rem 1.5rem;
 	border: 0;
 	border-radius: 10px;
@@ -240,8 +239,13 @@ main.game-ended .box {
 	cursor: pointer;
 }
 
-.how-to-play-content {
-	min-height: 11rem;
+.how-to-play-content ol {
+	margin: 0;
+	padding-left: 1.25em;
+}
+
+.how-to-play-content li + li {
+	margin-top: 0.65em;
 }
 
 main.game-ended .how-to-play-button {
@@ -266,7 +270,7 @@ main.game-ended .how-to-play-button {
 	.boxes {
 		width: 100%;
 		min-width: 0;
-		grid-template-columns: repeat(4, max-content);
+		grid-template-columns: repeat(5, max-content);
 		justify-content: center;
 		gap: var(--game-gap);
 	}

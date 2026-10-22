@@ -20,6 +20,8 @@
 				<button class="box" type="button" aria-label="Tube 6"><span class="stack"></span></button>
 				<button class="box" type="button" aria-label="Tube 7"><span class="stack"></span></button>
 				<button class="box" type="button" aria-label="Tube 8"><span class="stack"></span></button>
+				<button class="box" type="button" aria-label="Tube 9"><span class="stack"></span></button>
+				<button class="box" type="button" aria-label="Tube 10"><span class="stack"></span></button>
 			</div>
 			<div class="click-blocker" aria-hidden="true"></div>
 		</div>
@@ -31,7 +33,11 @@
 	<dialog class="how-to-play" aria-label="How to Play">
 		<button class="how-to-play-close" type="button" aria-label="Close">Close</button>
 		<div class="how-to-play-content">
-			<!-- Draft the How to Play content here. -->
+			<ol>
+				<li>Sort all cubes by color.</li>
+				<li>Move same-colored cubes together.</li>
+				<li>Cubes may only go in an empty tube, or on cube(s) of the same color.</li>
+			</ol>
 		</div>
 	</dialog>
 	<script>
@@ -42,11 +48,11 @@
 			"#4363D8", // Blue
 			"#F58231", // Orange
 			"#911EB4", // Purple
-			// "#42D4F4", // Cyan
-			// "#F032E6"  // Magenta
+			"#42D4F4", // Cyan
+			"#000000"  // Black
 		];
 		const SET_SIZE = 4;
-		const FILLED_TUBES = 6;
+		const FILLED_TUBES = 8;
 		const SCRAMBLE_MOVES = SET_SIZE * FILLED_TUBES * 10;
 		const boxes = document.querySelectorAll(".box");
 

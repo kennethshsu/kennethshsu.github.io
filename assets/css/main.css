@@ -3145,8 +3145,8 @@ body.is-preload #banner p {
 }
 
 #puzzle-popup .popup-banner-game {
-	width: min(320px, calc((100vh - 4.5rem) * 320 / 470), calc(100vw - 4rem));
-	aspect-ratio: 320 / 470;
+	width: min(390px, calc((100vh - 4.5rem) * 390 / 465), calc(100vw - 4rem));
+	aspect-ratio: 390 / 465;
 	height: auto;
 	overflow: hidden;
 }
