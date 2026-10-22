@@ -180,6 +180,27 @@ main.game-ended .box {
 }
 
 @media screen and (max-width: 736px) {
+	main {
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+		padding: 0.75rem;
+	}
+
+	.boxes {
+		width: 100%;
+		min-width: 0;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 0.45rem;
+	}
+
+	.box {
+		width: 100%;
+		min-width: 0;
+		height: auto;
+		aspect-ratio: 6.5 / 17.5;
+	}
+
 	.new-game {
 		padding: 0;
 	}

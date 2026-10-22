@@ -167,11 +167,36 @@
 		}, 2000);
 	});
 
+	var pageScrollY = 0;
+
+	function lockPageScroll() {
+		pageScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+		document.body.style.top = '-' + pageScrollY + 'px';
+		document.documentElement.classList.add('puzzle-open');
+	}
+
+	function unlockPageScroll() {
+		var root = document.documentElement;
+		root.classList.remove('puzzle-open');
+		document.body.style.top = '';
+		var previous = root.style.scrollBehavior;
+		root.style.scrollBehavior = 'auto';
+		window.scrollTo(0, pageScrollY);
+		root.style.scrollBehavior = previous;
+	}
+
 	function hidePopupBanner() {
+		var wasOpen = $('#popup-banner').hasClass('is-visible');
 		$('#popup-banner, #popup-banner-backdrop').removeClass('is-visible');
+		if (wasOpen)
+			unlockPageScroll();
 		var frame = document.getElementById('puzzle-frame');
-		if (frame)
-			frame.src = 'about:blank';
+		if (!frame)
+			return;
+		window.setTimeout(function () {
+			if (!$('#popup-banner').hasClass('is-visible'))
+				frame.src = 'about:blank';
+		}, 400);
 	}
 
 	$('#popup-banner-close, #popup-banner-backdrop').on('click', hidePopupBanner);
@@ -181,6 +206,7 @@
 		if (frame)
 			frame.src = 'game.html';
 		$('#popup-banner, #popup-banner-backdrop').addClass('is-visible');
+		lockPageScroll();
 	});
 
 	$(document).on('keydown', function (event) {

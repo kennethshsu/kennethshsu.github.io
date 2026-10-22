@@ -3044,15 +3044,20 @@ body.is-preload #banner p {
 
 /* Popup banner: no layout space when hidden (expired, dismissed, or before delayed show) */
 #popup-banner-backdrop {
-	display: none;
 	position: fixed;
 	inset: 0;
 	z-index: 10001;
 	background: rgba(46, 49, 65, 0.72);
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 
 #popup-banner-backdrop.is-visible {
-	display: block;
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
 }
 
 #popup-banner {
@@ -3065,7 +3070,6 @@ body.is-preload #banner p {
 	right: 1.25rem;
 	bottom: 1.25rem;
 	left: auto;
-	transform: none;
 	z-index: 10002;
 	border-radius: 10px;
 	width: max-content;
@@ -3076,14 +3080,8 @@ body.is-preload #banner p {
 	opacity: 0;
 	visibility: hidden;
 	pointer-events: none;
-	-moz-transition: opacity 0.4s ease;
-	-webkit-transition: opacity 0.4s ease;
-	-ms-transition: opacity 0.4s ease;
-	transition: opacity 0.4s ease;
-}
-
-#popup-banner:not(.is-visible) {
-	display: none;
+	transform: translateY(0.75rem);
+	transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
 }
 
 #popup-banner p,
@@ -3100,21 +3098,51 @@ body.is-preload #banner p {
 	opacity: 1;
 	visibility: visible;
 	pointer-events: auto;
+	transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#popup-banner,
+	#popup-banner-backdrop {
+		transition: none;
+	}
+
+	#popup-banner {
+		transform: none;
+	}
 }
 
 #popup-banner .popup-banner-game {
-	width: 18rem;
-	height: 22rem;
+	width: 390px;
+	height: min(740px, calc(100vh - 4.5rem));
 	overflow: hidden;
 }
 
 #popup-banner iframe {
 	display: block;
-	width: 36rem;
-	height: 44rem;
+	width: 100%;
+	height: 100%;
 	border: 0;
-	transform: scale(0.5);
-	transform-origin: top left;
+}
+
+@media screen and (max-width: 736px) {
+	#popup-banner {
+		top: 0.5rem;
+		right: 0.5rem;
+		bottom: 0.5rem;
+		left: 0.5rem;
+		width: auto;
+		max-width: none;
+		display: flex;
+		flex-direction: column;
+	}
+
+	#popup-banner .popup-banner-game {
+		width: 100%;
+		flex: 1;
+		height: auto;
+		min-height: 0;
+	}
 }
 
 #popup-banner p {
@@ -3249,7 +3277,19 @@ body.is-preload #banner p {
 	right: 1.25rem;
 	bottom: 1.25rem;
 	z-index: 998;
-	border-bottom: 0;
+	border: 2px solid #ffffff;
+}
+
+html.puzzle-open,
+html.puzzle-open body {
+	overflow: hidden;
+}
+
+html.puzzle-open body {
+	position: fixed;
+	left: 0;
+	right: 0;
+	width: 100%;
 }
 
 @media screen and (max-width: 736px) {
