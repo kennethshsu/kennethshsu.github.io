@@ -14,11 +14,31 @@
 		xsmall: '(max-width: 480px)'
 	});
 
-	// Play initial animations on page load.
-	$window.on('load', function () {
+	// Show the hero as soon as the page structure is ready (not after every image downloads).
+	$(function () {
 		window.setTimeout(function () {
 			$body.removeClass('is-preload');
 		}, 100);
+	});
+
+	function loadBackgroundImage() {
+		if ($body.hasClass('has-background-image'))
+			return;
+		var img = new Image();
+		img.src = 'images/background.webp';
+		img.onload = function () {
+			$body.addClass('has-background-image');
+		};
+	}
+
+	$(function () {
+		var run = function () {
+			loadBackgroundImage();
+		};
+		if (window.requestIdleCallback)
+			window.requestIdleCallback(run, { timeout: 2500 });
+		else
+			window.setTimeout(run, 400);
 	});
 
 	// Header.
@@ -189,33 +209,51 @@
 		$('#popup-banner').removeClass('is-visible');
 	}
 
+	var PUZZLE_URL = 'game.html';
+
+	function puzzleFrameLoaded(frame) {
+		if (!frame || !frame.src || frame.src === 'about:blank')
+			return false;
+		try {
+			return new URL(frame.src, window.location.href).pathname.endsWith('game.html');
+		} catch (e) {
+			return frame.src.indexOf('game.html') !== -1;
+		}
+	}
+
+	function preloadPuzzleFrame() {
+		var frame = document.getElementById('puzzle-frame');
+		if (!frame || puzzleFrameLoaded(frame))
+			return;
+		frame.src = PUZZLE_URL;
+	}
+
 	function hidePuzzle() {
 		var wasOpen = $('#puzzle-popup').hasClass('is-visible');
 		$('#puzzle-popup, #popup-banner-backdrop').removeClass('is-visible');
 		if (wasOpen)
 			unlockPageScroll();
-		var frame = document.getElementById('puzzle-frame');
-		if (!frame)
-			return;
-		window.setTimeout(function () {
-			if (!$('#puzzle-popup').hasClass('is-visible'))
-				frame.src = 'about:blank';
-		}, 400);
 	}
 
 	$('#popup-banner-close').on('click', hidePopupBanner);
 	$('#puzzle-popup-close, #popup-banner-backdrop').on('click', hidePuzzle);
 
 	$window.on('load', function () {
+		var runPreload = function () {
+			preloadPuzzleFrame();
+		};
+		if (window.requestIdleCallback)
+			window.requestIdleCallback(runPreload, { timeout: 3000 });
+		else
+			window.setTimeout(runPreload, 500);
+
 		window.setTimeout(function () {
 			$('.puzzle-invite').addClass('is-visible');
 		}, 3000);
 	});
 
 	$('.puzzle-invite').on('click', function () {
-		var frame = document.getElementById('puzzle-frame');
-		if (frame)
-			frame.src = '/game.html';
+		preloadPuzzleFrame();
 		$('#puzzle-popup, #popup-banner-backdrop').addClass('is-visible');
 		lockPageScroll();
 	});
