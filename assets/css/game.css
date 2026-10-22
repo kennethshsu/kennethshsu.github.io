@@ -212,7 +212,6 @@ main.game-ended .box {
 
 .how-to-play {
 	width: min(22rem, calc(100% - 2rem));
-	min-height: 15rem;
 	padding: 2.5rem 1.5rem 1.5rem;
 	border: 0;
 	border-radius: 10px;
@@ -240,8 +239,13 @@ main.game-ended .box {
 	cursor: pointer;
 }
 
-.how-to-play-content {
-	min-height: 11rem;
+.how-to-play-content ol {
+	margin: 0;
+	padding-left: 1.25em;
+}
+
+.how-to-play-content li + li {
+	margin-top: 0.65em;
 }
 
 main.game-ended .how-to-play-button {
