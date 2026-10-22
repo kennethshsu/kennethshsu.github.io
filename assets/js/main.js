@@ -14,11 +14,31 @@
 		xsmall: '(max-width: 480px)'
 	});
 
-	// Play initial animations on page load.
-	$window.on('load', function () {
+	// Show the hero as soon as the page structure is ready (not after every image downloads).
+	$(function () {
 		window.setTimeout(function () {
 			$body.removeClass('is-preload');
 		}, 100);
+	});
+
+	function loadBackgroundImage() {
+		if ($body.hasClass('has-background-image'))
+			return;
+		var img = new Image();
+		img.src = 'images/background.jpg';
+		img.onload = function () {
+			$body.addClass('has-background-image');
+		};
+	}
+
+	$(function () {
+		var run = function () {
+			loadBackgroundImage();
+		};
+		if (window.requestIdleCallback)
+			window.requestIdleCallback(run, { timeout: 2500 });
+		else
+			window.setTimeout(run, 400);
 	});
 
 	// Header.
