@@ -2019,9 +2019,6 @@ button:disabled,
 	line-height: 1;
 	font-family: 'Font Awesome 5 Free';
 	font-weight: 900;
-}
-
-#header nav a[href="#menu"]:before {
 	content: '\f0c9';
 	line-height: inherit;
 }
@@ -2245,8 +2242,6 @@ body.is-menu-visible #menu .inner {
 	min-height: 100vh;
 	position: relative;
 	z-index: auto;
-	/* z-index:2; TODO Is this needed? */
-	
 }
 
 #banner .inner {
