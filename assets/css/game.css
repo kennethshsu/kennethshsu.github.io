@@ -55,7 +55,7 @@ main {
 	container-type: inline-size;
 	position: relative;
 	width: 6.5rem;
-	height: 17.5rem;
+	height: calc(17.5rem + 9.7rem / 6);
 	padding: 0;
 	border: 0;
 	border-radius: 5px;
@@ -70,7 +70,10 @@ main {
 
 .stack {
 	position: absolute;
-	inset: calc(100cqw * 9.7 / 39);
+	top: calc(100cqw * 9.7 / 39 * 2);
+	right: calc(100cqw * 9.7 / 39);
+	bottom: calc(100cqw * 9.7 / 39);
+	left: calc(100cqw * 9.7 / 39);
 	display: grid;
 	grid-template-rows: repeat(4, 1fr);
 	justify-items: stretch;
@@ -93,9 +96,11 @@ main {
 	box-shadow:
 		inset 0 1px 0 rgba(255, 255, 255, 0.65),
 		0 2px 0 var(--cube-deep);
+	transition: transform 0.2s ease;
 }
 
 .cube.is-selected {
+	transform: translateY(calc(100cqw * -9.7 / 78));
 	box-shadow:
 		inset 0 0 0 3px #ffffff,
 		0 2px 0 var(--cube-deep);
@@ -196,7 +201,7 @@ main.game-ended .box {
 		width: 100%;
 		min-width: 0;
 		height: auto;
-		aspect-ratio: 6.5 / 17.5;
+		aspect-ratio: 6.5 / calc(17.5 + 9.7 / 6);
 	}
 
 	.new-game {
