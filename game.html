@@ -25,8 +25,15 @@
 		</div>
 		<div class="game-actions">
 			<button class="new-game" type="button">New Game</button>
+			<button class="how-to-play-button" type="button">How to Play</button>
 		</div>
 	</main>
+	<dialog class="how-to-play" aria-label="How to Play">
+		<button class="how-to-play-close" type="button" aria-label="Close">Close</button>
+		<div class="how-to-play-content">
+			<!-- Draft the How to Play content here. -->
+		</div>
+	</dialog>
 	<script>
 		const COLORS = [
 			"#E6194B", // Crimson
@@ -40,7 +47,7 @@
 		];
 		const SET_SIZE = 4;
 		const FILLED_TUBES = 6;
-		const SCRAMBLE_MOVES = 100;
+		const SCRAMBLE_MOVES = SET_SIZE * FILLED_TUBES * 10;
 		const boxes = document.querySelectorAll(".box");
 
 		function shuffle(items) {
@@ -82,6 +89,7 @@
 					});
 				});
 
+				if (!options.length) break;
 				const option = options[Math.floor(Math.random() * options.length)];
 				const count = 1 + Math.floor(Math.random() * option.maxCount);
 				const moving = tubes[option.sourceIndex].splice(0, count);
@@ -94,6 +102,7 @@
 				while (source.length) {
 					const open = filled.filter((tube) => tube.length < SET_SIZE);
 					const destination = open[Math.floor(Math.random() * open.length)];
+					if (!destination) break;
 					destination.unshift(source.shift());
 				}
 			});
@@ -108,6 +117,7 @@
 				const cube = document.createElement("span");
 				cube.className = "cube";
 				cube.dataset.color = color;
+				cube.style.setProperty("--cube-color", color);
 				cube.style.gridRow = String(SET_SIZE - colors.length + 1 + index);
 				stack.appendChild(cube);
 			});
@@ -149,7 +159,7 @@
 			renderTube(source, sourceColors.slice(moving.length));
 			clearSelection();
 			if (gameend()) endGame();
-			else confetti.reset();
+			else resetConfetti();
 		}
 
 		function gameend() {
@@ -176,8 +186,12 @@
 			boxes.forEach((tube, index) => {
 				renderTube(tube, tubes[index]);
 			});
-			confetti.reset();
+			resetConfetti();
 			document.querySelector("main").classList.remove("game-ended");
+		}
+
+		function resetConfetti() {
+			if (typeof confetti !== "undefined") confetti.reset();
 		}
 
 		function endGame() {
@@ -197,8 +211,12 @@
 		});
 
 		document.querySelector(".new-game").addEventListener("click", newGame);
+		const howToPlay = document.querySelector(".how-to-play");
+		document.querySelector(".how-to-play-button").addEventListener("click", () => howToPlay.showModal());
+		document.querySelector(".how-to-play-close").addEventListener("click", () => howToPlay.close());
 
 		function realisticConfetti() {
+			if (typeof confetti === "undefined") return;
 			const count = 200;
 			const defaults = {
 				origin: { y: 0.7 }

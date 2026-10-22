@@ -8,6 +8,8 @@
 
 html {
 	box-sizing: border-box;
+	height: 100%;
+	container-type: size;
 }
 
 *,
@@ -17,10 +19,19 @@ html {
 }
 
 body {
+	--pad-x: 1rem;
+	--pad-y: 0rem;
+	--game-gap: 1rem;
+	--game-actions: 1.25rem;
+	--tube-from-width: calc((100cqw - 2 * var(--pad-x) - 3 * var(--game-gap)) / 4);
+	--tube-from-height: calc((100cqh - 2 * var(--pad-y) - var(--game-actions) - 3em - var(--game-gap) - 0.25rem) / 2 * 6.5 / 17.5);
 	margin: 0;
-	min-height: 100vh;
+	height: 100%;
+	max-height: 100%;
+	min-height: 0;
 	display: grid;
 	place-items: center;
+	overflow: hidden;
 	background-color: #2e3141;
 	color: #ffffff;
 	font-family: "Source Sans Pro", Helvetica, sans-serif;
@@ -54,8 +65,10 @@ main {
 .box {
 	container-type: inline-size;
 	position: relative;
-	width: 6.5rem;
-	height: 17.5rem;
+	font-size: inherit;
+	width: min(6.5rem, var(--tube-from-width), var(--tube-from-height));
+	height: auto;
+	aspect-ratio: 6.5 / 17.5;
 	padding: 0;
 	border: 0;
 	border-radius: 5px;
@@ -87,7 +100,8 @@ main {
 	aspect-ratio: 1;
 	max-width: 100%;
 	border-radius: 5px;
-	background:
+	background-color: var(--cube-color, #4c5c96);
+	background-image:
 		linear-gradient(180deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 40%),
 		linear-gradient(160deg, var(--cube-light) 0%, var(--cube-color) 46%, var(--cube-deep) 100%);
 	box-shadow:
@@ -135,10 +149,13 @@ main.game-ended .box {
 .game-actions {
 	display: flex;
 	justify-content: center;
+	gap: 0.75rem;
 	margin-top: 1.25rem;
 }
 
-.new-game {
+.new-game,
+.how-to-play-button {
+	min-width: min(10em, calc((100cqw - 2 * var(--pad-x) - 0.75rem) / 2));
 	appearance: none;
 	display: inline-block;
 	margin: 0;
@@ -156,7 +173,6 @@ main.game-ended .box {
 	text-align: center;
 	text-decoration: none;
 	white-space: nowrap;
-	min-width: 10em;
 	max-width: 100%;
 	transition: background-color 0.2s ease-in-out, opacity 0.8s ease-in-out;
 }
@@ -166,42 +182,97 @@ main.game-ended .box {
 	box-shadow: none;
 }
 
+.how-to-play-button {
+	background-color: transparent;
+	box-shadow: inset 0 0 0 2px var(--line);
+}
+
 .new-game:hover {
 	background-color: var(--primary-hover);
+}
+
+.how-to-play-button:hover {
+	background-color: rgba(255, 255, 255, 0.025);
 }
 
 .new-game:active {
 	background-color: var(--primary-active);
 }
 
-.new-game:focus-visible {
+.how-to-play-button:active {
+	background-color: rgba(255, 255, 255, 0.075);
+}
+
+.new-game:focus-visible,
+.how-to-play-button:focus-visible,
+.how-to-play-close:focus-visible {
 	outline: solid 2px rgba(255, 255, 255, 0.65);
 	outline-offset: 3px;
 }
 
+.how-to-play {
+	width: min(22rem, calc(100% - 2rem));
+	min-height: 15rem;
+	padding: 2.5rem 1.5rem 1.5rem;
+	border: 0;
+	border-radius: 10px;
+	background: var(--panel);
+	box-shadow: inset 0 0 0 2px var(--line);
+	color: #ffffff;
+}
+
+.how-to-play::backdrop {
+	background: rgba(46, 49, 65, 0.72);
+}
+
+.how-to-play-close {
+	position: absolute;
+	top: 0.65rem;
+	right: 0.65rem;
+	width: 1.25rem;
+	height: 1.25rem;
+	padding: 0;
+	border: 0;
+	background: url("../../images/close_icon.svg") center / contain no-repeat;
+	overflow: hidden;
+	text-indent: 100%;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.how-to-play-content {
+	min-height: 11rem;
+}
+
+main.game-ended .how-to-play-button {
+	opacity: 0.2;
+	pointer-events: none;
+}
+
 @media screen and (max-width: 736px) {
+	body {
+		--pad-x: 0.75rem;
+		--pad-y: 0.75rem;
+		--game-gap: 0.45rem;
+	}
+
 	main {
 		width: 100%;
 		max-width: 100%;
 		min-width: 0;
-		padding: 0.75rem;
+		padding: var(--pad-y) var(--pad-x);
 	}
 
 	.boxes {
 		width: 100%;
 		min-width: 0;
-		grid-template-columns: repeat(4, minmax(0, 1fr));
-		gap: 0.45rem;
+		grid-template-columns: repeat(4, max-content);
+		justify-content: center;
+		gap: var(--game-gap);
 	}
 
-	.box {
-		width: 100%;
-		min-width: 0;
-		height: auto;
-		aspect-ratio: 6.5 / 17.5;
-	}
-
-	.new-game {
+	.new-game,
+	.how-to-play-button {
 		padding: 0;
 	}
 }

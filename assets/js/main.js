@@ -215,7 +215,7 @@
 	$('.puzzle-invite').on('click', function () {
 		var frame = document.getElementById('puzzle-frame');
 		if (frame)
-			frame.src = 'game.html';
+			frame.src = '/game.html';
 		$('#puzzle-popup, #popup-banner-backdrop').addClass('is-visible');
 		lockPageScroll();
 	});
