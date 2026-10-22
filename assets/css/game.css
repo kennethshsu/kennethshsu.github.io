@@ -9,6 +9,7 @@
 html {
 	box-sizing: border-box;
 	height: 100%;
+	container-type: size;
 }
 
 *,
@@ -18,11 +19,19 @@ html {
 }
 
 body {
+	--pad-x: 1rem;
+	--pad-y: 0rem;
+	--game-gap: 1rem;
+	--game-actions: 1.25rem;
+	--tube-from-width: calc((100cqw - 2 * var(--pad-x) - 3 * var(--game-gap)) / 4);
+	--tube-from-height: calc((100cqh - 2 * var(--pad-y) - var(--game-actions) - 3em - var(--game-gap) - 0.25rem) / 2 * 6.5 / 17.5);
 	margin: 0;
 	height: 100%;
-	min-height: 100%;
+	max-height: 100%;
+	min-height: 0;
 	display: grid;
 	place-items: center;
+	overflow: hidden;
 	background-color: #2e3141;
 	color: #ffffff;
 	font-family: "Source Sans Pro", Helvetica, sans-serif;
@@ -56,8 +65,10 @@ main {
 .box {
 	container-type: inline-size;
 	position: relative;
-	width: 6.5rem;
-	height: 17.5rem;
+	font-size: inherit;
+	width: min(6.5rem, var(--tube-from-width), var(--tube-from-height));
+	height: auto;
+	aspect-ratio: 6.5 / 17.5;
 	padding: 0;
 	border: 0;
 	border-radius: 5px;
@@ -144,6 +155,7 @@ main.game-ended .box {
 
 .new-game,
 .how-to-play-button {
+	min-width: min(10em, calc((100cqw - 2 * var(--pad-x) - 0.75rem) / 2));
 	appearance: none;
 	display: inline-block;
 	margin: 0;
@@ -161,7 +173,6 @@ main.game-ended .box {
 	text-align: center;
 	text-decoration: none;
 	white-space: nowrap;
-	min-width: 10em;
 	max-width: 100%;
 	transition: background-color 0.2s ease-in-out, opacity 0.8s ease-in-out;
 }
@@ -239,25 +250,25 @@ main.game-ended .how-to-play-button {
 }
 
 @media screen and (max-width: 736px) {
+	body {
+		--pad-x: 0.75rem;
+		--pad-y: 0.75rem;
+		--game-gap: 0.45rem;
+	}
+
 	main {
 		width: 100%;
 		max-width: 100%;
 		min-width: 0;
-		padding: 0.75rem;
+		padding: var(--pad-y) var(--pad-x);
 	}
 
 	.boxes {
 		width: 100%;
 		min-width: 0;
-		grid-template-columns: repeat(4, minmax(0, 1fr));
-		gap: 0.45rem;
-	}
-
-	.box {
-		width: 100%;
-		min-width: 0;
-		height: auto;
-		aspect-ratio: 6.5 / 17.5;
+		grid-template-columns: repeat(4, max-content);
+		justify-content: center;
+		gap: var(--game-gap);
 	}
 
 	.new-game,
