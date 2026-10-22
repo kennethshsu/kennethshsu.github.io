@@ -2334,8 +2334,8 @@ body.is-menu-visible #menu .inner {
 @media screen and (max-width: 980px) {
 
 	#banner {
-		padding: 12em 3em 12.375em 3em;
-		margin-bottom: -4.75em;
+		padding: 12em 3em 11vh 3em;
+		margin-bottom: 0;
 	}
 
 	#banner .inner {
@@ -2347,8 +2347,8 @@ body.is-menu-visible #menu .inner {
 @media screen and (max-width: 736px) {
 
 	#banner {
-		padding: 5em 2em 4.25em 2em;
-		margin-bottom: -2.5em;
+		padding: 5em 2em 11vh 2em;
+		margin-bottom: 0;
 	}
 
 	#banner .logo {
@@ -3077,6 +3077,14 @@ body.is-preload #banner p {
 	transition: opacity 0.4s ease;
 }
 
+@media screen and (max-width: 736px) {
+	#popup-banner {
+		padding-left: 0.75em;
+		padding-right: 0.75em;
+		max-width: 92%;
+	}
+}
+
 #popup-banner p,
 #popup-banner li,
 #popup-banner i,
@@ -3137,8 +3145,9 @@ body.is-preload #banner p {
 }
 
 #puzzle-popup .popup-banner-game {
-	width: 390px;
-	height: min(740px, calc(100vh - 4.5rem));
+	width: min(320px, calc((100vh - 4.5rem) * 320 / 470), calc(100vw - 4rem));
+	aspect-ratio: 320 / 470;
+	height: auto;
 	overflow: hidden;
 }
 
@@ -3165,13 +3174,13 @@ body.is-preload #banner p {
 		width: 100%;
 		flex: 1;
 		height: auto;
+		aspect-ratio: auto;
 		min-height: 0;
 	}
 }
 
 #popup-banner p {
 	margin: 0;
-	padding-right: 2em;
 	font-size: 0.9em;
 	line-height: 1.5;
 }
@@ -3192,7 +3201,7 @@ body.is-preload #banner p {
 
 #popup-banner .popup-banner-list {
 	margin: 0;
-	padding: 0 2em 0 1.25em;
+	padding: 0 0 0 1.25em;
 	list-style: disc;
 	list-style-position: outside;
 }
@@ -3346,13 +3355,16 @@ html.puzzle-open body {
 	border: none;
 	outline: none;
 	box-shadow: none;
-	background-color: #ffffff;
-	-webkit-mask: url("../../images/close_icon.svg") center / contain no-repeat;
-	mask: url("../../images/close_icon.svg") center / contain no-repeat;
+	background: url("../../images/close_icon.svg") center / contain no-repeat;
 	font-size: 1.2em;
 	overflow: hidden;
 	text-indent: 100%;
 	white-space: nowrap;
 	cursor: pointer;
 	display: block;
+}
+
+#popup-banner .popup-close {
+	top: -0.45em;
+	right: -0.45em;
 }
