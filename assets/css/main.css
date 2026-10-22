@@ -3305,12 +3305,30 @@ body.is-preload #banner p {
 	visibility: hidden;
 	pointer-events: none;
 	transition: background-color 0.2s ease-in-out, opacity 0.4s ease, visibility 0.4s ease;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.35em;
+	line-height: 1;
+	text-align: center;
 }
 
 .puzzle-invite.is-visible {
 	opacity: 1;
 	visibility: visible;
 	pointer-events: auto;
+}
+
+.puzzle-invite__emoji {
+	display: block;
+	font-size: 1.05em;
+	line-height: 1;
+}
+
+.puzzle-invite__text {
+	display: block;
+	line-height: 1;
+	letter-spacing: 0.08em;
 }
 
 html.puzzle-open,
