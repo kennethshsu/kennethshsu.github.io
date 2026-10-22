@@ -2334,8 +2334,8 @@ body.is-menu-visible #menu .inner {
 @media screen and (max-width: 980px) {
 
 	#banner {
-		padding: 12em 3em 12.375em 3em;
-		margin-bottom: -4.75em;
+		padding: 12em 3em 11vh 3em;
+		margin-bottom: 0;
 	}
 
 	#banner .inner {
@@ -2347,8 +2347,8 @@ body.is-menu-visible #menu .inner {
 @media screen and (max-width: 736px) {
 
 	#banner {
-		padding: 5em 2em 4.25em 2em;
-		margin-bottom: -2.5em;
+		padding: 5em 2em 11vh 2em;
+		margin-bottom: 0;
 	}
 
 	#banner .logo {
@@ -3145,8 +3145,9 @@ body.is-preload #banner p {
 }
 
 #puzzle-popup .popup-banner-game {
-	width: 390px;
-	height: min(740px, calc(100vh - 4.5rem));
+	width: min(320px, calc((100vh - 4.5rem) * 320 / 470), calc(100vw - 4rem));
+	aspect-ratio: 320 / 470;
+	height: auto;
 	overflow: hidden;
 }
 
@@ -3173,6 +3174,7 @@ body.is-preload #banner p {
 		width: 100%;
 		flex: 1;
 		height: auto;
+		aspect-ratio: auto;
 		min-height: 0;
 	}
 }
