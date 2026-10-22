@@ -3278,6 +3278,16 @@ body.is-preload #banner p {
 	bottom: 1.25rem;
 	z-index: 998;
 	border: 2px solid #ffffff;
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transition: background-color 0.2s ease-in-out, opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.puzzle-invite.is-visible {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
 }
 
 html.puzzle-open,

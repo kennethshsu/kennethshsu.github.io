@@ -201,6 +201,12 @@
 
 	$('#popup-banner-close, #popup-banner-backdrop').on('click', hidePopupBanner);
 
+	$window.on('load', function () {
+		window.setTimeout(function () {
+			$('.puzzle-invite').addClass('is-visible');
+		}, 5000);
+	});
+
 	$('.puzzle-invite').on('click', function () {
 		var frame = document.getElementById('puzzle-frame');
 		if (frame)
