@@ -52,8 +52,7 @@
 			"#000000"  // Black
 		];
 		const SET_SIZE = 4;
-		const FILLED_TUBES = 8;
-		const SCRAMBLE_MOVES = SET_SIZE * FILLED_TUBES * 10;
+		const SCRAMBLE_MOVES = SET_SIZE * COLORS.length * 10;
 		const boxes = document.querySelectorAll(".box");
 
 		function shuffle(items) {
@@ -102,9 +101,8 @@
 				tubes[option.destinationIndex].unshift(...moving);
 			}
 
-			// move the cubes in the last two tubes to available spaces
-			const filled = tubes.slice(0, -2);
-			tubes.slice(-2).forEach((source) => {
+			const filled = tubes.slice(0, COLORS.length);
+			tubes.slice(COLORS.length).forEach((source) => {
 				while (source.length) {
 					const open = filled.filter((tube) => tube.length < SET_SIZE);
 					const destination = open[Math.floor(Math.random() * open.length)];
