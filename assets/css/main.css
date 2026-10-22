@@ -3188,34 +3188,8 @@ body.is-preload #banner p {
 	line-height: 1.5;
 }
 
-/* Match #banner p (list items are not <p>, so they need the same typography explicitly) */
-#popup-banner .popup-banner-list li {
-	font-family: Raleway, Helvetica, sans-serif;
-	font-size: 0.9em;
-	font-weight: 200;
-	font-style: normal;
-	line-height: 1.5;
-	letter-spacing: 0.1em;
-}
-
 #popup-banner > *:not(#popup-banner-close) ~ *:not(#popup-banner-close) {
 	margin-top: 0.5em;
-}
-
-#popup-banner .popup-banner-list {
-	margin: 0;
-	padding: 0 0 0 1.25em;
-	list-style: disc;
-	list-style-position: outside;
-}
-
-#popup-banner .popup-banner-list li {
-	margin: 0;
-	padding: 0 0 0 0.25em;
-}
-
-#popup-banner .popup-banner-list li::marker {
-	color: inherit;
 }
 
 #popup-banner .popup-banner-greeting {
