@@ -31,21 +31,58 @@
 		</div>
 		<div class="game-actions">
 			<button class="new-game" type="button">New Game</button>
-			<button class="info-button" type="button" aria-label="Info"><i class="fas fa-info-circle"></i></button>
+			<button class="game-icon-button help-button" type="button" aria-label="How to play"><i class="fas fa-question" aria-hidden="true"></i></button>
+			<button class="game-icon-button settings-button" type="button" aria-label="Difficulty level"><i class="fas fa-cog" aria-hidden="true"></i></button>
 		</div>
 	</main>
 	<div id="info-backdrop" class="info-backdrop" aria-hidden="true"></div>
-	<div id="info-popup" class="info-popup" role="dialog" aria-label="Info" aria-hidden="true">
-		<button class="info-close" type="button" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+	<div id="help-popup" class="info-popup help-popup" role="dialog" aria-label="How to play" aria-hidden="true">
+		<button class="info-close help-close" type="button" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
 		<div class="info-content">
 			<section class="info-section">
 				<h2 class="info-section-title">How to play</h2>
-				<ol>
-					<li>Sort all cubes by color to win!</li>
-					<li>Move same-colored cubes together.</li>
-					<li>Cubes may only go in an empty tube, or on a cube of the same color.</li>
-				</ol>
+				<div class="info-carousel" id="how-to-play-carousel">
+					<div class="info-carousel__frame">
+						<button type="button" class="info-carousel__arrow info-carousel__arrow--prev"
+							aria-label="Previous step"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+						<div class="info-carousel__viewport" tabindex="0" role="region" aria-roledescription="carousel"
+							aria-label="How to play steps">
+							<div class="info-carousel__track">
+								<div class="info-carousel__slide" role="group" aria-label="Step 1 of 3">
+									<img class="info-carousel__img" src="images/game/how_to_play_1.png" width="320" height="248"
+										alt="Example board with sorted color tubes" loading="lazy" decoding="async" />
+									<p class="info-carousel__text">Sort all cubes by color to win!</p>
+								</div>
+								<div class="info-carousel__slide" role="group" aria-label="Step 2 of 3">
+									<img class="info-carousel__img" src="images/game/how_to_play_2.png" width="320" height="248"
+										alt="Example board with two red cubes selected" loading="lazy" decoding="async" />
+									<p class="info-carousel__text">Move same-colored cubes together.</p>
+								</div>
+								<div class="info-carousel__slide" role="group" aria-label="Step 3 of 3">
+									<img class="info-carousel__img" src="images/game/how_to_play_3.png" width="320" height="248"
+										alt="Example of placing cubes on a matching color" loading="lazy" decoding="async" />
+									<p class="info-carousel__text">Cubes may only go on top of a same color cube or to an empty tube.</p>
+								</div>
+							</div>
+						</div>
+						<button type="button" class="info-carousel__arrow info-carousel__arrow--next"
+							aria-label="Next step"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+					</div>
+					<div class="info-carousel__dots" role="tablist" aria-label="Choose step">
+						<button type="button" class="info-carousel__dot is-active" role="tab" aria-selected="true"
+							aria-label="Step 1" data-slide="0"></button>
+						<button type="button" class="info-carousel__dot" role="tab" aria-selected="false"
+							aria-label="Step 2" data-slide="1"></button>
+						<button type="button" class="info-carousel__dot" role="tab" aria-selected="false"
+							aria-label="Step 3" data-slide="2"></button>
+					</div>
+				</div>
 			</section>
+		</div>
+	</div>
+	<div id="settings-popup" class="info-popup settings-popup" role="dialog" aria-label="Difficulty level" aria-hidden="true">
+		<button class="info-close settings-close" type="button" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+		<div class="info-content">
 			<section class="info-section">
 				<h2 class="info-section-title">Difficulty Level</h2>
 				<div class="info-settings" id="info-settings">
@@ -381,7 +418,8 @@
 		}
 
 		document.querySelector(".new-game").addEventListener("click", startNewGameFromButton);
-		const infoPopup = document.getElementById("info-popup");
+		const helpPopup = document.getElementById("help-popup");
+		const settingsPopup = document.getElementById("settings-popup");
 		const infoBackdrop = document.getElementById("info-backdrop");
 		const outOfMovesPopup = document.getElementById("out-of-moves-popup");
 		const outOfMovesBackdrop = document.getElementById("out-of-moves-backdrop");
@@ -424,26 +462,138 @@
 			syncParentOverlayState();
 		}
 
-		function openInfo() {
-			if (outOfMovesPopup.classList.contains("is-visible") || winPopup.classList.contains("is-visible")) return;
-			settingsDifficulty = difficulty;
-			updateDifficultyStepper();
-			infoBackdrop.classList.add("is-visible");
-			infoBackdrop.setAttribute("aria-hidden", "false");
-			infoPopup.classList.add("is-visible");
-			infoPopup.setAttribute("aria-hidden", "false");
-			notifyParentInfoOpen(true);
+		function resetHowToPlayCarousel() {
+			const carousel = document.getElementById("how-to-play-carousel");
+			if (!carousel || typeof carousel._resetScroll !== "function") return;
+			carousel._resetScroll();
+		}
+
+		function initHowToPlayCarousel() {
+			const carousel = document.getElementById("how-to-play-carousel");
+			if (!carousel) return;
+			const viewport = carousel.querySelector(".info-carousel__viewport");
+			const prevButton = carousel.querySelector(".info-carousel__arrow--prev");
+			const nextButton = carousel.querySelector(".info-carousel__arrow--next");
+			const dots = [...carousel.querySelectorAll(".info-carousel__dot")];
+			if (!viewport || !dots.length) return;
+
+			function activeIndex() {
+				const width = viewport.clientWidth;
+				if (!width) return 0;
+				return Math.max(0, Math.min(dots.length - 1, Math.round(viewport.scrollLeft / width)));
+			}
+
+			function setActiveDot(index) {
+				dots.forEach((dot, i) => {
+					const active = i === index;
+					dot.classList.toggle("is-active", active);
+					dot.setAttribute("aria-selected", active ? "true" : "false");
+				});
+			}
+
+			function updateArrows(index) {
+				if (prevButton)
+					prevButton.disabled = index <= 0;
+				if (nextButton)
+					nextButton.disabled = index >= dots.length - 1;
+			}
+
+			function goToSlide(index) {
+				const width = viewport.clientWidth;
+				if (!width) return;
+				const clamped = Math.max(0, Math.min(dots.length - 1, index));
+				viewport.scrollTo({ left: clamped * width, behavior: "smooth" });
+				setActiveDot(clamped);
+				updateArrows(clamped);
+			}
+
+			viewport.addEventListener("scroll", () => {
+				window.requestAnimationFrame(() => {
+					const index = activeIndex();
+					setActiveDot(index);
+					updateArrows(index);
+				});
+			}, { passive: true });
+
+			dots.forEach((dot) => {
+				dot.addEventListener("click", () => {
+					const index = Number(dot.dataset.slide);
+					if (!Number.isFinite(index)) return;
+					goToSlide(index);
+				});
+			});
+
+			if (prevButton)
+				prevButton.addEventListener("click", () => goToSlide(activeIndex() - 1));
+			if (nextButton)
+				nextButton.addEventListener("click", () => goToSlide(activeIndex() + 1));
+
+			carousel._resetScroll = () => {
+				viewport.scrollLeft = 0;
+				setActiveDot(0);
+				updateArrows(0);
+			};
+			setActiveDot(0);
+			updateArrows(0);
+		}
+
+		function isHelpOpen() {
+			return helpPopup.classList.contains("is-visible");
+		}
+
+		function isSettingsOpen() {
+			return settingsPopup.classList.contains("is-visible");
+		}
+
+		function syncPanelBackdrop() {
+			const open = isHelpOpen() || isSettingsOpen();
+			infoBackdrop.classList.toggle("is-visible", open);
+			infoBackdrop.setAttribute("aria-hidden", open ? "false" : "true");
+		}
+
+		function closeHelp() {
+			if (!isHelpOpen())
+				return;
+			helpPopup.classList.remove("is-visible");
+			helpPopup.setAttribute("aria-hidden", "true");
+			syncPanelBackdrop();
+			syncParentOverlayState();
+		}
+
+		function closeSettings() {
+			if (!isSettingsOpen())
+				return;
+			settingsPopup.classList.remove("is-visible");
+			settingsPopup.setAttribute("aria-hidden", "true");
+			syncPanelBackdrop();
+			syncParentOverlayState();
+			applyDifficulty();
 		}
 
 		function closeInfo() {
-			if (!infoPopup.classList.contains("is-visible"))
-				return;
-			infoBackdrop.classList.remove("is-visible");
-			infoBackdrop.setAttribute("aria-hidden", "true");
-			infoPopup.classList.remove("is-visible");
-			infoPopup.setAttribute("aria-hidden", "true");
-			syncParentOverlayState();
-			applyDifficulty();
+			closeHelp();
+			closeSettings();
+		}
+
+		function openHelp() {
+			if (outOfMovesPopup.classList.contains("is-visible") || winPopup.classList.contains("is-visible")) return;
+			closeSettings();
+			resetHowToPlayCarousel();
+			helpPopup.classList.add("is-visible");
+			helpPopup.setAttribute("aria-hidden", "false");
+			syncPanelBackdrop();
+			notifyParentInfoOpen(true);
+		}
+
+		function openSettings() {
+			if (outOfMovesPopup.classList.contains("is-visible") || winPopup.classList.contains("is-visible")) return;
+			closeHelp();
+			settingsDifficulty = difficulty;
+			updateDifficultyStepper();
+			settingsPopup.classList.add("is-visible");
+			settingsPopup.setAttribute("aria-hidden", "false");
+			syncPanelBackdrop();
+			notifyParentInfoOpen(true);
 		}
 
 		function openOutOfMovesPopup() {
@@ -469,7 +619,8 @@
 		}
 
 		function isGameOverlayOpen() {
-			return infoPopup.classList.contains("is-visible")
+			return isHelpOpen()
+				|| isSettingsOpen()
 				|| outOfMovesPopup.classList.contains("is-visible")
 				|| winPopup.classList.contains("is-visible");
 		}
@@ -478,8 +629,11 @@
 			notifyParentInfoOpen(isGameOverlayOpen());
 		}
 
-		document.querySelector(".info-button").addEventListener("click", openInfo);
-		document.querySelector(".info-close").addEventListener("click", closeInfo);
+		initHowToPlayCarousel();
+		document.querySelector(".help-button").addEventListener("click", openHelp);
+		document.querySelector(".settings-button").addEventListener("click", openSettings);
+		document.querySelector(".help-close").addEventListener("click", closeHelp);
+		document.querySelector(".settings-close").addEventListener("click", closeSettings);
 		infoBackdrop.addEventListener("click", closeInfo);
 		levelStepperDecrease.addEventListener("click", () => setSettingsDifficulty(settingsDifficulty - 1));
 		levelStepperIncrease.addEventListener("click", () => setSettingsDifficulty(settingsDifficulty + 1));
@@ -503,9 +657,14 @@
 		document.addEventListener("keydown", (event) => {
 			if (event.key !== "Escape") return;
 			if (outOfMovesPopup.classList.contains("is-visible")) return;
-			if (infoPopup.classList.contains("is-visible")) {
+			if (isSettingsOpen()) {
 				event.preventDefault();
-				closeInfo();
+				closeSettings();
+				return;
+			}
+			if (isHelpOpen()) {
+				event.preventDefault();
+				closeHelp();
 			}
 		});
 
@@ -519,7 +678,7 @@
 			}
 			if (data.type === "open-info") {
 				newGame();
-				openInfo();
+				openHelp();
 			}
 		});
 
