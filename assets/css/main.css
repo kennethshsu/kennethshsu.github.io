@@ -1707,15 +1707,19 @@ body.is-preload .items.onload-fade-in>*>.inner {
 /* Company Logos */
 .company-logo-row {
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: center;
-	gap: 3em;
+	align-items: center;
+	gap: clamp(1em, 4vw, 3em);
 	margin-top: 2em;
 	margin-bottom: 2em;
+	max-width: 100%;
 }
 
 .company-logo-row .icon {
-	width: 60px;
+	width: clamp(44px, 12vw, 60px);
 	height: auto;
+	flex: 0 1 auto;
 	display: block;
 	border: 1px solid white;
 	border-radius: 10px;
