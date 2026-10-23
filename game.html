@@ -63,9 +63,13 @@
 
 			const mainCount = COLORS.length;
 
+			
 			for (let master = 0; master < TUBES_SHUFFLE_COUNT; master++) {
+				// Shuffle tubes
 				for (let tubeIndex = 0; tubeIndex < tubes.length; tubeIndex++) {
 					const cubeCount = tubes[tubeIndex].length;
+
+					// Shuffle cubes within each tube top to bottom
 					for (let cubeFromTop = 0; cubeFromTop < cubeCount; cubeFromTop++) {
 						if (!tubes[tubeIndex].length) break;
 
@@ -80,6 +84,8 @@
 						tubes[dest].unshift(tubes[tubeIndex].shift());
 					}
 				}
+				
+				// Shuffle tubes order before next run
 				for (let i = tubes.length - 1; i > 0; i--) {
 					const j = Math.floor(Math.random() * (i + 1));
 					const swap = tubes[i];
@@ -88,8 +94,10 @@
 				}
 			}
 
+			// Sort tubes by length descending
 			tubes.sort((a, b) => b.length - a.length);
 
+			// Empty last 2 tubes
 			for (let s = tubes.length - 1; s >= tubes.length - 2; s--) {
 				while (tubes[s].length) {
 					const open = [];
@@ -101,6 +109,7 @@
 				}
 			}
 
+			// Shuffle filled tubes order one last time
 			for (let i = mainCount - 1; i > 0; i--) {
 				const j = Math.floor(Math.random() * (i + 1));
 				const swap = tubes[i];
