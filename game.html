@@ -529,7 +529,10 @@
 				nextButton.addEventListener("click", () => goToSlide(activeIndex() + 1));
 
 			carousel._resetScroll = () => {
+				const prior = viewport.style.scrollBehavior;
+				viewport.style.scrollBehavior = "auto";
 				viewport.scrollLeft = 0;
+				viewport.style.scrollBehavior = prior;
 				setActiveDot(0);
 				updateArrows(0);
 			};
@@ -578,10 +581,11 @@
 		function openHelp() {
 			if (outOfMovesPopup.classList.contains("is-visible") || winPopup.classList.contains("is-visible")) return;
 			closeSettings();
-			resetHowToPlayCarousel();
 			helpPopup.classList.add("is-visible");
 			helpPopup.setAttribute("aria-hidden", "false");
 			syncPanelBackdrop();
+			resetHowToPlayCarousel();
+			window.requestAnimationFrame(() => resetHowToPlayCarousel());
 			notifyParentInfoOpen(true);
 		}
 
