@@ -1,4 +1,4 @@
-/* @import url(fontawesome-all.min.css); — disabled for faster load; re-enable for footer icon glyphs */
+@import url(fontawesome-all.min.css);
 @import url("https://fonts.googleapis.com/css?family=Raleway:200,700|Source+Sans+Pro:300,600,300italic,600italic");
 
 /*
@@ -211,7 +211,7 @@ body::before {
 }
 
 body.has-background-image::before {
-	background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/background.webp");
+	background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/background/background.webp");
 }
 
 /* Font Awesome off: footer social links show text labels instead of icon fonts */
@@ -1969,7 +1969,7 @@ button:disabled,
 	position: fixed;
 	top: 0;
 	width: 100%;
-	z-index: 10000;
+	z-index: 10;
 }
 
 #header h1 {
@@ -2142,6 +2142,7 @@ button:disabled,
 	top: 0;
 	visibility: hidden;
 	width: 100%;
+	z-index: 15;
 }
 
 #menu .inner {
@@ -2170,21 +2171,57 @@ button:disabled,
 }
 
 #menu .close {
-	background-image: url("images/close.svg");
-	background-position: 75% 25%;
-	background-repeat: no-repeat;
-	background-size: 2em 2em;
 	border: 0;
-	content: '';
-	display: block;
+	color: #4c5c96;
+	display: flex;
+	align-items: flex-start;
+	justify-content: flex-end;
 	height: 4em;
-	overflow: hidden;
+	padding: 0.65em 0.65em 0 0;
 	position: absolute;
 	right: 0;
-	text-align: center;
-	text-indent: 4em;
 	top: 0;
 	width: 4em;
+	text-decoration: none;
+	-moz-transition: color 0.2s ease-in-out;
+	-webkit-transition: color 0.2s ease-in-out;
+	-ms-transition: color 0.2s ease-in-out;
+	transition: color 0.2s ease-in-out;
+}
+
+#menu .close:hover {
+	color: #53639e;
+}
+
+#menu .close:active {
+	color: #45558d;
+}
+
+#menu .close .fa-times {
+	align-items: center;
+	background: rgba(255, 255, 255, 0.9);
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	border-radius: 50%;
+	color: #4c5c96;
+	display: inline-flex;
+	font-size: 1em;
+	height: 1.75em;
+	justify-content: center;
+	line-height: 1;
+	width: 1.75em;
+	-moz-transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	-webkit-transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	-ms-transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+#menu .close:hover .fa-times {
+	background: rgba(255, 255, 255, 0.98);
+	color: #53639e;
+}
+
+#menu .close:active .fa-times {
+	color: #45558d;
 }
 
 #menu .links {
@@ -3058,11 +3095,14 @@ body.is-preload #banner p {
 	width: calc(50% - 0.75em);
 }
 
-/* Popup banner: no layout space when hidden (expired, dismissed, or before delayed show) */
+/*
+	Stacking (low → high): 1 page wrapper · 2 hero popup · 10 header · 15 menu ·
+	20 puzzle invite · 30 puzzle backdrop · 40 puzzle modal
+*/
 #popup-banner-backdrop {
 	position: fixed;
 	inset: 0;
-	z-index: 10001;
+	z-index: 30;
 	background: rgba(46, 49, 65, 0.72);
 	opacity: 0;
 	visibility: hidden;
@@ -3082,7 +3122,7 @@ body.is-preload #banner p {
 	text-align: left;
 	padding: 1em;
 	position: relative;
-	z-index: 1000;
+	z-index: 2;
 	border-radius: 10px;
 	max-width: 80%;
 	margin: 0 auto;
@@ -3103,7 +3143,6 @@ body.is-preload #banner p {
 
 #popup-banner p,
 #popup-banner li,
-#popup-banner i,
 #popup-banner a,
 #popup-banner a:visited,
 #popup-banner a:hover,
@@ -3128,7 +3167,7 @@ body.is-preload #banner p {
 	right: 1.25rem;
 	bottom: 1.25rem;
 	left: auto;
-	z-index: 10002;
+	z-index: 40;
 	border-radius: 10px;
 	width: max-content;
 	max-width: calc(100vw - 2rem);
@@ -3162,10 +3201,20 @@ body.is-preload #banner p {
 }
 
 #puzzle-popup .popup-banner-game {
+	position: relative;
+	z-index: 1;
 	width: min(390px, calc((100vh - 4.5rem) * 390 / 450), calc(100vw - 4rem));
 	aspect-ratio: 390 / 450;
 	height: auto;
 	overflow: hidden;
+}
+
+#puzzle-popup #puzzle-popup-close {
+	z-index: 2;
+}
+
+#puzzle-popup.game-help-open #puzzle-popup-close {
+	pointer-events: none;
 }
 
 #puzzle-popup iframe {
@@ -3296,7 +3345,7 @@ body.is-preload #banner p {
 	position: fixed;
 	right: 1.25rem;
 	bottom: 1.25rem;
-	z-index: 998;
+	z-index: 20;
 	border: 2px solid #ffffff;
 	opacity: 0;
 	visibility: hidden;
@@ -3353,20 +3402,42 @@ html.puzzle-open body {
 	top: 0.3em;
 	right: 0.3em;
 	z-index: 2;
-	width: 1.1em;
-	height: 1.1em;
 	padding: 0;
 	margin: 0;
 	border: none;
 	outline: none;
 	box-shadow: none;
-	background: url("../../images/close_icon.svg") center / contain no-repeat;
-	font-size: 1.2em;
-	overflow: hidden;
-	text-indent: 100%;
-	white-space: nowrap;
+	background: rgba(255, 255, 255, 0.9);
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	border-radius: 50%;
+	color: #4c5c96;
 	cursor: pointer;
-	display: block;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+	width: 1.65em;
+	height: 1.65em;
+	-moz-transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	-webkit-transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	-ms-transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.popup-close:hover,
+.popup-close:hover .fa-times {
+	color: #53639e;
+	background-color: rgba(255, 255, 255, 0.98);
+}
+
+.popup-close:active,
+.popup-close:active .fa-times {
+	color: #45558d;
+}
+
+.popup-close .fa-times {
+	font-size: 0.95em;
+	color: #4c5c96;
 }
 
 #popup-banner .popup-close {
