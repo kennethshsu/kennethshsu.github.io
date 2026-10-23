@@ -541,8 +541,6 @@ main.game-ended .box {
 	justify-content: center;
 	gap: 0.65rem;
 	padding: 0.65rem 0.5rem;
-	border-radius: 5px;
-	box-shadow: inset 0 0 0 1px var(--line);
 	scroll-snap-align: start;
 	scroll-snap-stop: always;
 }

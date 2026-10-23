@@ -45,28 +45,25 @@
 					<div class="info-carousel__frame">
 						<button type="button" class="info-carousel__arrow info-carousel__arrow--prev"
 							aria-label="Previous step"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
-						<div class="info-carousel__stage">
-							<div class="info-carousel__viewport" tabindex="0" role="region" aria-roledescription="carousel"
-								aria-label="How to play steps">
-								<div class="info-carousel__track">
-									<div class="info-carousel__slide" role="group" aria-label="Step 1 of 3"
-										data-caption="Sort all cubes by color to win!">
-										<img class="info-carousel__img" src="images/game/how_to_play_1.png" width="320" height="248"
-											alt="Example board with sorted color tubes" loading="lazy" decoding="async" />
-									</div>
-									<div class="info-carousel__slide" role="group" aria-label="Step 2 of 3"
-										data-caption="Move same-colored cubes together.">
-										<img class="info-carousel__img" src="images/game/how_to_play_2.png" width="320" height="248"
-											alt="Example board with two red cubes selected" loading="lazy" decoding="async" />
-									</div>
-									<div class="info-carousel__slide" role="group" aria-label="Step 3 of 3"
-										data-caption="Cubes may only go on top of a same color tube or to an empty tube.">
-										<img class="info-carousel__img" src="images/game/how_to_play_3.png" width="320" height="248"
-											alt="Example of placing cubes on a matching color" loading="lazy" decoding="async" />
-									</div>
+						<div class="info-carousel__viewport" tabindex="0" role="region" aria-roledescription="carousel"
+							aria-label="How to play steps">
+							<div class="info-carousel__track">
+								<div class="info-carousel__slide" role="group" aria-label="Step 1 of 3">
+									<img class="info-carousel__img" src="images/game/how_to_play_1.png" width="320" height="248"
+										alt="Example board with sorted color tubes" loading="lazy" decoding="async" />
+									<p class="info-carousel__text">Sort all cubes by color to win!</p>
+								</div>
+								<div class="info-carousel__slide" role="group" aria-label="Step 2 of 3">
+									<img class="info-carousel__img" src="images/game/how_to_play_2.png" width="320" height="248"
+										alt="Example board with two red cubes selected" loading="lazy" decoding="async" />
+									<p class="info-carousel__text">Move same-colored cubes together.</p>
+								</div>
+								<div class="info-carousel__slide" role="group" aria-label="Step 3 of 3">
+									<img class="info-carousel__img" src="images/game/how_to_play_3.png" width="320" height="248"
+										alt="Example of placing cubes on a matching color" loading="lazy" decoding="async" />
+									<p class="info-carousel__text">Cubes may only go on top of a same color cube or to an empty tube.</p>
 								</div>
 							</div>
-							<p class="info-carousel__text" id="how-to-play-caption" aria-live="polite"></p>
 						</div>
 						<button type="button" class="info-carousel__arrow info-carousel__arrow--next"
 							aria-label="Next step"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
@@ -477,10 +474,8 @@
 			const viewport = carousel.querySelector(".info-carousel__viewport");
 			const prevButton = carousel.querySelector(".info-carousel__arrow--prev");
 			const nextButton = carousel.querySelector(".info-carousel__arrow--next");
-			const caption = document.getElementById("how-to-play-caption");
-			const slides = [...carousel.querySelectorAll(".info-carousel__slide")];
 			const dots = [...carousel.querySelectorAll(".info-carousel__dot")];
-			if (!viewport || !dots.length || !slides.length) return;
+			if (!viewport || !dots.length) return;
 
 			function activeIndex() {
 				const width = viewport.clientWidth;
