@@ -164,6 +164,7 @@
 			for (const rowLength of lvl.rows) {
 				const row = document.createElement("div");
 				row.className = "boxes-row";
+				row.style.setProperty("--row-cols", String(rowLength));
 				for (let i = 0; i < rowLength; i++) {
 					tubeNumber += 1;
 					const box = document.createElement("button");
