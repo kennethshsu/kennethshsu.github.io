@@ -156,37 +156,6 @@
 
 		});
 
-	// Popup banner: optional deadline from #popup-banner data-show-until (ISO 8601). Omit attribute for no expiry.
-	// data-manual banners stay hidden until something else adds .is-visible.
-	$(document).ready(function () {
-		var $banner = $('#popup-banner');
-		if (!$banner.length || $banner.is('[data-manual]'))
-			return;
-
-		var raw = $banner.attr('data-show-until');
-		var showUntilMs = raw ? Date.parse(raw) : Infinity;
-		if (Number.isNaN(showUntilMs))
-			showUntilMs = Infinity;
-
-		function hideIfExpired() {
-			if (Date.now() >= showUntilMs)
-				$banner.removeClass('is-visible');
-		}
-
-		if (Date.now() >= showUntilMs)
-			return;
-
-		setTimeout(function () {
-			hideIfExpired();
-			if (Date.now() >= showUntilMs)
-				return;
-			$banner.addClass('is-visible');
-			var msLeft = showUntilMs - Date.now();
-			if (Number.isFinite(msLeft) && msLeft > 0)
-				setTimeout(hideIfExpired, msLeft);
-		}, 2000);
-	});
-
 	var pageScrollY = 0;
 	var scrollRestorationBackup = null;
 
@@ -238,9 +207,31 @@
 		}
 	}
 
-	function hidePopupBanner() {
-		$('#popup-banner').removeClass('is-visible');
+	function hidePopupBanners($only) {
+		if ($only && $only.length)
+			$only.removeClass('is-visible');
+		else
+			$('.popup-banner').removeClass('is-visible');
 	}
+
+	// Hero popup banners: .popup-banner + optional data-show-until (ISO 8601). Omit for no expiry.
+	$(document).ready(function () {
+		$('.popup-banner').not('[data-manual]').each(function () {
+			var $banner = $(this);
+			var raw = $banner.attr('data-show-until');
+			var showUntilMs = raw ? Date.parse(raw) : Infinity;
+			if (Number.isNaN(showUntilMs))
+				showUntilMs = Infinity;
+			if (Date.now() >= showUntilMs)
+				return;
+
+			setTimeout(function () {
+				if (Date.now() >= showUntilMs)
+					return;
+				$banner.addClass('is-visible');
+			}, 2000);
+		});
+	});
 
 	var PUZZLE_URL = 'game.html';
 
@@ -465,7 +456,9 @@
 		} catch (err) { /* ignore */ }
 	}
 
-	$('#popup-banner-close').on('click', hidePopupBanner);
+	$(document).on('click', '.popup-banner-close', function () {
+		hidePopupBanners($(this).closest('.popup-banner'));
+	});
 	$('#puzzle-popup-close').on('click', hidePuzzle);
 	$('#page-popup-close').on('click', function () {
 		hidePageModal();
@@ -520,7 +513,11 @@
 				requestClosePuzzleInfo();
 				return;
 			}
-			hidePopupBanner();
+			if ($('.popup-banner.is-visible').length) {
+				event.preventDefault();
+				hidePopupBanners();
+				return;
+			}
 			if ($('#page-popup').hasClass('is-visible')) {
 				hidePageModal();
 				return;
