@@ -474,8 +474,55 @@
 			const viewport = carousel.querySelector(".info-carousel__viewport");
 			const prevButton = carousel.querySelector(".info-carousel__arrow--prev");
 			const nextButton = carousel.querySelector(".info-carousel__arrow--next");
+			const slides = [...carousel.querySelectorAll(".info-carousel__slide")];
 			const dots = [...carousel.querySelectorAll(".info-carousel__dot")];
-			if (!viewport || !dots.length) return;
+			if (!viewport || !dots.length || !slides.length) return;
+
+			function syncCarouselSlideHeights() {
+				slides.forEach((slide) => {
+					slide.style.minHeight = "";
+				});
+				viewport.style.minHeight = "";
+
+				let maxHeight = 0;
+				for (const slide of slides)
+					maxHeight = Math.max(maxHeight, slide.offsetHeight);
+				if (maxHeight <= 0)
+					return;
+
+				const heightPx = `${maxHeight}px`;
+				viewport.style.minHeight = heightPx;
+				slides.forEach((slide) => {
+					slide.style.minHeight = heightPx;
+				});
+			}
+
+			function whenSlideImagesReady(then) {
+				const images = slides.map((slide) => slide.querySelector("img")).filter(Boolean);
+				if (!images.length) {
+					then();
+					return;
+				}
+				let pending = 0;
+				images.forEach((img) => {
+					if (img.complete)
+						return;
+					pending += 1;
+					const done = () => {
+						img.removeEventListener("load", done);
+						img.removeEventListener("error", done);
+						pending -= 1;
+						if (pending <= 0)
+							then();
+					};
+					img.addEventListener("load", done);
+					img.addEventListener("error", done);
+				});
+				if (pending <= 0)
+					then();
+			}
+
+			carousel._syncHeights = syncCarouselSlideHeights;
 
 			function activeIndex() {
 				const width = viewport.clientWidth;
@@ -538,6 +585,8 @@
 			};
 			setActiveDot(0);
 			updateArrows(0);
+			whenSlideImagesReady(syncCarouselSlideHeights);
+			window.addEventListener("resize", syncCarouselSlideHeights);
 		}
 
 		function isHelpOpen() {
@@ -585,7 +634,12 @@
 			helpPopup.setAttribute("aria-hidden", "false");
 			syncPanelBackdrop();
 			resetHowToPlayCarousel();
-			window.requestAnimationFrame(() => resetHowToPlayCarousel());
+			window.requestAnimationFrame(() => {
+				resetHowToPlayCarousel();
+				const carousel = document.getElementById("how-to-play-carousel");
+				if (carousel && typeof carousel._syncHeights === "function")
+					carousel._syncHeights();
+			});
 			notifyParentInfoOpen(true);
 		}
 

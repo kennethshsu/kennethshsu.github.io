@@ -535,10 +535,11 @@ main.game-ended .box {
 .info-carousel__slide {
 	flex: 0 0 100%;
 	min-width: 0;
+	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: center;
+	justify-content: flex-start;
 	gap: 0.65rem;
 	padding: 0.65rem 0.5rem;
 	scroll-snap-align: start;
@@ -557,6 +558,7 @@ main.game-ended .box {
 	margin: 0;
 	line-height: 1.55;
 	text-align: center;
+	width: 100%;
 }
 
 .info-carousel__dots {
