@@ -25,10 +25,18 @@
 				<button class="box" type="button" aria-label="Tube 10"><span class="stack"></span></button>
 			</div>
 			<div class="click-blocker" aria-hidden="true"></div>
+			<div id="out-of-moves-backdrop" class="out-of-moves-backdrop" aria-hidden="true"></div>
+			<div id="out-of-moves-popup" class="out-of-moves-popup" role="dialog" aria-label="Out of moves" aria-modal="true" aria-hidden="true">
+				<div class="out-of-moves-content">
+					<p class="out-of-moves-title">Out of moves.</p>
+					<p class="out-of-moves-quip" id="out-of-moves-quip"></p>
+				</div>
+			</div>
 		</div>
 		<div class="game-actions">
 			<button class="new-game" type="button">New Game</button>
-			<button class="how-to-play-button" type="button">How to Play</button>
+			<button class="how-to-play-button" type="button" aria-label="How to Play"><i class="fas fa-question"></i></button>
+			<button class="settings-button" type="button" aria-label="Settings"><i class="fas fa-cog" aria-hidden="true"></i></button>
 		</div>
 	</main>
 	<div id="how-to-play-backdrop" class="how-to-play-backdrop" aria-hidden="true"></div>
@@ -42,6 +50,11 @@
 			</ol>
 		</div>
 	</div>
+	<div id="settings-backdrop" class="settings-backdrop" aria-hidden="true"></div>
+	<div id="settings-popup" class="settings-popup" role="dialog" aria-label="Settings" aria-hidden="true">
+		<button class="settings-close" type="button" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+		<div class="settings-content"></div>
+	</div>
 	<script>
 		const COLORS = [
 			"#E6194B", // Crimson
@@ -54,6 +67,14 @@
 			"#000000"  // Black
 		];
 		const SET_SIZE = 4;
+		const OUT_OF_MOVES_QUIPS = [
+			"What a statistically insignificant performance.",
+			"Observed unfavorable development on all fronts.",
+			"Total loss - no salvage value remaining.",
+			"What a catastrophe.",
+			"Bad luck, or just terrible inputs?",
+			"Actual result emerged as expected.",
+		];
 		const boxes = document.querySelectorAll(".box");
 		const TUBES_SHUFFLE_COUNT = boxes.length * boxes.length;
 
@@ -63,7 +84,6 @@
 
 			const mainCount = COLORS.length;
 
-			
 			for (let master = 0; master < TUBES_SHUFFLE_COUNT; master++) {
 				// Shuffle tubes
 				for (let tubeIndex = 0; tubeIndex < tubes.length; tubeIndex++) {
@@ -84,7 +104,7 @@
 						tubes[dest].unshift(tubes[tubeIndex].shift());
 					}
 				}
-				
+
 				// Shuffle tubes order before next run
 				for (let i = tubes.length - 1; i > 0; i--) {
 					const j = Math.floor(Math.random() * (i + 1));
@@ -154,12 +174,32 @@
 			return destinationColors[0] === moving[0];
 		}
 
+		function topRunColors(colors) {
+			if (!colors.length) return [];
+			const moving = [];
+			while (moving.length < colors.length && colors[moving.length] === colors[0]) {
+				moving.push(colors[0]);
+			}
+			return moving;
+		}
+
+		function outOfMoves() {
+			const tubeList = [...boxes];
+			for (const source of tubeList) {
+				const moving = topRunColors(tubeColors(source));
+				if (!moving.length) continue;
+
+				for (const destination of tubeList) {
+					if (destination === source) continue;
+					if (canMove(moving, tubeColors(destination))) return false;
+				}
+			}
+			return true;
+		}
+
 		function moveCubes(source, destination) {
 			const sourceColors = tubeColors(source);
-			const moving = [];
-			while (moving.length < sourceColors.length && sourceColors[moving.length] === sourceColors[0]) {
-				moving.push(sourceColors[0]);
-			}
+			const moving = topRunColors(sourceColors);
 			const destinationColors = tubeColors(destination);
 			if (!canMove(moving, destinationColors)) {
 				clearSelection();
@@ -169,6 +209,7 @@
 			renderTube(source, sourceColors.slice(moving.length));
 			clearSelection();
 			if (gameend()) endGame();
+			else if (outOfMoves()) showOutOfMovesPopup();
 			else resetConfetti();
 		}
 
@@ -197,6 +238,7 @@
 				renderTube(tube, tubes[index]);
 			});
 			resetConfetti();
+			closeOutOfMovesPopup();
 			document.querySelector("main").classList.remove("game-ended");
 		}
 
@@ -205,24 +247,24 @@
 		}
 
 		function endGame() {
+			closeOutOfMovesPopup();
 			document.querySelector("main").classList.add("game-ended");
 			realisticConfetti();
 		}
 
-		boxes.forEach((box) => {
-			box.addEventListener("click", () => {
-				const source = selectedTube();
-				if (source && source !== box) {
-					moveCubes(source, box);
-					return;
-				}
-				selectTopRun(box);
-			});
-		});
+		function showOutOfMovesPopup() {
+			clearSelection();
+			openOutOfMovesPopup();
+		}
 
 		document.querySelector(".new-game").addEventListener("click", newGame);
 		const howToPlayPopup = document.getElementById("how-to-play-popup");
 		const howToPlayBackdrop = document.getElementById("how-to-play-backdrop");
+		const settingsPopup = document.getElementById("settings-popup");
+		const settingsBackdrop = document.getElementById("settings-backdrop");
+		const outOfMovesPopup = document.getElementById("out-of-moves-popup");
+		const outOfMovesBackdrop = document.getElementById("out-of-moves-backdrop");
+		const outOfMovesQuip = document.getElementById("out-of-moves-quip");
 
 		function notifyParentHowToPlayOpen(isOpen) {
 			try {
@@ -236,6 +278,7 @@
 		}
 
 		function openHowToPlay() {
+			if (outOfMovesPopup.classList.contains("is-visible")) return;
 			howToPlayBackdrop.classList.add("is-visible");
 			howToPlayBackdrop.setAttribute("aria-hidden", "false");
 			howToPlayPopup.classList.add("is-visible");
@@ -250,15 +293,87 @@
 			howToPlayBackdrop.setAttribute("aria-hidden", "true");
 			howToPlayPopup.classList.remove("is-visible");
 			howToPlayPopup.setAttribute("aria-hidden", "true");
-			notifyParentHowToPlayOpen(false);
+			syncParentOverlayState();
+		}
+
+		function openOutOfMovesPopup() {
+			const quip = OUT_OF_MOVES_QUIPS[Math.floor(Math.random() * OUT_OF_MOVES_QUIPS.length)];
+			outOfMovesQuip.textContent = quip;
+			document.querySelector("main").classList.add("out-of-moves-active");
+			outOfMovesBackdrop.classList.add("is-visible");
+			outOfMovesBackdrop.setAttribute("aria-hidden", "false");
+			outOfMovesPopup.classList.add("is-visible");
+			outOfMovesPopup.setAttribute("aria-hidden", "false");
+			notifyParentHowToPlayOpen(true);
+		}
+
+		function closeOutOfMovesPopup() {
+			if (!outOfMovesPopup.classList.contains("is-visible"))
+				return;
+			document.querySelector("main").classList.remove("out-of-moves-active");
+			outOfMovesBackdrop.classList.remove("is-visible");
+			outOfMovesBackdrop.setAttribute("aria-hidden", "true");
+			outOfMovesPopup.classList.remove("is-visible");
+			outOfMovesPopup.setAttribute("aria-hidden", "true");
+			syncParentOverlayState();
+		}
+
+		function isGameOverlayOpen() {
+			return howToPlayPopup.classList.contains("is-visible")
+				|| settingsPopup.classList.contains("is-visible")
+				|| outOfMovesPopup.classList.contains("is-visible");
+		}
+
+		function syncParentOverlayState() {
+			notifyParentHowToPlayOpen(isGameOverlayOpen());
+		}
+
+		function openSettings() {
+			if (outOfMovesPopup.classList.contains("is-visible")) return;
+			settingsBackdrop.classList.add("is-visible");
+			settingsBackdrop.setAttribute("aria-hidden", "false");
+			settingsPopup.classList.add("is-visible");
+			settingsPopup.setAttribute("aria-hidden", "false");
+			notifyParentHowToPlayOpen(true);
+		}
+
+		function closeSettings() {
+			if (!settingsPopup.classList.contains("is-visible"))
+				return;
+			settingsBackdrop.classList.remove("is-visible");
+			settingsBackdrop.setAttribute("aria-hidden", "true");
+			settingsPopup.classList.remove("is-visible");
+			settingsPopup.setAttribute("aria-hidden", "true");
+			syncParentOverlayState();
 		}
 
 		document.querySelector(".how-to-play-button").addEventListener("click", openHowToPlay);
 		document.querySelector(".how-to-play-close").addEventListener("click", closeHowToPlay);
 		howToPlayBackdrop.addEventListener("click", closeHowToPlay);
+		document.querySelector(".settings-button").addEventListener("click", openSettings);
+		document.querySelector(".settings-close").addEventListener("click", closeSettings);
+		settingsBackdrop.addEventListener("click", closeSettings);
+		boxes.forEach((box) => {
+			box.addEventListener("click", () => {
+				if (outOfMovesPopup.classList.contains("is-visible")) return;
+				const source = selectedTube();
+				if (source && source !== box) {
+					moveCubes(source, box);
+					return;
+				}
+				selectTopRun(box);
+			});
+		});
 
 		document.addEventListener("keydown", (event) => {
-			if (event.key === "Escape" && howToPlayPopup.classList.contains("is-visible")) {
+			if (event.key !== "Escape") return;
+			if (outOfMovesPopup.classList.contains("is-visible")) return;
+			if (settingsPopup.classList.contains("is-visible")) {
+				event.preventDefault();
+				closeSettings();
+				return;
+			}
+			if (howToPlayPopup.classList.contains("is-visible")) {
 				event.preventDefault();
 				closeHowToPlay();
 			}
@@ -269,6 +384,7 @@
 			const data = event.data;
 			if (!data || data.source !== "kennethhsu-parent" || data.type !== "close-how-to-play") return;
 			closeHowToPlay();
+			closeSettings();
 		});
 
 		notifyParentHowToPlayOpen(false);
