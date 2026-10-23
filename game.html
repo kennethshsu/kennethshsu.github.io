@@ -34,32 +34,38 @@
 			<section class="info-section">
 				<h2 class="info-section-title">How to play</h2>
 				<ol>
-					<li>Sort all cubes by color.</li>
+					<li>Sort all cubes by color to win!</li>
 					<li>Move same-colored cubes together.</li>
 					<li>Cubes may only go in an empty tube, or on cube(s) of the same color.</li>
 				</ol>
 			</section>
 			<section class="info-section">
 				<h2 class="info-section-title">Settings</h2>
-				<div class="info-settings" id="info-settings"></div>
+				<div class="info-settings" id="info-settings">
+					<div class="level-stepper" aria-label="Level">
+						<button class="level-stepper-button" type="button" aria-label="Decrease level"><i class="fas fa-minus" aria-hidden="true"></i></button>
+						<span class="level-stepper-value">1</span>
+						<button class="level-stepper-button" type="button" aria-label="Increase level"><i class="fas fa-plus" aria-hidden="true"></i></button>
+					</div>
+				</div>
 			</section>
 		</div>
 	</div>
 	<script>
 		const PALETTE = [
 			"#000000", // black
-			"#8b4513", // saddlebrown
-			"#006400", // darkgreen
-			"#4b0082", // indigo
 			"#ff0000", // red
 			"#ffd700", // gold
-			"#7cfc00", // lawngreen
 			"#00ffff", // aqua
 			"#0000ff", // blue
 			"#ff00ff", // fuchsia
-			"#6495ed", // cornflower
+			"#006400", // darkgreen
 			"#f5deb3", // wheat
-			"#ff69b4"  // hotpink
+			"#8b4513", // saddlebrown
+			"#7cfc00", // lawngreen
+			"#ff69b4", // hotpink
+			"#4b0082", // indigo
+			"#6495ed"  // cornflower
 		];
 		const SET_SIZE = 4;
 		const LEVELS = {

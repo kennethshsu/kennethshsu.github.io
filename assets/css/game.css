@@ -389,6 +389,54 @@ main.game-ended .box {
 	text-transform: uppercase;
 }
 
+.level-stepper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.75rem;
+}
+
+.level-stepper-button {
+	appearance: none;
+	flex: 0 0 auto;
+	width: 2.75em;
+	height: 2.75em;
+	padding: 0;
+	border: 0;
+	border-radius: 5px;
+	background-color: transparent;
+	box-shadow: inset 0 0 0 1px var(--line);
+	color: #ffffff;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+	transition: background-color 0.2s ease-in-out;
+}
+
+.level-stepper-button:hover {
+	background-color: rgba(255, 255, 255, 0.025);
+}
+
+.level-stepper-button:active {
+	background-color: rgba(255, 255, 255, 0.075);
+}
+
+.level-stepper-button:focus-visible {
+	outline: solid 2px rgba(255, 255, 255, 0.65);
+	outline-offset: 3px;
+}
+
+.level-stepper-value {
+	min-width: 2.5em;
+	font-family: Raleway, Helvetica, sans-serif;
+	font-size: 1.15em;
+	font-weight: 700;
+	text-align: center;
+	letter-spacing: 0.05em;
+}
+
 .info-content ol {
 	margin: 0;
 	padding-left: 1.25em;
