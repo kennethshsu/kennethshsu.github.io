@@ -97,7 +97,7 @@
 
 				<div id="popup-banner" data-show-until="2027-03-14T00:00:00-07:00">
 					<p class="popup-banner-greeting">Interested in a backpacking trip with toddlers?</p>
-					<p>I am organizing a backpacking trip with toddlers in March 2027. More details on how to join us <a href="backpacking.html">here</a>.
+					<p>I am organizing a backpacking trip with toddlers in March 2027. More details on how to join us <a href="#page/backpacking" data-page-modal="backpacking">here</a>.
 					</p>
 					<span id="popup-banner-close" class="popup-close" role="button" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></span>
 				</div> 
@@ -255,8 +255,8 @@
 								chainladder-python library, customizing devices like routers and Raspberry Pis, and
 								staying current with new technologies.
 							</p>
-							<a href="technical_projects.html" class="special reveal">Technical
-								projects</a>
+							<a href="#page/technical_projects" data-page-modal="technical_projects"
+								class="special reveal">Technical projects</a>
 						</article>
 						<article>
 							<img src="images/publicwork_icon/keynote.svg" alt="Keynote Icon"
@@ -267,7 +267,7 @@
 								also support the CAS on various presentations, spreading knowledge to actuaries of all
 								expertise levels.
 							</p>
-							<a href="keynote.html" class="special reveal">Keynotes &
+							<a href="#page/keynote" data-page-modal="keynote" class="special reveal">Keynotes &amp;
 								presentations</a>
 						</article>
 						<article>
@@ -279,7 +279,8 @@
 								disciplinary processes, and trends in conduct. Are you looking for some easy
 								Continuing Education credits?
 							</p>
-							<a href="publications.html" class="special reveal">Publications</a>
+							<a href="#page/publications" data-page-modal="publications"
+								class="special reveal">Publications</a>
 						</article>
 						<article>
 							<img src="images/publicwork_icon/volunteer.svg" alt="Volunteer Icon"
@@ -290,7 +291,8 @@
 								Currently, I chair the Annual Meeting Working Group and support many other committees
 								on education efforts.
 							</p>
-							<a href="volunteerism.html" class="special reveal">Volunteering work</a>
+							<a href="#page/volunteerism" data-page-modal="volunteerism"
+								class="special reveal">Volunteering work</a>
 						</article>
 					</section>
 
@@ -322,6 +324,14 @@
 			<iframe id="puzzle-frame" title="Puzzle"></iframe>
 		</div>
 		<span id="puzzle-popup-close" class="popup-close" role="button" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></span>
+	</div>
+
+	<div id="page-popup" role="dialog" aria-modal="true" aria-hidden="true">
+		<div id="page-popup-scroll" class="page-popup__scroll" tabindex="-1">
+			<div id="page-popup-mount"></div>
+		</div>
+		<span id="page-popup-close" class="popup-close" role="button" aria-label="Close"><i class="fas fa-times"
+				aria-hidden="true"></i></span>
 	</div>
 
 	<!-- Scripts -->
