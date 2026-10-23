@@ -2288,13 +2288,25 @@ body.is-menu-visible #menu .inner {
 /* Banner */
 
 #banner {
-	padding: 10em 0 11vh 0;
+	display: -moz-flex;
+	display: -webkit-flex;
+	display: -ms-flex;
+	display: flex;
+	-moz-flex-direction: column;
+	-webkit-flex-direction: column;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	padding: 10em 0 0 0;
 	min-height: 100vh;
 	position: relative;
-	z-index: auto;
+	z-index: 2;
 }
 
 #banner .inner {
+	-moz-flex: 1 1 auto;
+	-webkit-flex: 1 1 auto;
+	-ms-flex: 1 1 auto;
+	flex: 1 1 auto;
 	margin: 0 auto;
 	width: 55em;
 }
@@ -2342,33 +2354,28 @@ body.is-menu-visible #menu .inner {
 }
 
 #banner .banner-scroll-hint {
-	position: absolute;
-	bottom: 2.5em;
-	left: 50%;
-	display: block;
+	-moz-flex: 0 0 auto;
+	-webkit-flex: 0 0 auto;
+	-ms-flex: 0 0 auto;
+	flex: 0 0 auto;
+	padding: 1.5em 0 4em 0;
 	color: rgba(255, 255, 255, 0.6);
-	font-size: 1.5em;
+	font-size: 2.5em;
 	line-height: 1;
-	text-decoration: none;
-	transform: translateX(-50%);
-	transition: color 0.2s ease;
+	text-align: center;
 	animation: banner-scroll-hint-bounce 2s ease-in-out infinite;
-}
-
-#banner .banner-scroll-hint:hover,
-#banner .banner-scroll-hint:focus-visible {
-	color: #ffffff;
+	pointer-events: none;
 }
 
 @keyframes banner-scroll-hint-bounce {
 
 	0%,
 	100% {
-		transform: translateX(-50%) translateY(0);
+		transform: translateY(0);
 	}
 
 	50% {
-		transform: translateX(-50%) translateY(0.35em);
+		transform: translateY(0.35em);
 	}
 
 }
@@ -2376,7 +2383,7 @@ body.is-menu-visible #menu .inner {
 @media screen and (max-width: 980px) {
 
 	#banner {
-		padding: 12em 3em 11vh 3em;
+		padding: 12em 3em 0 3em;
 		margin-bottom: 0;
 	}
 
@@ -2389,8 +2396,12 @@ body.is-menu-visible #menu .inner {
 @media screen and (max-width: 736px) {
 
 	#banner {
-		padding: 5em 2em 11vh 2em;
+		padding: 5em 2em 0 2em;
 		margin-bottom: 0;
+	}
+
+	#banner .banner-scroll-hint {
+		padding-bottom: 3em;
 	}
 
 	#banner .logo {
