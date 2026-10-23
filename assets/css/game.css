@@ -220,7 +220,7 @@ main.game-ended .box {
 .how-to-play-backdrop {
 	position: fixed;
 	inset: 0;
-	z-index: 15;
+	z-index: 1;
 	background: rgba(46, 49, 65, 0.72);
 	opacity: 0;
 	visibility: hidden;
@@ -248,7 +248,7 @@ main.game-ended .box {
 	position: fixed;
 	left: 50%;
 	top: 50%;
-	z-index: 20;
+	z-index: 2;
 	margin: 0;
 	font: inherit;
 	opacity: 0;

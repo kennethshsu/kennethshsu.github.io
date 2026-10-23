@@ -1969,7 +1969,7 @@ button:disabled,
 	position: fixed;
 	top: 0;
 	width: 100%;
-	z-index: 10000;
+	z-index: 10;
 }
 
 #header h1 {
@@ -2142,6 +2142,7 @@ button:disabled,
 	top: 0;
 	visibility: hidden;
 	width: 100%;
+	z-index: 15;
 }
 
 #menu .inner {
@@ -3094,11 +3095,14 @@ body.is-preload #banner p {
 	width: calc(50% - 0.75em);
 }
 
-/* Popup banner: no layout space when hidden (expired, dismissed, or before delayed show) */
+/*
+	Stacking (low → high): 1 page wrapper · 2 hero popup · 10 header · 15 menu ·
+	20 puzzle invite · 30 puzzle backdrop · 40 puzzle modal
+*/
 #popup-banner-backdrop {
 	position: fixed;
 	inset: 0;
-	z-index: 10001;
+	z-index: 30;
 	background: rgba(46, 49, 65, 0.72);
 	opacity: 0;
 	visibility: hidden;
@@ -3118,7 +3122,7 @@ body.is-preload #banner p {
 	text-align: left;
 	padding: 1em;
 	position: relative;
-	z-index: 1000;
+	z-index: 2;
 	border-radius: 10px;
 	max-width: 80%;
 	margin: 0 auto;
@@ -3163,7 +3167,7 @@ body.is-preload #banner p {
 	right: 1.25rem;
 	bottom: 1.25rem;
 	left: auto;
-	z-index: 10002;
+	z-index: 40;
 	border-radius: 10px;
 	width: max-content;
 	max-width: calc(100vw - 2rem);
@@ -3341,7 +3345,7 @@ body.is-preload #banner p {
 	position: fixed;
 	right: 1.25rem;
 	bottom: 1.25rem;
-	z-index: 998;
+	z-index: 20;
 	border: 2px solid #ffffff;
 	opacity: 0;
 	visibility: hidden;
