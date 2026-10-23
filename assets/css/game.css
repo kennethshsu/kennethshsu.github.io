@@ -296,6 +296,28 @@ main.game-ended .box {
 	padding: 2.5rem 1.5rem 1.5rem;
 }
 
+.help-popup {
+	padding: 2.1rem 1.35rem 1.2rem;
+}
+
+.help-popup .info-section-title {
+	margin-bottom: 0.5em;
+}
+
+.help-popup .info-carousel__slide {
+	gap: 0.45rem;
+	padding: 0.25rem 0.25rem 0;
+}
+
+.help-popup .info-carousel__text {
+	min-height: 4.35em;
+	line-height: 1.5;
+}
+
+.help-popup .info-carousel__dots {
+	margin-top: 0.65rem;
+}
+
 .info-popup,
 .out-of-moves-popup,
 .win-popup {
