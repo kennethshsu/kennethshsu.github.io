@@ -462,131 +462,51 @@
 			syncParentOverlayState();
 		}
 
-		function resetHowToPlayCarousel() {
-			const carousel = document.getElementById("how-to-play-carousel");
-			if (!carousel || typeof carousel._resetScroll !== "function") return;
-			carousel._resetScroll();
-		}
+		let resetHowToPlayCarousel = () => {};
 
 		function initHowToPlayCarousel() {
-			const carousel = document.getElementById("how-to-play-carousel");
-			if (!carousel) return;
-			const viewport = carousel.querySelector(".info-carousel__viewport");
-			const prevButton = carousel.querySelector(".info-carousel__arrow--prev");
-			const nextButton = carousel.querySelector(".info-carousel__arrow--next");
-			const slides = [...carousel.querySelectorAll(".info-carousel__slide")];
-			const dots = [...carousel.querySelectorAll(".info-carousel__dot")];
-			if (!viewport || !dots.length || !slides.length) return;
+			const root = document.getElementById("how-to-play-carousel");
+			const viewport = root.querySelector(".info-carousel__viewport");
+			const prev = root.querySelector(".info-carousel__arrow--prev");
+			const next = root.querySelector(".info-carousel__arrow--next");
+			const dots = [...root.querySelectorAll(".info-carousel__dot")];
+			const lastIndex = dots.length - 1;
 
-			function syncCarouselSlideHeights() {
-				slides.forEach((slide) => {
-					slide.style.minHeight = "";
-				});
-				viewport.style.minHeight = "";
-
-				let maxHeight = 0;
-				for (const slide of slides)
-					maxHeight = Math.max(maxHeight, slide.offsetHeight);
-				if (maxHeight <= 0)
-					return;
-
-				const heightPx = `${maxHeight}px`;
-				viewport.style.minHeight = heightPx;
-				slides.forEach((slide) => {
-					slide.style.minHeight = heightPx;
-				});
+			function currentIndex() {
+				return Math.round(viewport.scrollLeft / viewport.clientWidth);
 			}
 
-			function whenSlideImagesReady(then) {
-				const images = slides.map((slide) => slide.querySelector("img")).filter(Boolean);
-				if (!images.length) {
-					then();
-					return;
-				}
-				let pending = 0;
-				images.forEach((img) => {
-					if (img.complete)
-						return;
-					pending += 1;
-					const done = () => {
-						img.removeEventListener("load", done);
-						img.removeEventListener("error", done);
-						pending -= 1;
-						if (pending <= 0)
-							then();
-					};
-					img.addEventListener("load", done);
-					img.addEventListener("error", done);
+			function updateUi(index) {
+				const i = Math.max(0, Math.min(lastIndex, index));
+				dots.forEach((dot, n) => {
+					dot.classList.toggle("is-active", n === i);
+					dot.setAttribute("aria-selected", n === i ? "true" : "false");
 				});
-				if (pending <= 0)
-					then();
-			}
-
-			carousel._syncHeights = syncCarouselSlideHeights;
-
-			function activeIndex() {
-				const width = viewport.clientWidth;
-				if (!width) return 0;
-				return Math.max(0, Math.min(dots.length - 1, Math.round(viewport.scrollLeft / width)));
-			}
-
-			function setActiveDot(index) {
-				dots.forEach((dot, i) => {
-					const active = i === index;
-					dot.classList.toggle("is-active", active);
-					dot.setAttribute("aria-selected", active ? "true" : "false");
-				});
-			}
-
-			function updateArrows(index) {
-				if (prevButton)
-					prevButton.disabled = index <= 0;
-				if (nextButton)
-					nextButton.disabled = index >= dots.length - 1;
+				prev.disabled = i === 0;
+				next.disabled = i === lastIndex;
 			}
 
 			function goToSlide(index) {
-				const width = viewport.clientWidth;
-				if (!width) return;
-				const clamped = Math.max(0, Math.min(dots.length - 1, index));
-				viewport.scrollTo({ left: clamped * width, behavior: "smooth" });
-				setActiveDot(clamped);
-				updateArrows(clamped);
+				const i = Math.max(0, Math.min(lastIndex, index));
+				viewport.scrollTo({ left: i * viewport.clientWidth, behavior: "smooth" });
+				updateUi(i);
 			}
 
 			viewport.addEventListener("scroll", () => {
-				window.requestAnimationFrame(() => {
-					const index = activeIndex();
-					setActiveDot(index);
-					updateArrows(index);
-				});
+				requestAnimationFrame(() => updateUi(currentIndex()));
 			}, { passive: true });
 
 			dots.forEach((dot) => {
-				dot.addEventListener("click", () => {
-					const index = Number(dot.dataset.slide);
-					if (!Number.isFinite(index)) return;
-					goToSlide(index);
-				});
+				dot.addEventListener("click", () => goToSlide(Number(dot.dataset.slide)));
 			});
+			prev.addEventListener("click", () => goToSlide(currentIndex() - 1));
+			next.addEventListener("click", () => goToSlide(currentIndex() + 1));
 
-			if (prevButton)
-				prevButton.addEventListener("click", () => goToSlide(activeIndex() - 1));
-			if (nextButton)
-				nextButton.addEventListener("click", () => goToSlide(activeIndex() + 1));
-
-			carousel._resetScroll = () => {
-				const prior = viewport.style.scrollBehavior;
-				viewport.style.scrollBehavior = "auto";
+			resetHowToPlayCarousel = () => {
 				viewport.scrollLeft = 0;
-				viewport.style.scrollBehavior = prior;
-				setActiveDot(0);
-				updateArrows(0);
+				updateUi(0);
 			};
-			setActiveDot(0);
-			updateArrows(0);
-			whenSlideImagesReady(syncCarouselSlideHeights);
-			window.addEventListener("resize", syncCarouselSlideHeights);
+			resetHowToPlayCarousel();
 		}
 
 		function isHelpOpen() {
@@ -634,12 +554,6 @@
 			helpPopup.setAttribute("aria-hidden", "false");
 			syncPanelBackdrop();
 			resetHowToPlayCarousel();
-			window.requestAnimationFrame(() => {
-				resetHowToPlayCarousel();
-				const carousel = document.getElementById("how-to-play-carousel");
-				if (carousel && typeof carousel._syncHeights === "function")
-					carousel._syncHeights();
-			});
 			notifyParentInfoOpen(true);
 		}
 

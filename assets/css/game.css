@@ -559,6 +559,8 @@ main.game-ended .box {
 	line-height: 1.55;
 	text-align: center;
 	width: 100%;
+	/* Tallest step (3 lines) — keeps the dialog from jumping between slides */
+	min-height: 4.65em;
 }
 
 .info-carousel__dots {
