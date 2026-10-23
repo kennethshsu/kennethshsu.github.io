@@ -2341,6 +2341,38 @@ body.is-menu-visible #menu .inner {
 	line-height: 2;
 }
 
+#banner .banner-scroll-hint {
+	position: absolute;
+	bottom: 2.5em;
+	left: 50%;
+	display: block;
+	color: rgba(255, 255, 255, 0.6);
+	font-size: 1.5em;
+	line-height: 1;
+	text-decoration: none;
+	transform: translateX(-50%);
+	transition: color 0.2s ease;
+	animation: banner-scroll-hint-bounce 2s ease-in-out infinite;
+}
+
+#banner .banner-scroll-hint:hover,
+#banner .banner-scroll-hint:focus-visible {
+	color: #ffffff;
+}
+
+@keyframes banner-scroll-hint-bounce {
+
+	0%,
+	100% {
+		transform: translateX(-50%) translateY(0);
+	}
+
+	50% {
+		transform: translateX(-50%) translateY(0.35em);
+	}
+
+}
+
 @media screen and (max-width: 980px) {
 
 	#banner {
@@ -3064,7 +3096,9 @@ body.is-menu-visible #menu .inner {
 }
 
 .popup-banner.is-dismissed {
-	display: none;
+	visibility: hidden;
+	pointer-events: none;
+	background: transparent;
 }
 
 @media screen and (max-width: 736px) {
