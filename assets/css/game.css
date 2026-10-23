@@ -263,7 +263,8 @@ main.game-ended .box {
 	transition: opacity 0.4s ease, visibility 0s;
 }
 
-.out-of-moves-backdrop {
+.out-of-moves-backdrop,
+.win-backdrop {
 	position: absolute;
 	inset: 0;
 	z-index: 4;
@@ -274,7 +275,8 @@ main.game-ended .box {
 	transition: opacity 0.4s ease, visibility 0s linear 0.4s;
 }
 
-.out-of-moves-backdrop.is-visible {
+.out-of-moves-backdrop.is-visible,
+.win-backdrop.is-visible {
 	opacity: 1;
 	visibility: visible;
 	pointer-events: auto;
@@ -288,7 +290,8 @@ main.game-ended .box {
 }
 
 .info-popup,
-.out-of-moves-popup {
+.out-of-moves-popup,
+.win-popup {
 	border: 0;
 	border-radius: 10px;
 	background: var(--panel);
@@ -308,7 +311,8 @@ main.game-ended .box {
 	transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s linear 0.4s;
 }
 
-.out-of-moves-popup {
+.out-of-moves-popup,
+.win-popup {
 	width: max-content;
 	max-width: calc(100% - 2rem);
 	padding: 1.5rem;
@@ -317,7 +321,8 @@ main.game-ended .box {
 }
 
 .info-popup.is-visible,
-.out-of-moves-popup.is-visible {
+.out-of-moves-popup.is-visible,
+.win-popup.is-visible {
 	opacity: 1;
 	visibility: visible;
 	pointer-events: auto;
@@ -328,13 +333,16 @@ main.game-ended .box {
 @media (prefers-reduced-motion: reduce) {
 	.info-backdrop,
 	.out-of-moves-backdrop,
+	.win-backdrop,
 	.info-popup,
-	.out-of-moves-popup {
+	.out-of-moves-popup,
+	.win-popup {
 		transition: none;
 	}
 
 	.info-popup,
-	.out-of-moves-popup {
+	.out-of-moves-popup,
+	.win-popup {
 		transform: translate(-50%, -50%);
 	}
 }
@@ -457,10 +465,16 @@ main.game-ended .box {
 	text-align: center;
 }
 
-.out-of-moves-quip {
+.out-of-moves-quip,
+.win-quip {
 	margin-top: 0.65em;
 	font-size: 0.82em;
 	opacity: 0.55;
+}
+
+.win-content p {
+	margin: 0;
+	text-align: center;
 }
 
 main.out-of-moves-active .click-blocker {

@@ -21,6 +21,13 @@
 					<p class="out-of-moves-quip" id="out-of-moves-quip"></p>
 				</div>
 			</div>
+			<div id="win-backdrop" class="win-backdrop" aria-hidden="true"></div>
+			<div id="win-popup" class="win-popup" role="dialog" aria-label="You won" aria-modal="true" aria-hidden="true">
+				<div class="win-content">
+					<p class="win-title">You won</p>
+					<p class="win-quip" id="win-quip"></p>
+				</div>
+			</div>
 		</div>
 		<div class="game-actions">
 			<button class="new-game" type="button">New Game</button>
@@ -87,6 +94,14 @@
 			"What a catastrophe.",
 			"Bad luck, or just terrible inputs?",
 			"Actual result emerged as expected.",
+		];
+		const WIN_QUIPS = [
+			"Great job",
+			"Lucky I guess",
+			"Not bad for a human.",
+			"Acceptable outcome.",
+			"Color coordination: adequate.",
+			"That was almost impressive."
 		];
 		const boxesContainer = document.getElementById("boxes");
 		let difficulty = 1;
@@ -317,6 +332,7 @@
 			});
 			resetConfetti();
 			closeOutOfMovesPopup();
+			closeWinPopup();
 			document.querySelector("main").classList.remove("game-ended");
 		}
 
@@ -327,7 +343,10 @@
 		function endGame() {
 			closeOutOfMovesPopup();
 			document.querySelector("main").classList.add("game-ended");
-			realisticConfetti();
+			openWinPopup();
+			window.requestAnimationFrame(() => {
+				window.requestAnimationFrame(() => realisticConfetti());
+			});
 		}
 
 		function showOutOfMovesPopup() {
@@ -335,12 +354,28 @@
 			openOutOfMovesPopup();
 		}
 
-		document.querySelector(".new-game").addEventListener("click", newGame);
+		function startNewGameFromButton() {
+			const main = document.querySelector("main");
+			if (main.classList.contains("game-ended") && difficulty < MAX_DIFFICULTY) {
+				settingsDifficulty = difficulty + 1;
+				difficulty = settingsDifficulty;
+				level = LEVELS[difficulty];
+				applyLevelVisual(level);
+				buildTubes(level);
+				updateDifficultyStepper();
+			}
+			newGame();
+		}
+
+		document.querySelector(".new-game").addEventListener("click", startNewGameFromButton);
 		const infoPopup = document.getElementById("info-popup");
 		const infoBackdrop = document.getElementById("info-backdrop");
 		const outOfMovesPopup = document.getElementById("out-of-moves-popup");
 		const outOfMovesBackdrop = document.getElementById("out-of-moves-backdrop");
 		const outOfMovesQuip = document.getElementById("out-of-moves-quip");
+		const winPopup = document.getElementById("win-popup");
+		const winBackdrop = document.getElementById("win-backdrop");
+		const winQuip = document.getElementById("win-quip");
 		const levelStepperValue = document.getElementById("level-stepper-value");
 		const levelStepperDecrease = document.querySelector(".level-stepper-decrease");
 		const levelStepperIncrease = document.querySelector(".level-stepper-increase");
@@ -356,8 +391,28 @@
 			} catch (err) { /* ignore */ }
 		}
 
+		function openWinPopup() {
+			const quip = WIN_QUIPS[Math.floor(Math.random() * WIN_QUIPS.length)];
+			winQuip.textContent = quip;
+			winBackdrop.classList.add("is-visible");
+			winBackdrop.setAttribute("aria-hidden", "false");
+			winPopup.classList.add("is-visible");
+			winPopup.setAttribute("aria-hidden", "false");
+			notifyParentInfoOpen(true);
+		}
+
+		function closeWinPopup() {
+			if (!winPopup.classList.contains("is-visible"))
+				return;
+			winBackdrop.classList.remove("is-visible");
+			winBackdrop.setAttribute("aria-hidden", "true");
+			winPopup.classList.remove("is-visible");
+			winPopup.setAttribute("aria-hidden", "true");
+			syncParentOverlayState();
+		}
+
 		function openInfo() {
-			if (outOfMovesPopup.classList.contains("is-visible")) return;
+			if (outOfMovesPopup.classList.contains("is-visible") || winPopup.classList.contains("is-visible")) return;
 			settingsDifficulty = difficulty;
 			updateDifficultyStepper();
 			infoBackdrop.classList.add("is-visible");
@@ -402,7 +457,8 @@
 
 		function isGameOverlayOpen() {
 			return infoPopup.classList.contains("is-visible")
-				|| outOfMovesPopup.classList.contains("is-visible");
+				|| outOfMovesPopup.classList.contains("is-visible")
+				|| winPopup.classList.contains("is-visible");
 		}
 
 		function syncParentOverlayState() {
