@@ -225,13 +225,14 @@ main.game-ended .box {
 	opacity: 0;
 	visibility: hidden;
 	pointer-events: none;
-	transition: opacity 0.4s ease;
+	transition: opacity 0.4s ease, visibility 0s linear 0.4s;
 }
 
 .how-to-play-backdrop.is-visible {
 	opacity: 1;
 	visibility: visible;
 	pointer-events: auto;
+	transition: opacity 0.4s ease, visibility 0s;
 }
 
 /* Open/close motion aligned with #puzzle-popup in main.css */
@@ -254,7 +255,7 @@ main.game-ended .box {
 	visibility: hidden;
 	pointer-events: none;
 	transform: translate(-50%, calc(-50% + 0.75rem));
-	transition: opacity 0.4s ease, transform 0.4s ease;
+	transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s linear 0.4s;
 }
 
 .how-to-play-popup.is-visible {
@@ -262,6 +263,7 @@ main.game-ended .box {
 	visibility: visible;
 	pointer-events: auto;
 	transform: translate(-50%, -50%);
+	transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s;
 }
 
 @media (prefers-reduced-motion: reduce) {
