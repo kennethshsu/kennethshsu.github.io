@@ -235,18 +235,34 @@ main.game-ended .box {
 	top: 0.65rem;
 	right: 0.65rem;
 	padding: 0;
-	border: 0;
-	background: none;
-	color: #ffffff;
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	background: rgba(255, 255, 255, 0.9);
+	border-radius: 50%;
+	color: var(--primary);
 	cursor: pointer;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	line-height: 1;
+	width: 1.65rem;
+	height: 1.65rem;
+	transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
-.how-to-play-close .fa-times-circle {
-	font-size: 1.35rem;
+.how-to-play-close:hover,
+.how-to-play-close:hover .fa-times {
+	color: var(--primary-hover);
+	background-color: rgba(255, 255, 255, 0.98);
+}
+
+.how-to-play-close:active,
+.how-to-play-close:active .fa-times {
+	color: var(--primary-active);
+}
+
+.how-to-play-close .fa-times {
+	font-size: 0.95rem;
+	color: var(--primary);
 }
 
 .how-to-play-content ol {
