@@ -512,8 +512,15 @@
 		window.addEventListener("message", (event) => {
 			if (event.origin !== window.location.origin) return;
 			const data = event.data;
-			if (!data || data.source !== "kennethhsu-parent" || data.type !== "close-info") return;
-			closeInfo();
+			if (!data || data.source !== "kennethhsu-parent") return;
+			if (data.type === "close-info") {
+				closeInfo();
+				return;
+			}
+			if (data.type === "open-info") {
+				newGame();
+				openInfo();
+			}
 		});
 
 		notifyParentInfoOpen(false);

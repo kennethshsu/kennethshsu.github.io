@@ -437,16 +437,32 @@
 			syncOverlayBackdrop();
 	}
 
-	function requestClosePuzzleInfo() {
+	function postMessageToPuzzleFrame(message) {
 		var frame = document.getElementById('puzzle-frame');
 		if (!frame || !frame.contentWindow)
 			return;
 		try {
-			frame.contentWindow.postMessage(
-				{ source: 'kennethhsu-parent', type: 'close-info' },
-				window.location.origin
-			);
+			frame.contentWindow.postMessage(message, window.location.origin);
 		} catch (err) { /* ignore */ }
+	}
+
+	function requestClosePuzzleInfo() {
+		postMessageToPuzzleFrame({ source: 'kennethhsu-parent', type: 'close-info' });
+	}
+
+	function requestOpenPuzzleInfo() {
+		var frame = document.getElementById('puzzle-frame');
+		if (!frame)
+			return;
+
+		function send() {
+			postMessageToPuzzleFrame({ source: 'kennethhsu-parent', type: 'open-info' });
+		}
+
+		if (puzzleFrameLoaded(frame))
+			send();
+		else
+			frame.addEventListener('load', send, { once: true });
 	}
 
 	$(document).on('click', '.popup-banner-close', function () {
@@ -493,10 +509,9 @@
 
 	$('.puzzle-invite').on('click', function () {
 		preloadPuzzleFrame();
-		puzzleInfoOpen = false;
-		$('#puzzle-popup').removeClass('game-help-open');
 		$('#puzzle-popup').addClass('is-visible');
 		syncOverlayBackdrop();
+		requestOpenPuzzleInfo();
 	});
 
 	$(document).on('keydown', function (event) {
