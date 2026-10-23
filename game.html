@@ -40,32 +40,33 @@
 				</ol>
 			</section>
 			<section class="info-section">
-				<h2 class="info-section-title">Settings</h2>
+				<h2 class="info-section-title">Difficulty Level</h2>
 				<div class="info-settings" id="info-settings">
 					<div class="level-stepper" aria-label="Level">
-						<button class="level-stepper-button" type="button" aria-label="Decrease level"><i class="fas fa-minus" aria-hidden="true"></i></button>
-						<span class="level-stepper-value">1</span>
-						<button class="level-stepper-button" type="button" aria-label="Increase level"><i class="fas fa-plus" aria-hidden="true"></i></button>
+						<button class="level-stepper-button level-stepper-decrease" type="button" aria-label="Decrease level"><i class="fas fa-minus" aria-hidden="true"></i></button>
+						<span class="level-stepper-value" id="level-stepper-value">1</span>
+						<button class="level-stepper-button level-stepper-increase" type="button" aria-label="Increase level"><i class="fas fa-plus" aria-hidden="true"></i></button>
 					</div>
 				</div>
 			</section>
 		</div>
 	</div>
 	<script>
+		// CIELAB max-min order; white replaces teal; dark red replaces bright red (less clash with pink)
 		const PALETTE = [
+			"#3949ab", // indigo
+			"#fdd835", // yellow
+			"#d81b60", // pink
+			"#ffffff", // white
 			"#000000", // black
-			"#ff0000", // red
-			"#ffd700", // gold
-			"#00ffff", // aqua
-			"#0000ff", // blue
-			"#ff00ff", // fuchsia
-			"#006400", // darkgreen
-			"#f5deb3", // wheat
-			"#8b4513", // saddlebrown
-			"#7cfc00", // lawngreen
-			"#ff69b4", // hotpink
-			"#4b0082", // indigo
-			"#6495ed"  // cornflower
+			"#43a047", // green
+			"#ff6d00", // orange
+			"#00acc1", // cyan
+			"#6d4c41", // brown
+			"#8e24aa", // purple
+			"#b71c1c", // dark red
+			"#1e88e5", // blue
+			"#c0ca33"  // lime
 		];
 		const SET_SIZE = 4;
 		const LEVELS = {
@@ -78,7 +79,8 @@
 			7: { tubes: 14, filled: 12, rows: [4, 5, 5] },
 			8: { tubes: 15, filled: 13, rows: [5, 5, 5] }
 		};
-		const CURRENT_LEVEL = 1;
+		const MIN_DIFFICULTY = 1;
+		const MAX_DIFFICULTY = 8;
 		const OUT_OF_MOVES_QUIPS = [
 			"What a statistically insignificant performance.",
 			"Observed unfavorable development on all fronts.",
@@ -88,7 +90,9 @@
 			"Actual result emerged as expected.",
 		];
 		const boxesContainer = document.getElementById("boxes");
-		let level = LEVELS[CURRENT_LEVEL];
+		let difficulty = 1;
+		let settingsDifficulty = 1;
+		let level = LEVELS[difficulty];
 
 		function getBoxes() {
 			return boxesContainer.querySelectorAll(".box");
@@ -103,6 +107,29 @@
 			document.body.style.setProperty("--board-cols", String(maxCols));
 			document.body.style.setProperty("--board-rows", String(lvl.rows.length));
 			document.body.style.setProperty("--set-size", String(SET_SIZE));
+		}
+
+		function updateDifficultyStepper() {
+			levelStepperValue.textContent = String(settingsDifficulty);
+			levelStepperDecrease.disabled = settingsDifficulty <= MIN_DIFFICULTY;
+			levelStepperIncrease.disabled = settingsDifficulty >= MAX_DIFFICULTY;
+		}
+
+		function setSettingsDifficulty(next) {
+			const clamped = Math.min(MAX_DIFFICULTY, Math.max(MIN_DIFFICULTY, Math.round(next)));
+			if (clamped === settingsDifficulty) return;
+			settingsDifficulty = clamped;
+			updateDifficultyStepper();
+		}
+
+		function applyDifficulty() {
+			if (settingsDifficulty === difficulty) return;
+			difficulty = settingsDifficulty;
+			level = LEVELS[difficulty];
+			applyLevelVisual(level);
+			buildTubes(level);
+			updateDifficultyStepper();
+			newGame();
 		}
 
 		function buildTubes(lvl) {
@@ -315,6 +342,9 @@
 		const outOfMovesPopup = document.getElementById("out-of-moves-popup");
 		const outOfMovesBackdrop = document.getElementById("out-of-moves-backdrop");
 		const outOfMovesQuip = document.getElementById("out-of-moves-quip");
+		const levelStepperValue = document.getElementById("level-stepper-value");
+		const levelStepperDecrease = document.querySelector(".level-stepper-decrease");
+		const levelStepperIncrease = document.querySelector(".level-stepper-increase");
 
 		function notifyParentInfoOpen(isOpen) {
 			try {
@@ -329,6 +359,8 @@
 
 		function openInfo() {
 			if (outOfMovesPopup.classList.contains("is-visible")) return;
+			settingsDifficulty = difficulty;
+			updateDifficultyStepper();
 			infoBackdrop.classList.add("is-visible");
 			infoBackdrop.setAttribute("aria-hidden", "false");
 			infoPopup.classList.add("is-visible");
@@ -344,6 +376,7 @@
 			infoPopup.classList.remove("is-visible");
 			infoPopup.setAttribute("aria-hidden", "true");
 			syncParentOverlayState();
+			applyDifficulty();
 		}
 
 		function openOutOfMovesPopup() {
@@ -380,6 +413,8 @@
 		document.querySelector(".info-button").addEventListener("click", openInfo);
 		document.querySelector(".info-close").addEventListener("click", closeInfo);
 		infoBackdrop.addEventListener("click", closeInfo);
+		levelStepperDecrease.addEventListener("click", () => setSettingsDifficulty(settingsDifficulty - 1));
+		levelStepperIncrease.addEventListener("click", () => setSettingsDifficulty(settingsDifficulty + 1));
 		boxesContainer.addEventListener("click", (event) => {
 			if (outOfMovesPopup.classList.contains("is-visible")) return;
 			const box = event.target.closest(".box");
@@ -392,9 +427,10 @@
 			selectTopRun(box);
 		});
 
-		level = LEVELS[CURRENT_LEVEL];
+		settingsDifficulty = difficulty;
 		applyLevelVisual(level);
 		buildTubes(level);
+		updateDifficultyStepper();
 
 		document.addEventListener("keydown", (event) => {
 			if (event.key !== "Escape") return;

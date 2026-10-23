@@ -3211,10 +3211,12 @@ body.is-preload #banner p {
 
 #puzzle-popup #puzzle-popup-close {
 	z-index: 2;
+	transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out, opacity 0.4s ease;
 }
 
 #puzzle-popup.game-help-open #puzzle-popup-close {
 	pointer-events: none;
+	opacity: 0.2;
 }
 
 #puzzle-popup iframe {
