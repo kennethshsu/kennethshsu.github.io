@@ -73,36 +73,46 @@
 		<!-- Banner -->
 		<section id="banner">
 			<div class="inner">
-				<div class="logo">
+				<div class="logo reveal">
 					<img src="images/headshot/profile_picture.webp" alt="Kenneth Hsu's Profile Photo"
 						style="border: 2px solid white;" fetchpriority="high" decoding="async" width="160" height="160" />
 				</div>
-				<h2>Hi, I'm Kenneth.</h2>
-				<p>
+				<h2 class="reveal">Hi, I'm Kenneth.</h2>
+				<p class="reveal">
 					I'm a Property and Casualty Actuary, FCAS, CSPA, MAAA, CPCU, based in San Francisco, California.
+					I design and build actuarial and risk management systems using modern engineering practices. 
 				</p>
-				<p>
-					I design and build modern actuarial and risk management systems by marrying current software 
-					engineering practices to the (very old) actuarial profession, which is why most of my carrer 
-					is spent in non-traditional roles and start-ups. Many call me a jack of all trades (and a master of none).
+				<p class="reveal">
+					I spent most of my career in non-traditional roles and start-ups, as they are least resistant to change.
+					While working at these cool roles, I learn to do many things, like figuring out how to start an insurance carrier from scratch, or building data infrastructure that is easy to maintain and use by actuaries. 
+					I also get the opportunity to work with teams that are highly specilaized, like design, engineering, and legal. 
+					I like to think I am a jack of all trades (and maybe a master of none).
 				</p>
-				<p>
-					Outside of work, I like to spend time with my family and friends camping or backpacking, 
-					or geeking out boardgame strategies, or rewatching broadway musicals. 
+				<p class="reveal">
+					Outside of work, I like to spend time with my family and friends camping or backpacking,
+					geeking out over board game strategies (Catan is my favorite), or rewatching Broadway musicals. 
+					I also organize local backpacking trips with toddlers, reach out if you are interested.
+				</p>
+				<p class="reveal">
+					What brings you to my site? Don't leave without saying hi! 👋
 				</p>
 
-				<p>
-					What brings you to my site? Don't leave without saying hi!
-				</p>
+				<div class="popup-banner reveal" data-show-until="2027-03-14T00:00:00-07:00">
+					<p class="popup-banner-greeting">Attending the CAS Annual Meeting in Hawaii?</p>
+					<p>I will be there too, you may find me on stage at a few sessions. Got feedback? As the Chair of the Annual Meeting Working Group, I'd love to hear from you.</p>
+					<span class="popup-banner-close popup-close" role="button" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></span>
+				</div>
 
-				<div id="popup-banner" data-show-until="2027-03-14T00:00:00-07:00">
+				<div class="popup-banner reveal" data-show-until="2027-03-14T00:00:00-07:00">
 					<p class="popup-banner-greeting">Interested in a backpacking trip with toddlers?</p>
 					<p>I am organizing a backpacking trip with toddlers in March 2027. More details on how to join us <a href="#page/backpacking" data-page-modal="backpacking">here</a>.
 					</p>
-					<span id="popup-banner-close" class="popup-close" role="button" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></span>
-				</div> 
+					<span class="popup-banner-close popup-close" role="button" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></span>
+				</div>
 
-
+			</div>
+			<div class="banner-scroll-hint reveal" aria-hidden="true">
+				<i class="fas fa-angle-double-down"></i>
 			</div>
 		</section>
 
@@ -112,27 +122,24 @@
 			<!-- My Work -->
 			<section id="work" class="wrapper spotlight style1">
 				<div class="inner">
-					<a href="https://www.breachinsured.com" class="image" target="_blank" rel="noopener noreferrer"><img
-							src="images/company_logo/breach_insurance.png" alt="Breach Insurance's Logo"
+					<a href="https://axaxl.com" class="image" target="_blank" rel="noopener noreferrer"><img
+							src="images/company_logo/axa.png" alt="AXA XL's Logo"
 							class="reveal from-left" style="border: 2px solid white;" loading="lazy" decoding="async" /></a>
 					<div class="content">
 						<h2 class="major reveal">My Current Work</h2>
 						<p class="reveal">
-							I am currently the Head of Actuarial at Breach Insurance, an insurtech
-							start-up focused on building regulated insurance solutions for the crypto
-							and web3 industry.
+							I am currently the Head of Pricing, Large Commercial at AXA XL, the
+							property and casualty and specialty risk division of AXA.
 						</p>
-
 						<p class="reveal">
-							There are currently critical coverage gaps in traditional cyber policies, where
-							digital asset losses are typically excluded. I combine modern
-							technology, industry expertise, and the commitment to responsible
-							underwriting and pricing, along with my team, we deliver regulated insurance 
-							solutions that give individuals and institutions the confidence to participate 
-							in the evolving digital asset economy.
+							Large commercial accounts need pricing that is technically rigorous but
+							still practical for underwriters. I lead pricing and
+							portfolio management strategy for the America's Large Commerical vertical. 
+							I build pricing frameworks that are robust, easy to maintain, fast to refresh, while keeping aligned with our business objectives. 
+							I also help underwriters make sound business decisions using modern actuarial science that is not a black box.
 						</p>
 
-						<a href="https://www.breachinsured.com" class="special reveal" target="_blank"
+						<a href="https://axaxl.com" class="special reveal" target="_blank"
 							rel="noopener noreferrer">Learn more</a>
 					</div>
 				</div>
@@ -202,15 +209,16 @@
 
 						<p class="reveal">
 							With a strong foundation in pricing, reserving, and reinsurance, I’ve held key actuarial
-							roles across high growth and established companies. In my most recent role as Lead
-							Actuary at Cover, I led initiatives in pricing strategy, product launches, and profitability
-							analysis. Before that, at Uber, I focused on pricing and reserving for their rideshare and
-							delivery businesses, managed its captive, and contributed to SOX compliance
-							ahead of Uber's IPO. And lastly, my actuarial career began at Allstate, where I worked on
-							rate indications, regulatory filings, and supported new product launches.
+							roles across growth-stage startups and established companies. In my most recent role as Head of Actuarial at Breach Insurance, I led initiatives in product development, pricing strategy, and profitability
+							studies. Before that, at Cover, I managed profitability for the non-standard personal auto market. At Uber, I focused on pricing and reserving for their rideshare and
+							delivery businesses, managed their captive, and contributed to SOX compliance in preparation for
+							Uber's IPO. My actuarial career began at Allstate, where I worked on
+							rate indications and regulatory filings, and supported new product launches.
 						</p>
 
 						<div class="company-logo-row">
+							<img src="images/company_logo/breach_insurance.png" alt="Breach Insurance's Logo"
+								class="icon reveal" loading="lazy" decoding="async" />
 							<img src="images/company_logo/cover.jpeg" alt="Cover Financial's Logo"
 								class="icon reveal" loading="lazy" decoding="async" />
 							<img src="images/company_logo/uber.jpeg" alt="Uber Technologies's Logo"

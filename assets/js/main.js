@@ -156,37 +156,6 @@
 
 		});
 
-	// Popup banner: optional deadline from #popup-banner data-show-until (ISO 8601). Omit attribute for no expiry.
-	// data-manual banners stay hidden until something else adds .is-visible.
-	$(document).ready(function () {
-		var $banner = $('#popup-banner');
-		if (!$banner.length || $banner.is('[data-manual]'))
-			return;
-
-		var raw = $banner.attr('data-show-until');
-		var showUntilMs = raw ? Date.parse(raw) : Infinity;
-		if (Number.isNaN(showUntilMs))
-			showUntilMs = Infinity;
-
-		function hideIfExpired() {
-			if (Date.now() >= showUntilMs)
-				$banner.removeClass('is-visible');
-		}
-
-		if (Date.now() >= showUntilMs)
-			return;
-
-		setTimeout(function () {
-			hideIfExpired();
-			if (Date.now() >= showUntilMs)
-				return;
-			$banner.addClass('is-visible');
-			var msLeft = showUntilMs - Date.now();
-			if (Number.isFinite(msLeft) && msLeft > 0)
-				setTimeout(hideIfExpired, msLeft);
-		}, 2000);
-	});
-
 	var pageScrollY = 0;
 	var scrollRestorationBackup = null;
 
@@ -238,9 +207,24 @@
 		}
 	}
 
-	function hidePopupBanner() {
-		$('#popup-banner').removeClass('is-visible');
+	function hidePopupBanners($only) {
+		var $targets = ($only && $only.length)
+			? $only
+			: $('.popup-banner.reveal.is-visible:not(.is-dismissed)');
+		$targets.addClass('is-dismissed').removeClass('is-visible');
 	}
+
+	// Hero popup banners: reveal on scroll; optional data-show-until hides expired banners.
+	$(document).ready(function () {
+		$('.popup-banner[data-show-until]').each(function () {
+			var raw = $(this).attr('data-show-until');
+			var showUntilMs = raw ? Date.parse(raw) : Infinity;
+			if (Number.isNaN(showUntilMs))
+				showUntilMs = Infinity;
+			if (Date.now() >= showUntilMs)
+				$(this).addClass('is-dismissed');
+		});
+	});
 
 	var PUZZLE_URL = 'game.html';
 
@@ -453,19 +437,37 @@
 			syncOverlayBackdrop();
 	}
 
-	function requestClosePuzzleInfo() {
+	function postMessageToPuzzleFrame(message) {
 		var frame = document.getElementById('puzzle-frame');
 		if (!frame || !frame.contentWindow)
 			return;
 		try {
-			frame.contentWindow.postMessage(
-				{ source: 'kennethhsu-parent', type: 'close-info' },
-				window.location.origin
-			);
+			frame.contentWindow.postMessage(message, window.location.origin);
 		} catch (err) { /* ignore */ }
 	}
 
-	$('#popup-banner-close').on('click', hidePopupBanner);
+	function requestClosePuzzleInfo() {
+		postMessageToPuzzleFrame({ source: 'kennethhsu-parent', type: 'close-info' });
+	}
+
+	function requestOpenPuzzleInfo() {
+		var frame = document.getElementById('puzzle-frame');
+		if (!frame)
+			return;
+
+		function send() {
+			postMessageToPuzzleFrame({ source: 'kennethhsu-parent', type: 'open-info' });
+		}
+
+		if (puzzleFrameLoaded(frame))
+			send();
+		else
+			frame.addEventListener('load', send, { once: true });
+	}
+
+	$(document).on('click', '.popup-banner-close', function () {
+		hidePopupBanners($(this).closest('.popup-banner'));
+	});
 	$('#puzzle-popup-close').on('click', hidePuzzle);
 	$('#page-popup-close').on('click', function () {
 		hidePageModal();
@@ -507,10 +509,9 @@
 
 	$('.puzzle-invite').on('click', function () {
 		preloadPuzzleFrame();
-		puzzleInfoOpen = false;
-		$('#puzzle-popup').removeClass('game-help-open');
 		$('#puzzle-popup').addClass('is-visible');
 		syncOverlayBackdrop();
+		requestOpenPuzzleInfo();
 	});
 
 	$(document).on('keydown', function (event) {
@@ -520,7 +521,11 @@
 				requestClosePuzzleInfo();
 				return;
 			}
-			hidePopupBanner();
+			if ($('.popup-banner.reveal.is-visible:not(.is-dismissed)').length) {
+				event.preventDefault();
+				hidePopupBanners();
+				return;
+			}
 			if ($('#page-popup').hasClass('is-visible')) {
 				hidePageModal();
 				return;

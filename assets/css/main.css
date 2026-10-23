@@ -2288,27 +2288,30 @@ body.is-menu-visible #menu .inner {
 /* Banner */
 
 #banner {
-	padding: 10em 0 0em 0;
+	display: -moz-flex;
+	display: -webkit-flex;
+	display: -ms-flex;
+	display: flex;
+	-moz-flex-direction: column;
+	-webkit-flex-direction: column;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	padding: 10em 0 0 0;
 	min-height: 100vh;
 	position: relative;
-	z-index: auto;
+	z-index: 2;
 }
 
 #banner .inner {
+	-moz-flex: 1 1 auto;
+	-webkit-flex: 1 1 auto;
+	-ms-flex: 1 1 auto;
+	flex: 1 1 auto;
 	margin: 0 auto;
 	width: 55em;
 }
 
 #banner .logo {
-	-moz-transition: opacity 2s ease, -moz-transform 1s ease;
-	-webkit-transition: opacity 2s ease, -webkit-transform 1s ease;
-	-ms-transition: opacity 2s ease, -ms-transform 1s ease;
-	transition: opacity 2s ease, transform 1s ease;
-	-moz-transform: translateY(0);
-	-webkit-transform: translateY(0);
-	-ms-transform: translateY(0);
-	transform: translateY(0);
-	opacity: 1;
 	margin: 0 0 1.3em 0;
 }
 
@@ -2336,23 +2339,6 @@ body.is-menu-visible #menu .inner {
 }
 
 #banner h2 {
-	-moz-transition: opacity 0.5s ease, -moz-transform 0.5s ease, -moz-filter 0.25s ease;
-	-webkit-transition: opacity 0.5s ease, -webkit-transform 0.5s ease, -webkit-filter 0.25s ease;
-	-ms-transition: opacity 0.5s ease, -ms-transform 0.5s ease, -ms-filter 0.25s ease;
-	transition: opacity 0.5s ease, transform 0.5s ease, filter 0.25s ease;
-	-moz-transform: translateX(0);
-	-webkit-transform: translateX(0);
-	-ms-transform: translateX(0);
-	transform: translateX(0);
-	-moz-transition-delay: 0.65s;
-	-webkit-transition-delay: 0.65s;
-	-ms-transition-delay: 0.65s;
-	transition-delay: 0.65s;
-	-moz-filter: blur(0);
-	-webkit-filter: blur(0);
-	-ms-filter: blur(0);
-	filter: blur(0);
-	opacity: 1;
 	border-bottom: solid 2px rgba(255, 255, 255, 0.125);
 	font-size: 2.25em;
 	margin-bottom: 0.8em;
@@ -2360,23 +2346,6 @@ body.is-menu-visible #menu .inner {
 }
 
 #banner p {
-	-moz-transition: opacity 0.5s ease, -moz-transform 0.5s ease, -moz-filter 0.25s ease;
-	-webkit-transition: opacity 0.5s ease, -webkit-transform 0.5s ease, -webkit-filter 0.25s ease;
-	-ms-transition: opacity 0.5s ease, -ms-transform 0.5s ease, -ms-filter 0.25s ease;
-	transition: opacity 0.5s ease, transform 0.5s ease, filter 0.25s ease;
-	-moz-transform: translateX(0);
-	-webkit-transform: translateX(0);
-	-ms-transform: translateX(0);
-	transform: translateX(0);
-	-moz-transition-delay: 0.8s;
-	-webkit-transition-delay: 0.8s;
-	-ms-transition-delay: 0.8s;
-	transition-delay: 0.8s;
-	-moz-filter: blur(0);
-	-webkit-filter: blur(0);
-	-ms-filter: blur(0);
-	filter: blur(0);
-	opacity: 1;
 	font-family: Raleway, Helvetica, sans-serif;
 	font-size: 1em;
 	font-weight: 200;
@@ -2384,10 +2353,37 @@ body.is-menu-visible #menu .inner {
 	line-height: 2;
 }
 
+#banner .banner-scroll-hint {
+	-moz-flex: 0 0 auto;
+	-webkit-flex: 0 0 auto;
+	-ms-flex: 0 0 auto;
+	flex: 0 0 auto;
+	padding: 1.5em 0 4em 0;
+	color: rgba(255, 255, 255, 0.6);
+	font-size: 2.5em;
+	line-height: 1;
+	text-align: center;
+	animation: banner-scroll-hint-bounce 2s ease-in-out infinite;
+	pointer-events: none;
+}
+
+@keyframes banner-scroll-hint-bounce {
+
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+
+	50% {
+		transform: translateY(0.35em);
+	}
+
+}
+
 @media screen and (max-width: 980px) {
 
 	#banner {
-		padding: 12em 3em 11vh 3em;
+		padding: 12em 3em 0 3em;
 		margin-bottom: 0;
 	}
 
@@ -2400,8 +2396,12 @@ body.is-menu-visible #menu .inner {
 @media screen and (max-width: 736px) {
 
 	#banner {
-		padding: 5em 2em 11vh 2em;
+		padding: 5em 2em 0 2em;
 		margin-bottom: 0;
+	}
+
+	#banner .banner-scroll-hint {
+		padding-bottom: 3em;
 	}
 
 	#banner .logo {
@@ -2420,42 +2420,10 @@ body.is-menu-visible #menu .inner {
 		font-size: 0.8em;
 	}
 
-	#popup-banner .popup-banner-list li {
+	.popup-banner .popup-banner-list li {
 		font-size: 0.8em;
 	}
 
-}
-
-body.is-preload #banner .logo {
-	-moz-transform: translateY(0.5em);
-	-webkit-transform: translateY(0.5em);
-	-ms-transform: translateY(0.5em);
-	transform: translateY(0.5em);
-	opacity: 0;
-}
-
-body.is-preload #banner h2 {
-	opacity: 0;
-	-moz-transform: translateX(0.25em);
-	-webkit-transform: translateX(0.25em);
-	-ms-transform: translateX(0.25em);
-	transform: translateX(0.25em);
-	-moz-filter: blur(2px);
-	-webkit-filter: blur(2px);
-	-ms-filter: blur(2px);
-	filter: blur(2px);
-}
-
-body.is-preload #banner p {
-	opacity: 0;
-	-moz-transform: translateX(0.5em);
-	-webkit-transform: translateX(0.5em);
-	-ms-transform: translateX(0.5em);
-	transform: translateX(0.5em);
-	-moz-filter: blur(2px);
-	-webkit-filter: blur(2px);
-	-ms-filter: blur(2px);
-	filter: blur(2px);
 }
 
 /* Wrapper */
@@ -3125,7 +3093,7 @@ body.is-preload #banner p {
 	pointer-events: auto;
 }
 
-#popup-banner {
+.popup-banner {
 	background: rgba(250, 250, 250, 0.3);
 	color: #ffffff;
 	text-align: left;
@@ -3136,33 +3104,33 @@ body.is-preload #banner p {
 	max-width: 80%;
 	margin: 0 auto;
 	font: inherit;
-	opacity: 0;
+}
+
+.popup-banner.is-dismissed {
 	visibility: hidden;
 	pointer-events: none;
-	transition: opacity 0.4s ease;
+	background: transparent;
 }
 
 @media screen and (max-width: 736px) {
-	#popup-banner {
+	.popup-banner {
 		padding-left: 0.75em;
 		padding-right: 0.75em;
 		max-width: 92%;
 	}
 }
 
-#popup-banner p,
-#popup-banner li,
-#popup-banner a,
-#popup-banner a:visited,
-#popup-banner a:hover,
-#popup-banner a:active {
+.popup-banner p,
+.popup-banner li,
+.popup-banner a,
+.popup-banner a:visited,
+.popup-banner a:hover,
+.popup-banner a:active {
 	color: #ffffff;
 }
 
-#popup-banner.is-visible {
-	opacity: 1;
-	visibility: visible;
-	pointer-events: auto;
+.popup-banner + .popup-banner {
+	margin-top: 1em;
 }
 
 #puzzle-popup {
@@ -3199,7 +3167,6 @@ body.is-preload #banner p {
 }
 
 @media (prefers-reduced-motion: reduce) {
-	#popup-banner,
 	#popup-banner-backdrop,
 	#puzzle-popup {
 		transition: none;
@@ -3359,19 +3326,19 @@ body.is-preload #banner p {
 	}
 }
 
-#popup-banner p {
+.popup-banner p {
 	margin: 0;
 	font-size: 0.9em;
 	line-height: 1.5;
 }
 
-#popup-banner > *:not(#popup-banner-close) ~ *:not(#popup-banner-close) {
+.popup-banner > *:not(.popup-banner-close) ~ *:not(.popup-banner-close) {
 	margin-top: 0.5em;
 }
 
-#popup-banner .popup-banner-greeting {
+#banner .popup-banner .popup-banner-greeting {
 	text-align: center;
-	font-weight: bold;
+	font-weight: 700;
 	color: #ffffff;
 }
 
@@ -3558,7 +3525,7 @@ html.puzzle-open body {
 	color: #4c5c96;
 }
 
-#popup-banner .popup-close {
+.popup-banner .popup-close {
 	top: -0.45em;
 	right: -0.45em;
 }
