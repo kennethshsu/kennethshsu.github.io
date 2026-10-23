@@ -183,6 +183,7 @@ body {
 html {
 	box-sizing: border-box;
 	scroll-behavior: smooth;
+	background-color: #2e3141;
 }
 
 *,
@@ -192,14 +193,34 @@ html {
 }
 
 body {
+	position: relative;
+	z-index: 0;
+	background-color: transparent;
+}
+
+body::before {
+	content: "";
+	position: fixed;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
 	background-color: #2e3141;
-	background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/background.jpg");
-	background-size: auto,
-		cover;
-	background-attachment: fixed,
-		fixed;
-	background-position: center,
-		center;
+	background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8));
+	background-size: auto, cover;
+	background-position: center, center;
+}
+
+body.has-background-image::before {
+	background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/background/background.webp");
+}
+
+/* Font Awesome off: footer social links show text labels instead of icon fonts */
+.footer-bar .icon:before {
+	display: none;
+}
+
+.footer-bar .icon > .label {
+	display: inline;
 }
 
 body.is-preload *,
@@ -1952,7 +1973,7 @@ button:disabled,
 	position: fixed;
 	top: 0;
 	width: 100%;
-	z-index: 10000;
+	z-index: 10;
 }
 
 #header h1 {
@@ -2015,9 +2036,6 @@ button:disabled,
 	line-height: 1;
 	font-family: 'Font Awesome 5 Free';
 	font-weight: 900;
-}
-
-#header nav a[href="#menu"]:before {
 	content: '\f0c9';
 	line-height: inherit;
 }
@@ -2128,6 +2146,7 @@ button:disabled,
 	top: 0;
 	visibility: hidden;
 	width: 100%;
+	z-index: 15;
 }
 
 #menu .inner {
@@ -2156,21 +2175,57 @@ button:disabled,
 }
 
 #menu .close {
-	background-image: url("images/close.svg");
-	background-position: 75% 25%;
-	background-repeat: no-repeat;
-	background-size: 2em 2em;
 	border: 0;
-	content: '';
-	display: block;
+	color: #4c5c96;
+	display: flex;
+	align-items: flex-start;
+	justify-content: flex-end;
 	height: 4em;
-	overflow: hidden;
+	padding: 0.65em 0.65em 0 0;
 	position: absolute;
 	right: 0;
-	text-align: center;
-	text-indent: 4em;
 	top: 0;
 	width: 4em;
+	text-decoration: none;
+	-moz-transition: color 0.2s ease-in-out;
+	-webkit-transition: color 0.2s ease-in-out;
+	-ms-transition: color 0.2s ease-in-out;
+	transition: color 0.2s ease-in-out;
+}
+
+#menu .close:hover {
+	color: #53639e;
+}
+
+#menu .close:active {
+	color: #45558d;
+}
+
+#menu .close .fa-times {
+	align-items: center;
+	background: rgba(255, 255, 255, 0.9);
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	border-radius: 50%;
+	color: #4c5c96;
+	display: inline-flex;
+	font-size: 1em;
+	height: 1.75em;
+	justify-content: center;
+	line-height: 1;
+	width: 1.75em;
+	-moz-transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	-webkit-transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	-ms-transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+#menu .close:hover .fa-times {
+	background: rgba(255, 255, 255, 0.98);
+	color: #53639e;
+}
+
+#menu .close:active .fa-times {
+	color: #45558d;
 }
 
 #menu .links {
@@ -2241,8 +2296,6 @@ body.is-menu-visible #menu .inner {
 	min-height: 100vh;
 	position: relative;
 	z-index: auto;
-	/* z-index:2; TODO Is this needed? */
-	
 }
 
 #banner .inner {
@@ -2338,8 +2391,8 @@ body.is-menu-visible #menu .inner {
 @media screen and (max-width: 980px) {
 
 	#banner {
-		padding: 12em 3em 12.375em 3em;
-		margin-bottom: -4.75em;
+		padding: 12em 3em 11vh 3em;
+		margin-bottom: 0;
 	}
 
 	#banner .inner {
@@ -2351,8 +2404,8 @@ body.is-menu-visible #menu .inner {
 @media screen and (max-width: 736px) {
 
 	#banner {
-		padding: 5em 2em 4.25em 2em;
-		margin-bottom: -2.5em;
+		padding: 5em 2em 11vh 2em;
+		margin-bottom: 0;
 	}
 
 	#banner .logo {
@@ -2416,23 +2469,27 @@ body.is-preload #banner p {
 	z-index: 1;
 }
 
-#wrapper>header {
+#wrapper>header,
+#wrapper .page-modal-panel>header {
 	padding: 11em 0 2.25em 0;
 }
 
-#wrapper>header .inner {
+#wrapper>header .inner,
+#wrapper .page-modal-panel>header .inner {
 	margin: 0 auto;
 	width: 55em;
 }
 
-#wrapper>header h2 {
+#wrapper>header h2,
+#wrapper .page-modal-panel>header h2 {
 	border-bottom: solid 2px rgba(255, 255, 255, 0.125);
 	font-size: 2em;
 	margin-bottom: 0.8em;
 	padding-bottom: 0.4em;
 }
 
-#wrapper>header p {
+#wrapper>header p,
+#wrapper .page-modal-panel>header p {
 	font-family: Raleway, Helvetica, sans-serif;
 	font-size: 1em;
 	font-weight: 200;
@@ -2442,7 +2499,8 @@ body.is-preload #banner p {
 
 @media screen and (max-width: 980px) {
 
-	#wrapper>header {
+	#wrapper>header,
+	#wrapper .page-modal-panel>header {
 		padding: 11em 3em 7.375em 3em;
 		background-size: auto,
 			cover;
@@ -2451,7 +2509,8 @@ body.is-preload #banner p {
 		margin-bottom: -4.75em;
 	}
 
-	#wrapper>header .inner {
+	#wrapper>header .inner,
+	#wrapper .page-modal-panel>header .inner {
 		width: 100%;
 	}
 
@@ -2459,18 +2518,21 @@ body.is-preload #banner p {
 
 @media screen and (max-width: 736px) {
 
-	#wrapper>header {
+	#wrapper>header,
+	#wrapper .page-modal-panel>header {
 		padding: 6.5em 2em 3em 2em;
 		background-size: auto,
 			125%;
 		margin-bottom: -2.5em;
 	}
 
-	#wrapper>header h2 {
+	#wrapper>header h2,
+	#wrapper .page-modal-panel>header h2 {
 		font-size: 1.25em;
 	}
 
-	#wrapper>header p {
+	#wrapper>header p,
+	#wrapper .page-modal-panel>header p {
 		font-size: 0.8em;
 	}
 
@@ -3046,14 +3108,34 @@ body.is-preload #banner p {
 	width: calc(50% - 0.75em);
 }
 
-/* Popup banner: no layout space when hidden (expired, dismissed, or before delayed show) */
+/*
+	Stacking (low → high): 1 page wrapper · 2 hero popup · 10 header · 15 menu ·
+	20 puzzle invite · 30 puzzle backdrop · 40 puzzle modal · 45 page content modal
+*/
+#popup-banner-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 30;
+	background: rgba(46, 49, 65, 0.72);
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+#popup-banner-backdrop.is-visible {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+}
+
 #popup-banner {
 	background: rgba(250, 250, 250, 0.3);
 	color: #ffffff;
 	text-align: left;
 	padding: 1em;
 	position: relative;
-	z-index: 1000;
+	z-index: 2;
 	border-radius: 10px;
 	max-width: 80%;
 	margin: 0 auto;
@@ -3061,19 +3143,19 @@ body.is-preload #banner p {
 	opacity: 0;
 	visibility: hidden;
 	pointer-events: none;
-	-moz-transition: opacity 0.4s ease;
-	-webkit-transition: opacity 0.4s ease;
-	-ms-transition: opacity 0.4s ease;
 	transition: opacity 0.4s ease;
 }
 
-#popup-banner:not(.is-visible) {
-	display: none;
+@media screen and (max-width: 736px) {
+	#popup-banner {
+		padding-left: 0.75em;
+		padding-right: 0.75em;
+		max-width: 92%;
+	}
 }
 
 #popup-banner p,
 #popup-banner li,
-#popup-banner i,
 #popup-banner a,
 #popup-banner a:visited,
 #popup-banner a:hover,
@@ -3087,41 +3169,208 @@ body.is-preload #banner p {
 	pointer-events: auto;
 }
 
-#popup-banner p {
+#puzzle-popup {
+	background: #353849;
+	color: #ffffff;
+	text-align: left;
+	padding: 0.35em;
+	border: 0;
+	box-shadow: inset 0 0 0 2.5px rgba(255, 255, 255, 0.22);
+	position: fixed;
+	top: auto;
+	right: 1.25rem;
+	bottom: 1.25rem;
+	left: auto;
+	z-index: 40;
+	border-radius: 10px;
+	width: max-content;
+	max-width: calc(100vw - 2rem);
 	margin: 0;
-	padding-right: 2em;
-	font-size: 0.9em;
-	line-height: 1.5;
+	overflow: hidden;
+	font: inherit;
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transform: translateY(0.75rem);
+	transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
 }
 
-/* Match #banner p (list items are not <p>, so they need the same typography explicitly) */
-#popup-banner .popup-banner-list li {
-	font-family: Raleway, Helvetica, sans-serif;
+#puzzle-popup.is-visible {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+	transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#popup-banner,
+	#popup-banner-backdrop,
+	#puzzle-popup {
+		transition: none;
+	}
+
+	#puzzle-popup {
+		transform: none;
+	}
+}
+
+#puzzle-popup .popup-banner-game {
+	position: relative;
+	z-index: 1;
+	width: min(390px, calc((100vh - 4.5rem) * 390 / 450), calc(100vw - 4rem));
+	aspect-ratio: 390 / 450;
+	height: auto;
+	overflow: hidden;
+}
+
+#puzzle-popup #puzzle-popup-close {
+	z-index: 2;
+	transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out, opacity 0.4s ease;
+}
+
+#puzzle-popup.game-help-open #puzzle-popup-close {
+	pointer-events: none;
+	opacity: 0.2;
+}
+
+#puzzle-popup iframe {
+	display: block;
+	width: 100%;
+	height: 100%;
+	border: 0;
+}
+
+@media screen and (max-width: 736px) {
+	#puzzle-popup {
+		top: auto;
+		right: max(0.5rem, env(safe-area-inset-right, 0px));
+		bottom: max(4.5rem, calc(0.5rem + env(safe-area-inset-bottom, 0px)));
+		left: auto;
+		width: max-content;
+		max-width: calc(100vw - 1rem);
+	}
+
+	#puzzle-popup .popup-banner-game {
+		width: min(360px, calc(100vw - 2rem), calc((100vh - 6rem) * 390 / 450));
+		aspect-ratio: 390 / 450;
+		height: auto;
+	}
+}
+
+#page-popup {
+	background: #353849;
+	color: #ffffff;
+	text-align: left;
+	padding: 0.35em;
+	border: 0;
+	box-shadow: inset 0 0 0 2.5px rgba(255, 255, 255, 0.22);
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	z-index: 45;
+	border-radius: 10px;
+	width: min(52em, calc(100vw - 2.5rem));
+	max-height: min(88vh, calc(100dvh - 2.5rem));
+	margin: 0;
+	overflow: hidden;
+	font: inherit;
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transform: translate(-50%, calc(-50% + 0.75rem));
+	transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
+}
+
+#page-popup.is-visible {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+	transform: translate(-50%, -50%);
+}
+
+#page-popup .page-popup__scroll {
+	max-height: min(85vh, calc(100dvh - 3.5rem));
+	overflow-x: hidden;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+	border-radius: 6px;
+	background-color: #2e3141;
+}
+
+#page-popup #page-popup-close {
+	z-index: 3;
+}
+
+#page-popup .page-modal-panel {
+	background-color: #2e3141;
+}
+
+#page-popup .page-modal-panel[hidden] {
+	display: none !important;
+}
+
+#page-popup .page-modal-panel>header {
+	padding: 2.25em 0 1.25em 0;
+	margin-bottom: 0;
+	background-color: #2e3141;
+}
+
+#page-popup .page-modal-panel>header .inner {
+	width: 100%;
+	max-width: none;
+	padding: 0 1.25em;
+}
+
+#page-popup .page-modal-panel .wrapper {
+	margin: 0;
+	background-color: #2e3141;
+}
+
+#page-popup .page-modal-panel .wrapper:before,
+#page-popup .page-modal-panel .wrapper:after {
+	display: none;
+}
+
+#page-popup .page-modal-panel .wrapper .inner {
+	padding: 2em 1.25em 2.5em 1.25em;
+}
+
+@media screen and (max-width: 736px) {
+	#page-popup {
+		width: calc(100vw - 1.25rem);
+		max-height: calc(100dvh - 1.25rem);
+	}
+
+	#page-popup .page-popup__scroll {
+		max-height: calc(100dvh - 2.25rem);
+	}
+
+	#page-popup .page-modal-panel>header {
+		padding: 1.75em 0 1em 0;
+	}
+
+	#page-popup .page-modal-panel>header .inner,
+	#page-popup .page-modal-panel .wrapper .inner {
+		padding-left: 0.85em;
+		padding-right: 0.85em;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#page-popup {
+		transition: none;
+		transform: translate(-50%, -50%);
+	}
+}
+
+#popup-banner p {
+	margin: 0;
 	font-size: 0.9em;
-	font-weight: 200;
-	font-style: normal;
 	line-height: 1.5;
-	letter-spacing: 0.1em;
 }
 
 #popup-banner > *:not(#popup-banner-close) ~ *:not(#popup-banner-close) {
 	margin-top: 0.5em;
-}
-
-#popup-banner .popup-banner-list {
-	margin: 0;
-	padding: 0 2em 0 1.25em;
-	list-style: disc;
-	list-style-position: outside;
-}
-
-#popup-banner .popup-banner-list li {
-	margin: 0;
-	padding: 0 0 0 0.25em;
-}
-
-#popup-banner .popup-banner-list li::marker {
-	color: inherit;
 }
 
 #popup-banner .popup-banner-greeting {
@@ -3211,28 +3460,109 @@ body.is-preload #banner p {
 
 .faq details p {
 	margin: 0;
-	padding: 0 3.5em 1.25em 1.35em;
+	padding: 0.65em 3.5em 1.25em 1.35em;
 }
 
-#popup-banner-close {
-	position: absolute;
-	top: 0.3em;
-	right: 0.5em;
-	background: none;
-	border: none;
-	outline: none;
-	color: #ffffff;
-	font-size: 1.2em;
-	width: 1.5em;
-	height: 1.5em;
-	cursor: pointer;
-	box-shadow: none;
-	padding: 0;
-	margin: 0;
-	width: auto;
-	height: auto;
-	line-height: 1;
-	display: block;
+.puzzle-invite {
+	position: fixed;
+	right: 1.25rem;
+	bottom: 1.25rem;
+	z-index: 20;
+	border: 2px solid #ffffff;
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transition: background-color 0.2s ease-in-out, opacity 0.4s ease, visibility 0.4s ease;
+	display: inline-flex;
 	align-items: center;
 	justify-content: center;
+	gap: 0.35em;
+	line-height: 1;
+	text-align: center;
+}
+
+.puzzle-invite.is-visible {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+}
+
+.puzzle-invite__emoji {
+	display: block;
+	font-size: 1.05em;
+	line-height: 1;
+}
+
+.puzzle-invite__text {
+	display: block;
+	line-height: 1;
+	letter-spacing: 0.08em;
+}
+
+html.puzzle-open,
+html.puzzle-open body {
+	overflow: hidden;
+}
+
+html.puzzle-open body {
+	position: fixed;
+	left: 0;
+	right: 0;
+	width: 100%;
+}
+
+@media screen and (max-width: 736px) {
+
+	.puzzle-invite {
+		padding: 0 1em;
+	}
+
+}
+
+.popup-close {
+	position: absolute;
+	top: 0.3em;
+	right: 0.3em;
+	z-index: 2;
+	padding: 0;
+	margin: 0;
+	border: none;
+	outline: none;
+	box-shadow: none;
+	background: rgba(255, 255, 255, 0.9);
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	border-radius: 50%;
+	color: #4c5c96;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+	width: 1.65em;
+	height: 1.65em;
+	-moz-transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	-webkit-transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	-ms-transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.popup-close:hover,
+.popup-close:hover .fa-times {
+	color: #53639e;
+	background-color: rgba(255, 255, 255, 0.98);
+}
+
+.popup-close:active,
+.popup-close:active .fa-times {
+	color: #45558d;
+}
+
+.popup-close .fa-times {
+	font-size: 0.95em;
+	color: #4c5c96;
+}
+
+#popup-banner .popup-close {
+	top: -0.45em;
+	right: -0.45em;
 }

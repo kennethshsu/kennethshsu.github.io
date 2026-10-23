@@ -1,0 +1,531 @@
+:root {
+	--panel: #353849;
+	--primary: #4c5c96;
+	--primary-hover: #53639e;
+	--primary-active: #45558d;
+	--line: rgba(255, 255, 255, 0.125);
+}
+
+html {
+	box-sizing: border-box;
+	height: 100%;
+	container-type: size;
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: inherit;
+}
+
+body {
+	--pad-x: 1rem;
+	--pad-y: 0.4rem;
+	--game-gap: 1rem;
+	--game-actions: 1.25rem;
+	--board-cols: 4;
+	--board-rows: 2;
+	--set-size: 4;
+	--tube-from-height: calc(
+		(100cqh - 2 * var(--pad-y) - var(--game-actions) - 3em - (var(--board-rows) - 1) * var(--game-gap) - 0.25rem)
+		/ var(--board-rows) * 6.5 / 17.5
+	);
+	margin: 0;
+	height: 100%;
+	max-height: 100%;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: var(--pad-y) var(--pad-x);
+	overflow: hidden;
+	background-color: #2e3141;
+	color: #ffffff;
+	font-family: "Source Sans Pro", Helvetica, sans-serif;
+	font-size: clamp(13pt, 1vw, 16.5pt);
+	font-weight: 300;
+	line-height: 1.65;
+	-webkit-text-size-adjust: none;
+}
+
+@media screen and (max-width: 980px) {
+	body {
+		font-size: 12pt;
+	}
+}
+
+main {
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	flex: 0 0 auto;
+}
+
+.board {
+	position: relative;
+}
+
+.boxes {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--game-gap);
+}
+
+.boxes-row {
+	--row-cols: var(--board-cols);
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: center;
+	gap: var(--game-gap);
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+}
+
+.box {
+	container-type: inline-size;
+	position: relative;
+	font-size: inherit;
+	width: min(
+		6.5rem,
+		calc((100% - (var(--row-cols) - 1) * var(--game-gap)) / var(--row-cols)),
+		var(--tube-from-height)
+	);
+	flex: 0 0 auto;
+	height: auto;
+	aspect-ratio: 6.5 / 17.5;
+	padding: 0;
+	border: 0;
+	border-radius: 5px;
+	background: var(--panel);
+	box-shadow: inset 0 0 0 1px var(--line);
+	color: inherit;
+	cursor: pointer;
+	overflow: hidden;
+	appearance: none;
+	transition: background-color 0.2s ease-in-out, opacity 0.8s ease-in-out;
+}
+
+.stack {
+	position: absolute;
+	inset: calc(100cqw * 9.7 / 39);
+	display: grid;
+	grid-template-rows: repeat(var(--set-size, 4), 1fr);
+	justify-items: stretch;
+	align-items: stretch;
+	gap: calc(100cqw * 0.4 / 6.5);
+}
+
+.cube {
+	--cube-color: attr(data-color type(<color>), #4c5c96);
+	--cube-light: color-mix(in srgb, var(--cube-color) 55%, white);
+	--cube-deep: color-mix(in srgb, var(--cube-color) 70%, black);
+	width: 100%;
+	height: 100%;
+	aspect-ratio: 1;
+	max-width: 100%;
+	border-radius: 5px;
+	background-color: var(--cube-color, #4c5c96);
+	background-image:
+		linear-gradient(180deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 40%),
+		linear-gradient(160deg, var(--cube-light) 0%, var(--cube-color) 46%, var(--cube-deep) 100%);
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.65),
+		0 2px 0 var(--cube-deep);
+	transition: transform 0.2s ease;
+}
+
+.cube.is-selected {
+	transform: translateY(calc(100cqw * -9.7 / 78));
+	box-shadow:
+		inset 0 0 0 2px #ffffff,
+		0 2px 0 var(--cube-deep);
+}
+
+.box:hover {
+	background-color: color-mix(in srgb, var(--panel), white 2.5%);
+}
+
+.box:active {
+	background-color: color-mix(in srgb, var(--panel), white 7.5%);
+}
+
+.box:focus-visible {
+	outline: solid 2px rgba(255, 255, 255, 0.65);
+	outline-offset: 3px;
+}
+
+.click-blocker {
+	display: none;
+	position: absolute;
+	inset: 0;
+	z-index: 2;
+	background: transparent;
+}
+
+main.game-ended .click-blocker {
+	display: block;
+}
+
+main.game-ended .box {
+	opacity: 0.2;
+}
+
+.game-actions {
+	display: flex;
+	justify-content: center;
+	gap: 0.75rem;
+	margin-top: 0.85rem;
+}
+
+.new-game,
+.info-button {
+	min-width: min(10em, calc((100cqw - 2 * var(--pad-x) - 0.75rem) / 2));
+	appearance: none;
+	display: inline-block;
+	margin: 0;
+	border-radius: 5px;
+	border: 0;
+	color: #ffffff;
+	cursor: pointer;
+	font-family: Raleway, Helvetica, sans-serif;
+	font-size: 0.8em;
+	font-weight: 700;
+	height: 3.75em;
+	letter-spacing: 0.1em;
+	line-height: 3.75em;
+	padding: 0 1.5em;
+	text-align: center;
+	text-decoration: none;
+	white-space: nowrap;
+	max-width: 100%;
+	transition: background-color 0.2s ease-in-out, opacity 0.8s ease-in-out;
+}
+
+.new-game {
+	background-color: var(--primary);
+	box-shadow: none;
+}
+
+.info-button {
+	background-color: transparent;
+	box-shadow: inset 0 0 0 1px var(--line);
+	min-width: 3.75em;
+	width: 3.75em;
+	padding: 0;
+	letter-spacing: 0;
+	line-height: 1;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.info-button .fa-info-circle {
+	font-size: 1.1em;
+}
+
+.new-game:hover {
+	background-color: var(--primary-hover);
+}
+
+.info-button:hover {
+	background-color: rgba(255, 255, 255, 0.025);
+}
+
+.new-game:active {
+	background-color: var(--primary-active);
+}
+
+.info-button:active {
+	background-color: rgba(255, 255, 255, 0.075);
+}
+
+.new-game:focus-visible,
+.info-button:focus-visible,
+.info-close:focus-visible {
+	outline: solid 2px rgba(255, 255, 255, 0.65);
+	outline-offset: 3px;
+}
+
+/* Same dimming layer as #popup-banner-backdrop in main.css */
+.info-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 1;
+	background: rgba(46, 49, 65, 0.72);
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transition: opacity 0.4s ease, visibility 0s linear 0.4s;
+}
+
+.info-backdrop.is-visible {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+	transition: opacity 0.4s ease, visibility 0s;
+}
+
+.out-of-moves-backdrop,
+.win-backdrop {
+	position: absolute;
+	inset: 0;
+	z-index: 4;
+	background: rgba(46, 49, 65, 0.72);
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transition: opacity 0.4s ease, visibility 0s linear 0.4s;
+}
+
+.out-of-moves-backdrop.is-visible,
+.win-backdrop.is-visible {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+	transition: opacity 0.4s ease, visibility 0s;
+}
+
+/* Open/close motion aligned with #puzzle-popup in main.css */
+.info-popup {
+	width: min(22rem, calc(100% - 2rem));
+	padding: 2.5rem 1.5rem 1.5rem;
+}
+
+.info-popup,
+.out-of-moves-popup,
+.win-popup {
+	border: 0;
+	border-radius: 10px;
+	background: var(--panel);
+	box-shadow: inset 0 0 0 1px var(--line);
+	color: #ffffff;
+	text-align: left;
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	z-index: 2;
+	margin: 0;
+	font: inherit;
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transform: translate(-50%, calc(-50% + 0.75rem));
+	transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s linear 0.4s;
+}
+
+.out-of-moves-popup,
+.win-popup {
+	width: max-content;
+	max-width: calc(100% - 2rem);
+	padding: 1.5rem;
+	z-index: 5;
+	text-align: center;
+}
+
+.info-popup.is-visible,
+.out-of-moves-popup.is-visible,
+.win-popup.is-visible {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+	transform: translate(-50%, -50%);
+	transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.info-backdrop,
+	.out-of-moves-backdrop,
+	.win-backdrop,
+	.info-popup,
+	.out-of-moves-popup,
+	.win-popup {
+		transition: none;
+	}
+
+	.info-popup,
+	.out-of-moves-popup,
+	.win-popup {
+		transform: translate(-50%, -50%);
+	}
+}
+
+.info-close {
+	position: absolute;
+	top: 0.65rem;
+	right: 0.65rem;
+	padding: 0;
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	background: rgba(255, 255, 255, 0.9);
+	border-radius: 50%;
+	color: var(--primary);
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+	width: 1.65rem;
+	height: 1.65rem;
+	transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.info-close:hover,
+.info-close:hover .fa-times {
+	color: var(--primary-hover);
+	background-color: rgba(255, 255, 255, 0.98);
+}
+
+.info-close:active,
+.info-close:active .fa-times {
+	color: var(--primary-active);
+}
+
+.info-close .fa-times {
+	font-size: 0.95rem;
+	color: var(--primary);
+}
+
+.info-section + .info-section {
+	margin-top: 1.35em;
+	padding-top: 1.35em;
+	border-top: 1px solid var(--line);
+}
+
+.info-section-title {
+	margin: 0 0 0.65em;
+	font-family: Raleway, Helvetica, sans-serif;
+	font-size: 0.95em;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.level-stepper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.75rem;
+}
+
+.level-stepper-button {
+	appearance: none;
+	flex: 0 0 auto;
+	width: 2.75em;
+	height: 2.75em;
+	padding: 0;
+	border: 0;
+	border-radius: 5px;
+	background-color: transparent;
+	box-shadow: inset 0 0 0 1px var(--line);
+	color: #ffffff;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+	transition: background-color 0.2s ease-in-out;
+}
+
+.level-stepper-button:hover {
+	background-color: rgba(255, 255, 255, 0.025);
+}
+
+.level-stepper-button:active {
+	background-color: rgba(255, 255, 255, 0.075);
+}
+
+.level-stepper-button:disabled {
+	opacity: 0.35;
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
+.level-stepper-button:focus-visible {
+	outline: solid 2px rgba(255, 255, 255, 0.65);
+	outline-offset: 3px;
+}
+
+.level-stepper-value {
+	min-width: 2.5em;
+	font-family: Raleway, Helvetica, sans-serif;
+	font-size: 1.15em;
+	font-weight: 700;
+	text-align: center;
+	letter-spacing: 0.05em;
+}
+
+.info-content ol {
+	margin: 0;
+	padding-left: 1.25em;
+}
+
+.info-content li + li {
+	margin-top: 0.65em;
+}
+
+.out-of-moves-content p {
+	margin: 0;
+	text-align: center;
+}
+
+.out-of-moves-quip,
+.win-quip {
+	margin-top: 0.65em;
+	font-size: 0.82em;
+	opacity: 0.55;
+}
+
+.win-content p {
+	margin: 0;
+	text-align: center;
+}
+
+main.out-of-moves-active .click-blocker {
+	display: block;
+}
+
+main.out-of-moves-active .box {
+	opacity: 0.2;
+}
+
+main.out-of-moves-active .info-button {
+	opacity: 0.2;
+	pointer-events: none;
+}
+
+main.game-ended .info-button {
+	opacity: 0.2;
+	pointer-events: none;
+}
+
+@media screen and (max-width: 736px) {
+	body {
+		--pad-x: 0.75rem;
+		--pad-y: 0.75rem;
+		--game-gap: 0.45rem;
+	}
+
+	main {
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+	}
+
+	.boxes {
+		width: 100%;
+		min-width: 0;
+		gap: var(--game-gap);
+	}
+
+	.boxes-row {
+		gap: var(--game-gap);
+	}
+
+	.new-game,
+	.info-button {
+		padding: 0;
+	}
+}

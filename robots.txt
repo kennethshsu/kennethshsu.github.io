@@ -1,5 +1,7 @@
 User-agent: *
+Allow: /images/favicon.svg
 Disallow: /assets/
 Disallow: /images/
+
 
 Sitemap: https://kennethhsu.com/sitemap.xml

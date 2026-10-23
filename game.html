@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title></title>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:700|Source+Sans+Pro:300" />
+	<link rel="stylesheet" href="assets/css/fontawesome-all.min.css" />
+	<link rel="stylesheet" href="assets/css/game.css" />
+	<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+	<main>
+		<div class="board">
+			<div class="boxes" id="boxes"></div>
+			<div class="click-blocker" aria-hidden="true"></div>
+			<div id="out-of-moves-backdrop" class="out-of-moves-backdrop" aria-hidden="true"></div>
+			<div id="out-of-moves-popup" class="out-of-moves-popup" role="dialog" aria-label="Out of moves" aria-modal="true" aria-hidden="true">
+				<div class="out-of-moves-content">
+					<p class="out-of-moves-title">Out of moves.</p>
+					<p class="out-of-moves-quip" id="out-of-moves-quip"></p>
+				</div>
+			</div>
+			<div id="win-backdrop" class="win-backdrop" aria-hidden="true"></div>
+			<div id="win-popup" class="win-popup" role="dialog" aria-label="You won" aria-modal="true" aria-hidden="true">
+				<div class="win-content">
+					<p class="win-title">You did it!</p>
+					<p class="win-quip" id="win-quip"></p>
+				</div>
+			</div>
+		</div>
+		<div class="game-actions">
+			<button class="new-game" type="button">New Game</button>
+			<button class="info-button" type="button" aria-label="Info"><i class="fas fa-info-circle"></i></button>
+		</div>
+	</main>
+	<div id="info-backdrop" class="info-backdrop" aria-hidden="true"></div>
+	<div id="info-popup" class="info-popup" role="dialog" aria-label="Info" aria-hidden="true">
+		<button class="info-close" type="button" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+		<div class="info-content">
+			<section class="info-section">
+				<h2 class="info-section-title">How to play</h2>
+				<ol>
+					<li>Sort all cubes by color to win!</li>
+					<li>Move same-colored cubes together.</li>
+					<li>Cubes may only go in an empty tube, or on a cube of the same color.</li>
+				</ol>
+			</section>
+			<section class="info-section">
+				<h2 class="info-section-title">Difficulty Level</h2>
+				<div class="info-settings" id="info-settings">
+					<div class="level-stepper" aria-label="Level">
+						<button class="level-stepper-button level-stepper-decrease" type="button" aria-label="Decrease level"><i class="fas fa-minus" aria-hidden="true"></i></button>
+						<span class="level-stepper-value" id="level-stepper-value">1</span>
+						<button class="level-stepper-button level-stepper-increase" type="button" aria-label="Increase level"><i class="fas fa-plus" aria-hidden="true"></i></button>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+	<script>
+		const PALETTE = [
+			"#000000", // black
+			"#ff0000", // red
+			"#ffd700", // gold
+			"#00ffff", // aqua
+			"#0000ff", // blue
+			"#ff00ff", // fuchsia
+			"#006400", // darkgreen
+			"#f5deb3", // wheat
+			"#8b4513", // saddlebrown
+			"#7cfc00", // lawngreen
+			"#ffa500", // orange
+			"#4b0082", // indigo
+			"#6495ed"  // cornflower
+		];
+		const SET_SIZE = 4;
+		const LEVELS = {
+			1: { tubes: 8, filled: 6, rows: [4, 4] },
+			2: { tubes: 9, filled: 7, rows: [4, 5] },
+			3: { tubes: 10, filled: 8, rows: [5, 5] },
+			4: { tubes: 11, filled: 9, rows: [5, 6] },
+			5: { tubes: 12, filled: 10, rows: [6, 6] },
+			6: { tubes: 13, filled: 11, rows: [4, 5, 4] },
+			7: { tubes: 14, filled: 12, rows: [4, 5, 5] },
+			8: { tubes: 15, filled: 13, rows: [5, 5, 5] }
+		};
+		const MIN_DIFFICULTY = 1;
+		const MAX_DIFFICULTY = 8;
+
+		const LOSS_QUIPS = [
+			"What a statistically insignificant performance.",
+			"An unfavoarbale development occurred.",
+			"Total loss with no salvage value.",
+			"What a catastrophe.",
+			"Bad luck, or just terrible inputs?",
+			"Actual result emerged as expected.",
+			"Yes, every puzzle is solvable.",
+			"Should we make it easier?",
+			"Why don't you ask a friend for help?",
+			"The trick is to put all the same colors in the same tube.",
+			"Maybe do it a bit slower next time?",
+			"Still developing your losses.",
+			"Is this the start of a loss trend?",
+			"You should be embarrassed.",
+		];
+		const WIN_QUIPS = [
+			"Outperformed the industry benchmark!",
+			"Great job, book closed!",
+			"Still a bit slower than AI...",
+			"Another round?",
+			"Maybe I didn't shuffle the board well.",
+			"Not bad for a human.",
+			"Should I be impressed?",
+			"That was an easy one."
+		];
+
+		const boxesContainer = document.getElementById("boxes");
+		let difficulty = 1;
+		let settingsDifficulty = 1;
+		let level = LEVELS[difficulty];
+
+		function getBoxes() {
+			return boxesContainer.querySelectorAll(".box");
+		}
+
+		function levelColors(lvl) {
+			return PALETTE.slice(0, lvl.filled);
+		}
+
+		function applyLevelVisual(lvl) {
+			const maxCols = Math.max(...lvl.rows);
+			document.body.style.setProperty("--board-cols", String(maxCols));
+			document.body.style.setProperty("--board-rows", String(lvl.rows.length));
+			document.body.style.setProperty("--set-size", String(SET_SIZE));
+		}
+
+		function updateDifficultyStepper() {
+			levelStepperValue.textContent = String(settingsDifficulty);
+			levelStepperDecrease.disabled = settingsDifficulty <= MIN_DIFFICULTY;
+			levelStepperIncrease.disabled = settingsDifficulty >= MAX_DIFFICULTY;
+		}
+
+		function setSettingsDifficulty(next) {
+			const clamped = Math.min(MAX_DIFFICULTY, Math.max(MIN_DIFFICULTY, Math.round(next)));
+			if (clamped === settingsDifficulty) return;
+			settingsDifficulty = clamped;
+			updateDifficultyStepper();
+		}
+
+		function applyDifficulty() {
+			if (settingsDifficulty === difficulty) return;
+			difficulty = settingsDifficulty;
+			level = LEVELS[difficulty];
+			applyLevelVisual(level);
+			buildTubes(level);
+			updateDifficultyStepper();
+			newGame();
+		}
+
+		function buildTubes(lvl) {
+			boxesContainer.replaceChildren();
+			let tubeNumber = 0;
+			for (const rowLength of lvl.rows) {
+				const row = document.createElement("div");
+				row.className = "boxes-row";
+				row.style.setProperty("--row-cols", String(rowLength));
+				for (let i = 0; i < rowLength; i++) {
+					tubeNumber += 1;
+					const box = document.createElement("button");
+					box.className = "box";
+					box.type = "button";
+					box.setAttribute("aria-label", `Tube ${tubeNumber}`);
+					const stack = document.createElement("span");
+					stack.className = "stack";
+					box.appendChild(stack);
+					row.appendChild(box);
+				}
+				boxesContainer.appendChild(row);
+			}
+		}
+
+		function createSolvableGame() {
+			const colors = levelColors(level);
+			const tubeCount = level.tubes;
+			const emptyCount = tubeCount - level.filled;
+			const mainCount = level.filled;
+			const shufflePasses = tubeCount * tubeCount;
+
+			const tubes = colors.map((color) => Array(SET_SIZE).fill(color));
+			while (tubes.length < tubeCount) tubes.push([]);
+
+			for (let master = 0; master < shufflePasses; master++) {
+				// Shuffle tubes
+				for (let tubeIndex = 0; tubeIndex < tubes.length; tubeIndex++) {
+					const cubeCount = tubes[tubeIndex].length;
+
+					// Shuffle cubes within each tube top to bottom
+					for (let cubeFromTop = 0; cubeFromTop < cubeCount; cubeFromTop++) {
+						if (!tubes[tubeIndex].length) break;
+
+						const destinations = [];
+						for (let d = 0; d < tubes.length; d++) {
+							if (d !== tubeIndex && tubes[d].length < SET_SIZE)
+								destinations.push(d);
+						}
+						if (!destinations.length) continue;
+
+						const dest = destinations[Math.floor(Math.random() * destinations.length)];
+						tubes[dest].unshift(tubes[tubeIndex].shift());
+					}
+				}
+
+				// Shuffle tubes order before next run
+				for (let i = tubes.length - 1; i > 0; i--) {
+					const j = Math.floor(Math.random() * (i + 1));
+					const swap = tubes[i];
+					tubes[i] = tubes[j];
+					tubes[j] = swap;
+				}
+			}
+
+			// Sort tubes by length descending
+			tubes.sort((a, b) => b.length - a.length);
+
+			// Empty last empty tubes
+			for (let s = tubes.length - 1; s >= tubes.length - emptyCount; s--) {
+				while (tubes[s].length) {
+					const open = [];
+					for (let d = 0; d < mainCount; d++) {
+						if (tubes[d].length < SET_SIZE) open.push(d);
+					}
+					if (!open.length) break;
+					tubes[open[Math.floor(Math.random() * open.length)]].unshift(tubes[s].shift());
+				}
+			}
+
+			// Shuffle filled tubes order one last time
+			for (let i = mainCount - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				const swap = tubes[i];
+				tubes[i] = tubes[j];
+				tubes[j] = swap;
+			}
+
+			return tubes;
+		}
+
+		function renderTube(tube, colors) {
+			const stack = tube.querySelector(".stack");
+			stack.replaceChildren();
+			colors.forEach((color, index) => {
+				const cube = document.createElement("span");
+				cube.className = "cube";
+				cube.dataset.color = color;
+				cube.style.setProperty("--cube-color", color);
+				cube.style.gridRow = String(SET_SIZE - colors.length + 1 + index);
+				stack.appendChild(cube);
+			});
+		}
+
+		function clearSelection() {
+			document.querySelectorAll(".cube.is-selected").forEach((cube) => {
+				cube.classList.remove("is-selected");
+			});
+		}
+
+		function tubeColors(tube) {
+			return [...tube.querySelectorAll(".cube")].map((cube) => cube.dataset.color);
+		}
+
+		function selectedTube() {
+			const cube = document.querySelector(".cube.is-selected");
+			return cube ? cube.closest(".box") : null;
+		}
+
+		function canMove(moving, destinationColors) {
+			if (!moving.length || moving.length + destinationColors.length > SET_SIZE) return false;
+			if (!destinationColors.length) return true;
+			return destinationColors[0] === moving[0];
+		}
+
+		function topRunColors(colors) {
+			if (!colors.length) return [];
+			const moving = [];
+			while (moving.length < colors.length && colors[moving.length] === colors[0]) {
+				moving.push(colors[0]);
+			}
+			return moving;
+		}
+
+		function outOfMoves() {
+			const tubeList = [...getBoxes()];
+			for (const source of tubeList) {
+				const moving = topRunColors(tubeColors(source));
+				if (!moving.length) continue;
+
+				for (const destination of tubeList) {
+					if (destination === source) continue;
+					if (canMove(moving, tubeColors(destination))) return false;
+				}
+			}
+			return true;
+		}
+
+		function moveCubes(source, destination) {
+			const sourceColors = tubeColors(source);
+			const moving = topRunColors(sourceColors);
+			const destinationColors = tubeColors(destination);
+			if (!canMove(moving, destinationColors)) {
+				clearSelection();
+				return;
+			}
+			renderTube(destination, moving.concat(destinationColors));
+			renderTube(source, sourceColors.slice(moving.length));
+			clearSelection();
+			if (gameend()) endGame();
+			else if (outOfMoves()) showOutOfMovesPopup();
+			else resetConfetti();
+		}
+
+		function gameend() {
+			return [...getBoxes()].every((tube) => {
+				const colors = tubeColors(tube);
+				return colors.length === 0 || (colors.length === SET_SIZE && colors.every((color) => color === colors[0]));
+			});
+		}
+
+		function selectTopRun(tube) {
+			const cubes = [...tube.querySelectorAll(".cube")];
+			const alreadySelected = cubes.some((cube) => cube.classList.contains("is-selected"));
+			clearSelection();
+			if (alreadySelected || !cubes.length) return;
+			const color = cubes[0].dataset.color;
+			for (const cube of cubes) {
+				if (cube.dataset.color !== color) break;
+				cube.classList.add("is-selected");
+			}
+		}
+
+		function newGame() {
+			const tubes = createSolvableGame();
+			getBoxes().forEach((tube, index) => {
+				renderTube(tube, tubes[index]);
+			});
+			resetConfetti();
+			closeOutOfMovesPopup();
+			closeWinPopup();
+			document.querySelector("main").classList.remove("game-ended");
+		}
+
+		function resetConfetti() {
+			if (typeof confetti !== "undefined") confetti.reset();
+		}
+
+		function endGame() {
+			closeOutOfMovesPopup();
+			document.querySelector("main").classList.add("game-ended");
+			openWinPopup();
+			window.requestAnimationFrame(() => {
+				window.requestAnimationFrame(() => realisticConfetti());
+			});
+		}
+
+		function showOutOfMovesPopup() {
+			clearSelection();
+			openOutOfMovesPopup();
+		}
+
+		function startNewGameFromButton() {
+			const main = document.querySelector("main");
+			if (main.classList.contains("game-ended") && difficulty < MAX_DIFFICULTY) {
+				settingsDifficulty = difficulty + 1;
+				difficulty = settingsDifficulty;
+				level = LEVELS[difficulty];
+				applyLevelVisual(level);
+				buildTubes(level);
+				updateDifficultyStepper();
+			}
+			newGame();
+		}
+
+		document.querySelector(".new-game").addEventListener("click", startNewGameFromButton);
+		const infoPopup = document.getElementById("info-popup");
+		const infoBackdrop = document.getElementById("info-backdrop");
+		const outOfMovesPopup = document.getElementById("out-of-moves-popup");
+		const outOfMovesBackdrop = document.getElementById("out-of-moves-backdrop");
+		const outOfMovesQuip = document.getElementById("out-of-moves-quip");
+		const winPopup = document.getElementById("win-popup");
+		const winBackdrop = document.getElementById("win-backdrop");
+		const winQuip = document.getElementById("win-quip");
+		const levelStepperValue = document.getElementById("level-stepper-value");
+		const levelStepperDecrease = document.querySelector(".level-stepper-decrease");
+		const levelStepperIncrease = document.querySelector(".level-stepper-increase");
+
+		function notifyParentInfoOpen(isOpen) {
+			try {
+				if (window.parent && window.parent !== window) {
+					window.parent.postMessage(
+						{ source: "kennethhsu-game", type: "info", open: isOpen },
+						window.location.origin
+					);
+				}
+			} catch (err) { /* ignore */ }
+		}
+
+		function openWinPopup() {
+			const quip = WIN_QUIPS[Math.floor(Math.random() * WIN_QUIPS.length)];
+			winQuip.textContent = quip;
+			winBackdrop.classList.add("is-visible");
+			winBackdrop.setAttribute("aria-hidden", "false");
+			winPopup.classList.add("is-visible");
+			winPopup.setAttribute("aria-hidden", "false");
+			notifyParentInfoOpen(true);
+		}
+
+		function closeWinPopup() {
+			if (!winPopup.classList.contains("is-visible"))
+				return;
+			winBackdrop.classList.remove("is-visible");
+			winBackdrop.setAttribute("aria-hidden", "true");
+			winPopup.classList.remove("is-visible");
+			winPopup.setAttribute("aria-hidden", "true");
+			syncParentOverlayState();
+		}
+
+		function openInfo() {
+			if (outOfMovesPopup.classList.contains("is-visible") || winPopup.classList.contains("is-visible")) return;
+			settingsDifficulty = difficulty;
+			updateDifficultyStepper();
+			infoBackdrop.classList.add("is-visible");
+			infoBackdrop.setAttribute("aria-hidden", "false");
+			infoPopup.classList.add("is-visible");
+			infoPopup.setAttribute("aria-hidden", "false");
+			notifyParentInfoOpen(true);
+		}
+
+		function closeInfo() {
+			if (!infoPopup.classList.contains("is-visible"))
+				return;
+			infoBackdrop.classList.remove("is-visible");
+			infoBackdrop.setAttribute("aria-hidden", "true");
+			infoPopup.classList.remove("is-visible");
+			infoPopup.setAttribute("aria-hidden", "true");
+			syncParentOverlayState();
+			applyDifficulty();
+		}
+
+		function openOutOfMovesPopup() {
+			const quip = LOSS_QUIPS[Math.floor(Math.random() * LOSS_QUIPS.length)];
+			outOfMovesQuip.textContent = quip;
+			document.querySelector("main").classList.add("out-of-moves-active");
+			outOfMovesBackdrop.classList.add("is-visible");
+			outOfMovesBackdrop.setAttribute("aria-hidden", "false");
+			outOfMovesPopup.classList.add("is-visible");
+			outOfMovesPopup.setAttribute("aria-hidden", "false");
+			notifyParentInfoOpen(true);
+		}
+
+		function closeOutOfMovesPopup() {
+			if (!outOfMovesPopup.classList.contains("is-visible"))
+				return;
+			document.querySelector("main").classList.remove("out-of-moves-active");
+			outOfMovesBackdrop.classList.remove("is-visible");
+			outOfMovesBackdrop.setAttribute("aria-hidden", "true");
+			outOfMovesPopup.classList.remove("is-visible");
+			outOfMovesPopup.setAttribute("aria-hidden", "true");
+			syncParentOverlayState();
+		}
+
+		function isGameOverlayOpen() {
+			return infoPopup.classList.contains("is-visible")
+				|| outOfMovesPopup.classList.contains("is-visible")
+				|| winPopup.classList.contains("is-visible");
+		}
+
+		function syncParentOverlayState() {
+			notifyParentInfoOpen(isGameOverlayOpen());
+		}
+
+		document.querySelector(".info-button").addEventListener("click", openInfo);
+		document.querySelector(".info-close").addEventListener("click", closeInfo);
+		infoBackdrop.addEventListener("click", closeInfo);
+		levelStepperDecrease.addEventListener("click", () => setSettingsDifficulty(settingsDifficulty - 1));
+		levelStepperIncrease.addEventListener("click", () => setSettingsDifficulty(settingsDifficulty + 1));
+		boxesContainer.addEventListener("click", (event) => {
+			if (outOfMovesPopup.classList.contains("is-visible")) return;
+			const box = event.target.closest(".box");
+			if (!box || !boxesContainer.contains(box)) return;
+			const source = selectedTube();
+			if (source && source !== box) {
+				moveCubes(source, box);
+				return;
+			}
+			selectTopRun(box);
+		});
+
+		settingsDifficulty = difficulty;
+		applyLevelVisual(level);
+		buildTubes(level);
+		updateDifficultyStepper();
+
+		document.addEventListener("keydown", (event) => {
+			if (event.key !== "Escape") return;
+			if (outOfMovesPopup.classList.contains("is-visible")) return;
+			if (infoPopup.classList.contains("is-visible")) {
+				event.preventDefault();
+				closeInfo();
+			}
+		});
+
+		window.addEventListener("message", (event) => {
+			if (event.origin !== window.location.origin) return;
+			const data = event.data;
+			if (!data || data.source !== "kennethhsu-parent" || data.type !== "close-info") return;
+			closeInfo();
+		});
+
+		notifyParentInfoOpen(false);
+
+		function realisticConfetti() {
+			if (typeof confetti === "undefined") return;
+			const count = 200;
+			const defaults = {
+				origin: { y: 0.7 }
+			};
+
+			function fire(particleRatio, opts) {
+				confetti({
+					...defaults,
+					...opts,
+					particleCount: Math.floor(count * particleRatio)
+				});
+			}
+
+			fire(0.25, {
+				spread: 26,
+				startVelocity: 55
+			});
+			fire(0.2, {
+				spread: 60
+			});
+			fire(0.35, {
+				spread: 100,
+				decay: 0.91,
+				scalar: 0.8
+			});
+			fire(0.1, {
+				spread: 120,
+				startVelocity: 25,
+				decay: 0.92,
+				scalar: 1.2
+			});
+			fire(0.1, {
+				spread: 120,
+				startVelocity: 45
+			});
+		}
+
+		newGame();
+	</script>
+</body>
+</html>
