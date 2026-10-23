@@ -228,36 +228,36 @@
 		frame.src = PUZZLE_URL;
 	}
 
-	var puzzleHowToPlayOpen = false;
+	var puzzleInfoOpen = false;
 
 	window.addEventListener('message', function (event) {
 		if (event.origin !== window.location.origin)
 			return;
 		var data = event.data;
-		if (!data || data.source !== 'kennethhsu-game' || data.type !== 'how-to-play')
+		if (!data || data.source !== 'kennethhsu-game' || data.type !== 'info')
 			return;
-		puzzleHowToPlayOpen = !!data.open;
-		$('#puzzle-popup').toggleClass('game-help-open', puzzleHowToPlayOpen);
+		puzzleInfoOpen = !!data.open;
+		$('#puzzle-popup').toggleClass('game-help-open', puzzleInfoOpen);
 	});
 
 	function hidePuzzle() {
-		if (puzzleHowToPlayOpen)
+		if (puzzleInfoOpen)
 			return;
 		var wasOpen = $('#puzzle-popup').hasClass('is-visible');
 		$('#puzzle-popup, #popup-banner-backdrop').removeClass('is-visible');
-		puzzleHowToPlayOpen = false;
+		puzzleInfoOpen = false;
 		$('#puzzle-popup').removeClass('game-help-open');
 		if (wasOpen)
 			unlockPageScroll();
 	}
 
-	function requestClosePuzzleHowToPlay() {
+	function requestClosePuzzleInfo() {
 		var frame = document.getElementById('puzzle-frame');
 		if (!frame || !frame.contentWindow)
 			return;
 		try {
 			frame.contentWindow.postMessage(
-				{ source: 'kennethhsu-parent', type: 'close-how-to-play' },
+				{ source: 'kennethhsu-parent', type: 'close-info' },
 				window.location.origin
 			);
 		} catch (err) { /* ignore */ }
@@ -282,7 +282,7 @@
 
 	$('.puzzle-invite').on('click', function () {
 		preloadPuzzleFrame();
-		puzzleHowToPlayOpen = false;
+		puzzleInfoOpen = false;
 		$('#puzzle-popup').removeClass('game-help-open');
 		$('#puzzle-popup, #popup-banner-backdrop').addClass('is-visible');
 		lockPageScroll();
@@ -290,9 +290,9 @@
 
 	$(document).on('keydown', function (event) {
 		if (event.keyCode == 27) {
-			if ($('#puzzle-popup').hasClass('is-visible') && puzzleHowToPlayOpen) {
+			if ($('#puzzle-popup').hasClass('is-visible') && puzzleInfoOpen) {
 				event.preventDefault();
-				requestClosePuzzleHowToPlay();
+				requestClosePuzzleInfo();
 				return;
 			}
 			hidePopupBanner();

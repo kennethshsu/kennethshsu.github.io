@@ -3157,11 +3157,12 @@ body.is-preload #banner p {
 }
 
 #puzzle-popup {
-	background: rgba(250, 250, 250, 0.22);
+	background: #353849;
 	color: #ffffff;
 	text-align: left;
 	padding: 0.35em;
-	border: 1px solid rgba(255, 255, 255, 0.35);
+	border: 0;
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.125);
 	position: fixed;
 	top: auto;
 	right: 1.25rem;
@@ -3211,10 +3212,12 @@ body.is-preload #banner p {
 
 #puzzle-popup #puzzle-popup-close {
 	z-index: 2;
+	transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out, opacity 0.4s ease;
 }
 
 #puzzle-popup.game-help-open #puzzle-popup-close {
 	pointer-events: none;
+	opacity: 0.2;
 }
 
 #puzzle-popup iframe {

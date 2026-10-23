@@ -23,8 +23,16 @@ body {
 	--pad-y: 0.4rem;
 	--game-gap: 1rem;
 	--game-actions: 1.25rem;
-	--tube-from-width: calc((100cqw - 2 * var(--pad-x) - 4 * var(--game-gap)) / 5);
-	--tube-from-height: calc((100cqh - 2 * var(--pad-y) - var(--game-actions) - 3em - var(--game-gap) - 0.25rem) / 2 * 6.5 / 17.5);
+	--board-cols: 4;
+	--board-rows: 2;
+	--set-size: 4;
+	--tube-from-width: calc(
+		(100cqw - 2 * var(--pad-x) - (var(--board-cols) - 1) * var(--game-gap)) / var(--board-cols)
+	);
+	--tube-from-height: calc(
+		(100cqh - 2 * var(--pad-y) - var(--game-actions) - 3em - (var(--board-rows) - 1) * var(--game-gap) - 0.25rem)
+		/ var(--board-rows) * 6.5 / 17.5
+	);
 	margin: 0;
 	height: 100%;
 	max-height: 100%;
@@ -62,10 +70,17 @@ main {
 }
 
 .boxes {
-	display: grid;
-	grid-template-columns: repeat(5, max-content);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--game-gap);
+}
+
+.boxes-row {
+	display: flex;
+	flex-wrap: nowrap;
 	justify-content: center;
-	gap: 1rem;
+	gap: var(--game-gap);
 }
 
 .box {
@@ -91,7 +106,7 @@ main {
 	position: absolute;
 	inset: calc(100cqw * 9.7 / 39);
 	display: grid;
-	grid-template-rows: repeat(4, 1fr);
+	grid-template-rows: repeat(var(--set-size, 4), 1fr);
 	justify-items: stretch;
 	align-items: stretch;
 	gap: calc(100cqw * 0.4 / 6.5);
@@ -160,7 +175,7 @@ main.game-ended .box {
 }
 
 .new-game,
-.how-to-play-button {
+.info-button {
 	min-width: min(10em, calc((100cqw - 2 * var(--pad-x) - 0.75rem) / 2));
 	appearance: none;
 	display: inline-block;
@@ -188,16 +203,29 @@ main.game-ended .box {
 	box-shadow: none;
 }
 
-.how-to-play-button {
+.info-button {
 	background-color: transparent;
 	box-shadow: inset 0 0 0 1px var(--line);
+	min-width: 3.75em;
+	width: 3.75em;
+	padding: 0;
+	letter-spacing: 0;
+	line-height: 1;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.info-button .fa-info-circle {
+	font-size: 1.1em;
 }
 
 .new-game:hover {
 	background-color: var(--primary-hover);
 }
 
-.how-to-play-button:hover {
+.info-button:hover {
 	background-color: rgba(255, 255, 255, 0.025);
 }
 
@@ -205,19 +233,19 @@ main.game-ended .box {
 	background-color: var(--primary-active);
 }
 
-.how-to-play-button:active {
+.info-button:active {
 	background-color: rgba(255, 255, 255, 0.075);
 }
 
 .new-game:focus-visible,
-.how-to-play-button:focus-visible,
-.how-to-play-close:focus-visible {
+.info-button:focus-visible,
+.info-close:focus-visible {
 	outline: solid 2px rgba(255, 255, 255, 0.65);
 	outline-offset: 3px;
 }
 
 /* Same dimming layer as #popup-banner-backdrop in main.css */
-.how-to-play-backdrop {
+.info-backdrop {
 	position: fixed;
 	inset: 0;
 	z-index: 1;
@@ -228,7 +256,27 @@ main.game-ended .box {
 	transition: opacity 0.4s ease, visibility 0s linear 0.4s;
 }
 
-.how-to-play-backdrop.is-visible {
+.info-backdrop.is-visible {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+	transition: opacity 0.4s ease, visibility 0s;
+}
+
+.out-of-moves-backdrop,
+.win-backdrop {
+	position: absolute;
+	inset: 0;
+	z-index: 4;
+	background: rgba(46, 49, 65, 0.72);
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transition: opacity 0.4s ease, visibility 0s linear 0.4s;
+}
+
+.out-of-moves-backdrop.is-visible,
+.win-backdrop.is-visible {
 	opacity: 1;
 	visibility: visible;
 	pointer-events: auto;
@@ -236,9 +284,14 @@ main.game-ended .box {
 }
 
 /* Open/close motion aligned with #puzzle-popup in main.css */
-.how-to-play-popup {
+.info-popup {
 	width: min(22rem, calc(100% - 2rem));
 	padding: 2.5rem 1.5rem 1.5rem;
+}
+
+.info-popup,
+.out-of-moves-popup,
+.win-popup {
 	border: 0;
 	border-radius: 10px;
 	background: var(--panel);
@@ -258,7 +311,18 @@ main.game-ended .box {
 	transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s linear 0.4s;
 }
 
-.how-to-play-popup.is-visible {
+.out-of-moves-popup,
+.win-popup {
+	width: max-content;
+	max-width: calc(100% - 2rem);
+	padding: 1.5rem;
+	z-index: 5;
+	text-align: center;
+}
+
+.info-popup.is-visible,
+.out-of-moves-popup.is-visible,
+.win-popup.is-visible {
 	opacity: 1;
 	visibility: visible;
 	pointer-events: auto;
@@ -267,17 +331,23 @@ main.game-ended .box {
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.how-to-play-backdrop,
-	.how-to-play-popup {
+	.info-backdrop,
+	.out-of-moves-backdrop,
+	.win-backdrop,
+	.info-popup,
+	.out-of-moves-popup,
+	.win-popup {
 		transition: none;
 	}
 
-	.how-to-play-popup {
+	.info-popup,
+	.out-of-moves-popup,
+	.win-popup {
 		transform: translate(-50%, -50%);
 	}
 }
 
-.how-to-play-close {
+.info-close {
 	position: absolute;
 	top: 0.65rem;
 	right: 0.65rem;
@@ -296,32 +366,131 @@ main.game-ended .box {
 	transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
-.how-to-play-close:hover,
-.how-to-play-close:hover .fa-times {
+.info-close:hover,
+.info-close:hover .fa-times {
 	color: var(--primary-hover);
 	background-color: rgba(255, 255, 255, 0.98);
 }
 
-.how-to-play-close:active,
-.how-to-play-close:active .fa-times {
+.info-close:active,
+.info-close:active .fa-times {
 	color: var(--primary-active);
 }
 
-.how-to-play-close .fa-times {
+.info-close .fa-times {
 	font-size: 0.95rem;
 	color: var(--primary);
 }
 
-.how-to-play-content ol {
+.info-section + .info-section {
+	margin-top: 1.35em;
+	padding-top: 1.35em;
+	border-top: 1px solid var(--line);
+}
+
+.info-section-title {
+	margin: 0 0 0.65em;
+	font-family: Raleway, Helvetica, sans-serif;
+	font-size: 0.95em;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.level-stepper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.75rem;
+}
+
+.level-stepper-button {
+	appearance: none;
+	flex: 0 0 auto;
+	width: 2.75em;
+	height: 2.75em;
+	padding: 0;
+	border: 0;
+	border-radius: 5px;
+	background-color: transparent;
+	box-shadow: inset 0 0 0 1px var(--line);
+	color: #ffffff;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+	transition: background-color 0.2s ease-in-out;
+}
+
+.level-stepper-button:hover {
+	background-color: rgba(255, 255, 255, 0.025);
+}
+
+.level-stepper-button:active {
+	background-color: rgba(255, 255, 255, 0.075);
+}
+
+.level-stepper-button:disabled {
+	opacity: 0.35;
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
+.level-stepper-button:focus-visible {
+	outline: solid 2px rgba(255, 255, 255, 0.65);
+	outline-offset: 3px;
+}
+
+.level-stepper-value {
+	min-width: 2.5em;
+	font-family: Raleway, Helvetica, sans-serif;
+	font-size: 1.15em;
+	font-weight: 700;
+	text-align: center;
+	letter-spacing: 0.05em;
+}
+
+.info-content ol {
 	margin: 0;
 	padding-left: 1.25em;
 }
 
-.how-to-play-content li + li {
+.info-content li + li {
 	margin-top: 0.65em;
 }
 
-main.game-ended .how-to-play-button {
+.out-of-moves-content p {
+	margin: 0;
+	text-align: center;
+}
+
+.out-of-moves-quip,
+.win-quip {
+	margin-top: 0.65em;
+	font-size: 0.82em;
+	opacity: 0.55;
+}
+
+.win-content p {
+	margin: 0;
+	text-align: center;
+}
+
+main.out-of-moves-active .click-blocker {
+	display: block;
+}
+
+main.out-of-moves-active .box {
+	opacity: 0.2;
+}
+
+main.out-of-moves-active .info-button {
+	opacity: 0.2;
+	pointer-events: none;
+}
+
+main.game-ended .info-button {
 	opacity: 0.2;
 	pointer-events: none;
 }
@@ -343,13 +512,15 @@ main.game-ended .how-to-play-button {
 	.boxes {
 		width: 100%;
 		min-width: 0;
-		grid-template-columns: repeat(5, max-content);
-		justify-content: center;
+		gap: var(--game-gap);
+	}
+
+	.boxes-row {
 		gap: var(--game-gap);
 	}
 
 	.new-game,
-	.how-to-play-button {
+	.info-button {
 		padding: 0;
 	}
 }
