@@ -25,7 +25,7 @@
 		if ($body.hasClass('has-background-image'))
 			return;
 		var img = new Image();
-		img.src = 'images/background.webp';
+		img.src = 'images/background/background.webp';
 		img.onload = function () {
 			$body.addClass('has-background-image');
 		};
