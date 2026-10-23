@@ -181,7 +181,7 @@ main.game-ended .box {
 }
 
 .new-game,
-.info-button {
+.game-icon-button {
 	min-width: min(10em, calc((100cqw - 2 * var(--pad-x) - 0.75rem) / 2));
 	appearance: none;
 	display: inline-block;
@@ -209,7 +209,7 @@ main.game-ended .box {
 	box-shadow: none;
 }
 
-.info-button {
+.game-icon-button {
 	background-color: transparent;
 	box-shadow: inset 0 0 0 1px var(--line);
 	min-width: 3.75em;
@@ -223,7 +223,8 @@ main.game-ended .box {
 	flex-shrink: 0;
 }
 
-.info-button .fa-info-circle {
+.game-icon-button .fa-question,
+.game-icon-button .fa-cog {
 	font-size: 1.1em;
 }
 
@@ -231,7 +232,7 @@ main.game-ended .box {
 	background-color: var(--primary-hover);
 }
 
-.info-button:hover {
+.game-icon-button:hover {
 	background-color: rgba(255, 255, 255, 0.025);
 }
 
@@ -239,12 +240,12 @@ main.game-ended .box {
 	background-color: var(--primary-active);
 }
 
-.info-button:active {
+.game-icon-button:active {
 	background-color: rgba(255, 255, 255, 0.075);
 }
 
 .new-game:focus-visible,
-.info-button:focus-visible,
+.game-icon-button:focus-visible,
 .info-close:focus-visible {
 	outline: solid 2px rgba(255, 255, 255, 0.65);
 	outline-offset: 3px;
@@ -457,13 +458,136 @@ main.game-ended .box {
 	letter-spacing: 0.05em;
 }
 
-.info-content ol {
-	margin: 0;
-	padding-left: 1.25em;
+.info-carousel__frame {
+	display: flex;
+	align-items: center;
+	gap: 0.35rem;
 }
 
-.info-content li + li {
-	margin-top: 0.65em;
+.info-carousel__arrow {
+	appearance: none;
+	flex: 0 0 auto;
+	width: 1.85rem;
+	height: 1.85rem;
+	padding: 0;
+	border: 0;
+	border-radius: 5px;
+	background-color: transparent;
+	box-shadow: inset 0 0 0 1px var(--line);
+	color: rgba(255, 255, 255, 0.85);
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+	transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, opacity 0.2s ease-in-out;
+}
+
+.info-carousel__arrow:hover:not(:disabled) {
+	background-color: rgba(255, 255, 255, 0.06);
+	color: #ffffff;
+}
+
+.info-carousel__arrow:active:not(:disabled) {
+	background-color: rgba(255, 255, 255, 0.12);
+}
+
+.info-carousel__arrow:disabled {
+	opacity: 0.3;
+	cursor: default;
+	pointer-events: none;
+}
+
+.info-carousel__arrow:focus-visible {
+	outline: solid 2px rgba(255, 255, 255, 0.65);
+	outline-offset: 3px;
+}
+
+.info-carousel__arrow .fa-chevron-left,
+.info-carousel__arrow .fa-chevron-right {
+	font-size: 0.85em;
+}
+
+.info-carousel__viewport {
+	flex: 1 1 auto;
+	min-width: 0;
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	scroll-behavior: smooth;
+	-webkit-overflow-scrolling: touch;
+	scrollbar-width: none;
+}
+
+.info-carousel__viewport::-webkit-scrollbar {
+	display: none;
+}
+
+.info-carousel__viewport:focus-visible {
+	outline: solid 2px rgba(255, 255, 255, 0.45);
+	outline-offset: 3px;
+	border-radius: 4px;
+}
+
+.info-carousel__track {
+	display: flex;
+}
+
+.info-carousel__slide {
+	flex: 0 0 100%;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.65rem;
+	padding: 0.65rem 0.5rem;
+	border-radius: 5px;
+	box-shadow: inset 0 0 0 1px var(--line);
+	scroll-snap-align: start;
+	scroll-snap-stop: always;
+}
+
+.info-carousel__img {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	height: auto;
+	border-radius: 4px;
+}
+
+.info-carousel__text {
+	margin: 0;
+	line-height: 1.55;
+	text-align: center;
+}
+
+.info-carousel__dots {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0.55rem;
+	margin-top: 0.9rem;
+}
+
+.info-carousel__dot {
+	width: 0.5rem;
+	height: 0.5rem;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background-color: rgba(255, 255, 255, 0.28);
+	cursor: pointer;
+	transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.info-carousel__dot.is-active {
+	background-color: rgba(255, 255, 255, 0.9);
+	transform: scale(1.15);
+}
+
+.info-carousel__dot:focus-visible {
+	outline: solid 2px rgba(255, 255, 255, 0.65);
+	outline-offset: 3px;
 }
 
 .out-of-moves-content p {
@@ -491,12 +615,12 @@ main.out-of-moves-active .box {
 	opacity: 0.2;
 }
 
-main.out-of-moves-active .info-button {
+main.out-of-moves-active .game-icon-button {
 	opacity: 0.2;
 	pointer-events: none;
 }
 
-main.game-ended .info-button {
+main.game-ended .game-icon-button {
 	opacity: 0.2;
 	pointer-events: none;
 }
@@ -525,7 +649,7 @@ main.game-ended .info-button {
 	}
 
 	.new-game,
-	.info-button {
+	.game-icon-button {
 		padding: 0;
 	}
 }
