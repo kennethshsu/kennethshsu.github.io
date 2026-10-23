@@ -12,18 +12,7 @@
 <body>
 	<main>
 		<div class="board">
-			<div class="boxes" id="boxes">
-				<button class="box" type="button" aria-label="Tube 1"><span class="stack"></span></button>
-				<button class="box" type="button" aria-label="Tube 2"><span class="stack"></span></button>
-				<button class="box" type="button" aria-label="Tube 3"><span class="stack"></span></button>
-				<button class="box" type="button" aria-label="Tube 4"><span class="stack"></span></button>
-				<button class="box" type="button" aria-label="Tube 5"><span class="stack"></span></button>
-				<button class="box" type="button" aria-label="Tube 6"><span class="stack"></span></button>
-				<button class="box" type="button" aria-label="Tube 7"><span class="stack"></span></button>
-				<button class="box" type="button" aria-label="Tube 8"><span class="stack"></span></button>
-				<button class="box" type="button" aria-label="Tube 9"><span class="stack"></span></button>
-				<button class="box" type="button" aria-label="Tube 10"><span class="stack"></span></button>
-			</div>
+			<div class="boxes" id="boxes"></div>
 			<div class="click-blocker" aria-hidden="true"></div>
 			<div id="out-of-moves-backdrop" class="out-of-moves-backdrop" aria-hidden="true"></div>
 			<div id="out-of-moves-popup" class="out-of-moves-popup" role="dialog" aria-label="Out of moves" aria-modal="true" aria-hidden="true">
@@ -56,7 +45,7 @@
 		<div class="settings-content"></div>
 	</div>
 	<script>
-		const COLORS = [
+		const PALETTE = [
 			"#E6194B", // Crimson
 			"#3CB44B", // Green
 			"#FFE119", // Yellow
@@ -64,9 +53,25 @@
 			"#F58231", // Orange
 			"#911EB4", // Purple
 			"#42D4F4", // Cyan
-			"#000000"  // Black
+			"#000000", // Black
+			"#F032E6", // Magenta
+			"#469990", // Teal
+			"#9A6324", // Brown
+			"#FABEBE", // Pink
+			"#A9A9A9"  // Gray
 		];
 		const SET_SIZE = 4;
+		const LEVELS = {
+			1: { tubes: 8, filled: 6, rows: [4, 4] },
+			2: { tubes: 9, filled: 7, rows: [4, 5] },
+			3: { tubes: 10, filled: 8, rows: [5, 5] },
+			4: { tubes: 11, filled: 9, rows: [5, 6] },
+			5: { tubes: 12, filled: 10, rows: [4, 4, 4] },
+			6: { tubes: 13, filled: 11, rows: [4, 5, 4] },
+			7: { tubes: 14, filled: 12, rows: [4, 5, 5] },
+			8: { tubes: 15, filled: 13, rows: [5, 5, 5] }
+		};
+		const CURRENT_LEVEL = 1;
 		const OUT_OF_MOVES_QUIPS = [
 			"What a statistically insignificant performance.",
 			"Observed unfavorable development on all fronts.",
@@ -75,16 +80,56 @@
 			"Bad luck, or just terrible inputs?",
 			"Actual result emerged as expected.",
 		];
-		const boxes = document.querySelectorAll(".box");
-		const TUBES_SHUFFLE_COUNT = boxes.length * boxes.length;
+		const boxesContainer = document.getElementById("boxes");
+		let level = LEVELS[CURRENT_LEVEL];
+
+		function getBoxes() {
+			return boxesContainer.querySelectorAll(".box");
+		}
+
+		function levelColors(lvl) {
+			return PALETTE.slice(0, lvl.filled);
+		}
+
+		function applyLevelVisual(lvl) {
+			const maxCols = Math.max(...lvl.rows);
+			document.body.style.setProperty("--board-cols", String(maxCols));
+			document.body.style.setProperty("--board-rows", String(lvl.rows.length));
+			document.body.style.setProperty("--set-size", String(SET_SIZE));
+		}
+
+		function buildTubes(lvl) {
+			boxesContainer.replaceChildren();
+			let tubeNumber = 0;
+			for (const rowLength of lvl.rows) {
+				const row = document.createElement("div");
+				row.className = "boxes-row";
+				for (let i = 0; i < rowLength; i++) {
+					tubeNumber += 1;
+					const box = document.createElement("button");
+					box.className = "box";
+					box.type = "button";
+					box.setAttribute("aria-label", `Tube ${tubeNumber}`);
+					const stack = document.createElement("span");
+					stack.className = "stack";
+					box.appendChild(stack);
+					row.appendChild(box);
+				}
+				boxesContainer.appendChild(row);
+			}
+		}
 
 		function createSolvableGame() {
-			const tubes = COLORS.map((color) => Array(SET_SIZE).fill(color));
-			while (tubes.length < boxes.length) tubes.push([]);
+			const colors = levelColors(level);
+			const tubeCount = level.tubes;
+			const emptyCount = tubeCount - level.filled;
+			const mainCount = level.filled;
+			const shufflePasses = tubeCount * tubeCount;
 
-			const mainCount = COLORS.length;
+			const tubes = colors.map((color) => Array(SET_SIZE).fill(color));
+			while (tubes.length < tubeCount) tubes.push([]);
 
-			for (let master = 0; master < TUBES_SHUFFLE_COUNT; master++) {
+			for (let master = 0; master < shufflePasses; master++) {
 				// Shuffle tubes
 				for (let tubeIndex = 0; tubeIndex < tubes.length; tubeIndex++) {
 					const cubeCount = tubes[tubeIndex].length;
@@ -117,8 +162,8 @@
 			// Sort tubes by length descending
 			tubes.sort((a, b) => b.length - a.length);
 
-			// Empty last 2 tubes
-			for (let s = tubes.length - 1; s >= tubes.length - 2; s--) {
+			// Empty last empty tubes
+			for (let s = tubes.length - 1; s >= tubes.length - emptyCount; s--) {
 				while (tubes[s].length) {
 					const open = [];
 					for (let d = 0; d < mainCount; d++) {
@@ -184,7 +229,7 @@
 		}
 
 		function outOfMoves() {
-			const tubeList = [...boxes];
+			const tubeList = [...getBoxes()];
 			for (const source of tubeList) {
 				const moving = topRunColors(tubeColors(source));
 				if (!moving.length) continue;
@@ -214,7 +259,7 @@
 		}
 
 		function gameend() {
-			return [...boxes].every((tube) => {
+			return [...getBoxes()].every((tube) => {
 				const colors = tubeColors(tube);
 				return colors.length === 0 || (colors.length === SET_SIZE && colors.every((color) => color === colors[0]));
 			});
@@ -234,7 +279,7 @@
 
 		function newGame() {
 			const tubes = createSolvableGame();
-			boxes.forEach((tube, index) => {
+			getBoxes().forEach((tube, index) => {
 				renderTube(tube, tubes[index]);
 			});
 			resetConfetti();
@@ -353,17 +398,21 @@
 		document.querySelector(".settings-button").addEventListener("click", openSettings);
 		document.querySelector(".settings-close").addEventListener("click", closeSettings);
 		settingsBackdrop.addEventListener("click", closeSettings);
-		boxes.forEach((box) => {
-			box.addEventListener("click", () => {
-				if (outOfMovesPopup.classList.contains("is-visible")) return;
-				const source = selectedTube();
-				if (source && source !== box) {
-					moveCubes(source, box);
-					return;
-				}
-				selectTopRun(box);
-			});
+		boxesContainer.addEventListener("click", (event) => {
+			if (outOfMovesPopup.classList.contains("is-visible")) return;
+			const box = event.target.closest(".box");
+			if (!box || !boxesContainer.contains(box)) return;
+			const source = selectedTube();
+			if (source && source !== box) {
+				moveCubes(source, box);
+				return;
+			}
+			selectTopRun(box);
 		});
+
+		level = LEVELS[CURRENT_LEVEL];
+		applyLevelVisual(level);
+		buildTubes(level);
 
 		document.addEventListener("keydown", (event) => {
 			if (event.key !== "Escape") return;
