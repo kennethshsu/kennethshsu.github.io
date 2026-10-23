@@ -208,28 +208,21 @@
 	}
 
 	function hidePopupBanners($only) {
-		if ($only && $only.length)
-			$only.removeClass('is-visible');
-		else
-			$('.popup-banner').removeClass('is-visible');
+		var $targets = ($only && $only.length)
+			? $only
+			: $('.popup-banner.reveal.is-visible:not(.is-dismissed)');
+		$targets.addClass('is-dismissed').removeClass('is-visible');
 	}
 
-	// Hero popup banners: .popup-banner + optional data-show-until (ISO 8601). Omit for no expiry.
+	// Hero popup banners: reveal on scroll; optional data-show-until hides expired banners.
 	$(document).ready(function () {
-		$('.popup-banner').not('[data-manual]').each(function () {
-			var $banner = $(this);
-			var raw = $banner.attr('data-show-until');
+		$('.popup-banner[data-show-until]').each(function () {
+			var raw = $(this).attr('data-show-until');
 			var showUntilMs = raw ? Date.parse(raw) : Infinity;
 			if (Number.isNaN(showUntilMs))
 				showUntilMs = Infinity;
 			if (Date.now() >= showUntilMs)
-				return;
-
-			setTimeout(function () {
-				if (Date.now() >= showUntilMs)
-					return;
-				$banner.addClass('is-visible');
-			}, 2000);
+				$(this).addClass('is-dismissed');
 		});
 	});
 
@@ -513,7 +506,7 @@
 				requestClosePuzzleInfo();
 				return;
 			}
-			if ($('.popup-banner.is-visible').length) {
+			if ($('.popup-banner.reveal.is-visible:not(.is-dismissed)').length) {
 				event.preventDefault();
 				hidePopupBanners();
 				return;
