@@ -31,7 +31,8 @@
 			<button class="how-to-play-button" type="button">How to Play</button>
 		</div>
 	</main>
-	<dialog class="how-to-play" aria-label="How to Play">
+	<div id="how-to-play-backdrop" class="how-to-play-backdrop" aria-hidden="true"></div>
+	<div id="how-to-play-popup" class="how-to-play-popup" role="dialog" aria-label="How to Play" aria-hidden="true">
 		<button class="how-to-play-close" type="button" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
 		<div class="how-to-play-content">
 			<ol>
@@ -40,7 +41,7 @@
 				<li>Cubes may only go in an empty tube, or on cube(s) of the same color.</li>
 			</ol>
 		</div>
-	</dialog>
+	</div>
 	<script>
 		const COLORS = [
 			"#E6194B", // Crimson
@@ -216,9 +217,57 @@
 		});
 
 		document.querySelector(".new-game").addEventListener("click", newGame);
-		const howToPlay = document.querySelector(".how-to-play");
-		document.querySelector(".how-to-play-button").addEventListener("click", () => howToPlay.showModal());
-		document.querySelector(".how-to-play-close").addEventListener("click", () => howToPlay.close());
+		const howToPlayPopup = document.getElementById("how-to-play-popup");
+		const howToPlayBackdrop = document.getElementById("how-to-play-backdrop");
+
+		function notifyParentHowToPlayOpen(isOpen) {
+			try {
+				if (window.parent && window.parent !== window) {
+					window.parent.postMessage(
+						{ source: "kennethhsu-game", type: "how-to-play", open: isOpen },
+						window.location.origin
+					);
+				}
+			} catch (err) { /* ignore */ }
+		}
+
+		function openHowToPlay() {
+			howToPlayBackdrop.classList.add("is-visible");
+			howToPlayBackdrop.setAttribute("aria-hidden", "false");
+			howToPlayPopup.classList.add("is-visible");
+			howToPlayPopup.setAttribute("aria-hidden", "false");
+			notifyParentHowToPlayOpen(true);
+		}
+
+		function closeHowToPlay() {
+			if (!howToPlayPopup.classList.contains("is-visible"))
+				return;
+			howToPlayBackdrop.classList.remove("is-visible");
+			howToPlayBackdrop.setAttribute("aria-hidden", "true");
+			howToPlayPopup.classList.remove("is-visible");
+			howToPlayPopup.setAttribute("aria-hidden", "true");
+			notifyParentHowToPlayOpen(false);
+		}
+
+		document.querySelector(".how-to-play-button").addEventListener("click", openHowToPlay);
+		document.querySelector(".how-to-play-close").addEventListener("click", closeHowToPlay);
+		howToPlayBackdrop.addEventListener("click", closeHowToPlay);
+
+		document.addEventListener("keydown", (event) => {
+			if (event.key === "Escape" && howToPlayPopup.classList.contains("is-visible")) {
+				event.preventDefault();
+				closeHowToPlay();
+			}
+		});
+
+		window.addEventListener("message", (event) => {
+			if (event.origin !== window.location.origin) return;
+			const data = event.data;
+			if (!data || data.source !== "kennethhsu-parent" || data.type !== "close-how-to-play") return;
+			closeHowToPlay();
+		});
+
+		notifyParentHowToPlayOpen(false);
 
 		function realisticConfetti() {
 			if (typeof confetti === "undefined") return;

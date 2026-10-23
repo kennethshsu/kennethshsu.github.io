@@ -3197,10 +3197,20 @@ body.is-preload #banner p {
 }
 
 #puzzle-popup .popup-banner-game {
+	position: relative;
+	z-index: 1;
 	width: min(390px, calc((100vh - 4.5rem) * 390 / 450), calc(100vw - 4rem));
 	aspect-ratio: 390 / 450;
 	height: auto;
 	overflow: hidden;
+}
+
+#puzzle-popup #puzzle-popup-close {
+	z-index: 2;
+}
+
+#puzzle-popup.game-help-open #puzzle-popup-close {
+	pointer-events: none;
 }
 
 #puzzle-popup iframe {
