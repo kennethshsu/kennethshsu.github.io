@@ -54,66 +54,61 @@
 			"#000000"  // Black
 		];
 		const SET_SIZE = 4;
-		const SCRAMBLE_MOVES = SET_SIZE * COLORS.length * 10;
 		const boxes = document.querySelectorAll(".box");
-
-		function shuffle(items) {
-			for (let i = items.length - 1; i > 0; i--) {
-				const j = Math.floor(Math.random() * (i + 1));
-				const current = items[i];
-				items[i] = items[j];
-				items[j] = current;
-			}
-			return items;
-		}
+		const TUBES_SHUFFLE_COUNT = boxes.length * boxes.length;
 
 		function createSolvableGame() {
 			const tubes = COLORS.map((color) => Array(SET_SIZE).fill(color));
 			while (tubes.length < boxes.length) tubes.push([]);
 
-			for (let move = 0; move < SCRAMBLE_MOVES; move++) {
-				const options = [];
+			const mainCount = COLORS.length;
 
-				tubes.forEach((source, sourceIndex) => {
-					if (!source.length) return;
+			for (let master = 0; master < TUBES_SHUFFLE_COUNT; master++) {
+				for (let tubeIndex = 0; tubeIndex < tubes.length; tubeIndex++) {
+					const cubeCount = tubes[tubeIndex].length;
+					for (let cubeFromTop = 0; cubeFromTop < cubeCount; cubeFromTop++) {
+						if (!tubes[tubeIndex].length) break;
 
-					let sameColorCount = 1;
-					while (
-						sameColorCount < source.length &&
-						source[sameColorCount] === source[0]
-					) {
-						sameColorCount++;
+						const destinations = [];
+						for (let d = 0; d < tubes.length; d++) {
+							if (d !== tubeIndex && tubes[d].length < SET_SIZE)
+								destinations.push(d);
+						}
+						if (!destinations.length) continue;
+
+						const dest = destinations[Math.floor(Math.random() * destinations.length)];
+						tubes[dest].unshift(tubes[tubeIndex].shift());
 					}
-
-					tubes.forEach((destination, destinationIndex) => {
-						const space = SET_SIZE - destination.length;
-						if (sourceIndex === destinationIndex || !space) return;
-						options.push({
-							sourceIndex,
-							destinationIndex,
-							maxCount: Math.min(sameColorCount, space)
-						});
-					});
-				});
-
-				if (!options.length) break;
-				const option = options[Math.floor(Math.random() * options.length)];
-				const count = 1 + Math.floor(Math.random() * option.maxCount);
-				const moving = tubes[option.sourceIndex].splice(0, count);
-				tubes[option.destinationIndex].unshift(...moving);
+				}
+				for (let i = tubes.length - 1; i > 0; i--) {
+					const j = Math.floor(Math.random() * (i + 1));
+					const swap = tubes[i];
+					tubes[i] = tubes[j];
+					tubes[j] = swap;
+				}
 			}
 
-			const filled = tubes.slice(0, COLORS.length);
-			tubes.slice(COLORS.length).forEach((source) => {
-				while (source.length) {
-					const open = filled.filter((tube) => tube.length < SET_SIZE);
-					const destination = open[Math.floor(Math.random() * open.length)];
-					if (!destination) break;
-					destination.unshift(source.shift());
-				}
-			});
+			tubes.sort((a, b) => b.length - a.length);
 
-			return shuffle(filled).concat(tubes.slice(-2));
+			for (let s = tubes.length - 1; s >= tubes.length - 2; s--) {
+				while (tubes[s].length) {
+					const open = [];
+					for (let d = 0; d < mainCount; d++) {
+						if (tubes[d].length < SET_SIZE) open.push(d);
+					}
+					if (!open.length) break;
+					tubes[open[Math.floor(Math.random() * open.length)]].unshift(tubes[s].shift());
+				}
+			}
+
+			for (let i = mainCount - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				const swap = tubes[i];
+				tubes[i] = tubes[j];
+				tubes[j] = swap;
+			}
+
+			return tubes;
 		}
 
 		function renderTube(tube, colors) {
