@@ -2465,23 +2465,27 @@ body.is-preload #banner p {
 	z-index: 1;
 }
 
-#wrapper>header {
+#wrapper>header,
+#wrapper .page-modal-panel>header {
 	padding: 11em 0 2.25em 0;
 }
 
-#wrapper>header .inner {
+#wrapper>header .inner,
+#wrapper .page-modal-panel>header .inner {
 	margin: 0 auto;
 	width: 55em;
 }
 
-#wrapper>header h2 {
+#wrapper>header h2,
+#wrapper .page-modal-panel>header h2 {
 	border-bottom: solid 2px rgba(255, 255, 255, 0.125);
 	font-size: 2em;
 	margin-bottom: 0.8em;
 	padding-bottom: 0.4em;
 }
 
-#wrapper>header p {
+#wrapper>header p,
+#wrapper .page-modal-panel>header p {
 	font-family: Raleway, Helvetica, sans-serif;
 	font-size: 1em;
 	font-weight: 200;
@@ -2491,7 +2495,8 @@ body.is-preload #banner p {
 
 @media screen and (max-width: 980px) {
 
-	#wrapper>header {
+	#wrapper>header,
+	#wrapper .page-modal-panel>header {
 		padding: 11em 3em 7.375em 3em;
 		background-size: auto,
 			cover;
@@ -2500,7 +2505,8 @@ body.is-preload #banner p {
 		margin-bottom: -4.75em;
 	}
 
-	#wrapper>header .inner {
+	#wrapper>header .inner,
+	#wrapper .page-modal-panel>header .inner {
 		width: 100%;
 	}
 
@@ -2508,18 +2514,21 @@ body.is-preload #banner p {
 
 @media screen and (max-width: 736px) {
 
-	#wrapper>header {
+	#wrapper>header,
+	#wrapper .page-modal-panel>header {
 		padding: 6.5em 2em 3em 2em;
 		background-size: auto,
 			125%;
 		margin-bottom: -2.5em;
 	}
 
-	#wrapper>header h2 {
+	#wrapper>header h2,
+	#wrapper .page-modal-panel>header h2 {
 		font-size: 1.25em;
 	}
 
-	#wrapper>header p {
+	#wrapper>header p,
+	#wrapper .page-modal-panel>header p {
 		font-size: 0.8em;
 	}
 
@@ -3097,7 +3106,7 @@ body.is-preload #banner p {
 
 /*
 	Stacking (low → high): 1 page wrapper · 2 hero popup · 10 header · 15 menu ·
-	20 puzzle invite · 30 puzzle backdrop · 40 puzzle modal
+	20 puzzle invite · 30 puzzle backdrop · 40 puzzle modal · 45 page content modal
 */
 #popup-banner-backdrop {
 	position: fixed;
@@ -3162,7 +3171,7 @@ body.is-preload #banner p {
 	text-align: left;
 	padding: 0.35em;
 	border: 0;
-	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.125);
+	box-shadow: inset 0 0 0 2.5px rgba(255, 255, 255, 0.22);
 	position: fixed;
 	top: auto;
 	right: 1.25rem;
@@ -3241,6 +3250,112 @@ body.is-preload #banner p {
 		width: min(360px, calc(100vw - 2rem), calc((100vh - 6rem) * 390 / 450));
 		aspect-ratio: 390 / 450;
 		height: auto;
+	}
+}
+
+#page-popup {
+	background: #353849;
+	color: #ffffff;
+	text-align: left;
+	padding: 0.35em;
+	border: 0;
+	box-shadow: inset 0 0 0 2.5px rgba(255, 255, 255, 0.22);
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	z-index: 45;
+	border-radius: 10px;
+	width: min(52em, calc(100vw - 2.5rem));
+	max-height: min(88vh, calc(100dvh - 2.5rem));
+	margin: 0;
+	overflow: hidden;
+	font: inherit;
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transform: translate(-50%, calc(-50% + 0.75rem));
+	transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
+}
+
+#page-popup.is-visible {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+	transform: translate(-50%, -50%);
+}
+
+#page-popup .page-popup__scroll {
+	max-height: min(85vh, calc(100dvh - 3.5rem));
+	overflow-x: hidden;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+	border-radius: 6px;
+	background-color: #2e3141;
+}
+
+#page-popup #page-popup-close {
+	z-index: 3;
+}
+
+#page-popup .page-modal-panel {
+	background-color: #2e3141;
+}
+
+#page-popup .page-modal-panel[hidden] {
+	display: none !important;
+}
+
+#page-popup .page-modal-panel>header {
+	padding: 2.25em 0 1.25em 0;
+	margin-bottom: 0;
+	background-color: #2e3141;
+}
+
+#page-popup .page-modal-panel>header .inner {
+	width: 100%;
+	max-width: none;
+	padding: 0 1.25em;
+}
+
+#page-popup .page-modal-panel .wrapper {
+	margin: 0;
+	background-color: #2e3141;
+}
+
+#page-popup .page-modal-panel .wrapper:before,
+#page-popup .page-modal-panel .wrapper:after {
+	display: none;
+}
+
+#page-popup .page-modal-panel .wrapper .inner {
+	padding: 2em 1.25em 2.5em 1.25em;
+}
+
+@media screen and (max-width: 736px) {
+	#page-popup {
+		width: calc(100vw - 1.25rem);
+		max-height: calc(100dvh - 1.25rem);
+	}
+
+	#page-popup .page-popup__scroll {
+		max-height: calc(100dvh - 2.25rem);
+	}
+
+	#page-popup .page-modal-panel>header {
+		padding: 1.75em 0 1em 0;
+	}
+
+	#page-popup .page-modal-panel>header .inner,
+	#page-popup .page-modal-panel .wrapper .inner {
+		padding-left: 0.85em;
+		padding-right: 0.85em;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#page-popup {
+		transition: none;
+		transform: translate(-50%, -50%);
 	}
 }
 
@@ -3341,7 +3456,7 @@ body.is-preload #banner p {
 
 .faq details p {
 	margin: 0;
-	padding: 0 3.5em 1.25em 1.35em;
+	padding: 0.65em 3.5em 1.25em 1.35em;
 }
 
 .puzzle-invite {
