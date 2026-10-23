@@ -43,7 +43,7 @@
 				<ol>
 					<li>Sort all cubes by color to win!</li>
 					<li>Move same-colored cubes together.</li>
-					<li>Cubes may only go in an empty tube, or on cube(s) of the same color.</li>
+					<li>Cubes may only go in an empty tube, or on a cube of the same color.</li>
 				</ol>
 			</section>
 			<section class="info-section">
@@ -87,6 +87,7 @@
 		};
 		const MIN_DIFFICULTY = 1;
 		const MAX_DIFFICULTY = 8;
+
 		const OUT_OF_MOVES_QUIPS = [
 			"What a statistically insignificant performance.",
 			"Observed unfavorable development on all fronts.",
@@ -96,13 +97,13 @@
 			"Actual result emerged as expected.",
 		];
 		const WIN_QUIPS = [
-			"Great job",
-			"Lucky I guess",
-			"Not bad for a human.",
-			"Acceptable outcome.",
-			"Color coordination: adequate.",
-			"That was almost impressive."
+			"Outperformed the industry benchmark.",
+			"Great job, book closed!",
+			"Still a bit slower than AI...",
+			"Now try an actuarial exam?",
+			"Another round?",
 		];
+
 		const boxesContainer = document.getElementById("boxes");
 		let difficulty = 1;
 		let settingsDifficulty = 1;
