@@ -24,41 +24,42 @@
 		</div>
 		<div class="game-actions">
 			<button class="new-game" type="button">New Game</button>
-			<button class="how-to-play-button" type="button" aria-label="How to Play"><i class="fas fa-question"></i></button>
-			<button class="settings-button" type="button" aria-label="Settings"><i class="fas fa-cog" aria-hidden="true"></i></button>
+			<button class="info-button" type="button" aria-label="Info"><i class="fas fa-info-circle"></i></button>
 		</div>
 	</main>
-	<div id="how-to-play-backdrop" class="how-to-play-backdrop" aria-hidden="true"></div>
-	<div id="how-to-play-popup" class="how-to-play-popup" role="dialog" aria-label="How to Play" aria-hidden="true">
-		<button class="how-to-play-close" type="button" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
-		<div class="how-to-play-content">
-			<ol>
-				<li>Sort all cubes by color.</li>
-				<li>Move same-colored cubes together.</li>
-				<li>Cubes may only go in an empty tube, or on cube(s) of the same color.</li>
-			</ol>
+	<div id="info-backdrop" class="info-backdrop" aria-hidden="true"></div>
+	<div id="info-popup" class="info-popup" role="dialog" aria-label="Info" aria-hidden="true">
+		<button class="info-close" type="button" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+		<div class="info-content">
+			<section class="info-section">
+				<h2 class="info-section-title">How to play</h2>
+				<ol>
+					<li>Sort all cubes by color.</li>
+					<li>Move same-colored cubes together.</li>
+					<li>Cubes may only go in an empty tube, or on cube(s) of the same color.</li>
+				</ol>
+			</section>
+			<section class="info-section">
+				<h2 class="info-section-title">Settings</h2>
+				<div class="info-settings" id="info-settings"></div>
+			</section>
 		</div>
-	</div>
-	<div id="settings-backdrop" class="settings-backdrop" aria-hidden="true"></div>
-	<div id="settings-popup" class="settings-popup" role="dialog" aria-label="Settings" aria-hidden="true">
-		<button class="settings-close" type="button" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
-		<div class="settings-content"></div>
 	</div>
 	<script>
 		const PALETTE = [
-			"#E6194B", // Crimson
-			"#3CB44B", // Green
-			"#FFE119", // Yellow
-			"#4363D8", // Blue
-			"#F58231", // Orange
-			"#911EB4", // Purple
-			"#42D4F4", // Cyan
-			"#000000", // Black
-			"#F032E6", // Magenta
-			"#469990", // Teal
-			"#9A6324", // Brown
-			"#FABEBE", // Pink
-			"#A9A9A9"  // Gray
+			"#000000", // black
+			"#8b4513", // saddlebrown
+			"#006400", // darkgreen
+			"#4b0082", // indigo
+			"#ff0000", // red
+			"#ffd700", // gold
+			"#7cfc00", // lawngreen
+			"#00ffff", // aqua
+			"#0000ff", // blue
+			"#ff00ff", // fuchsia
+			"#6495ed", // cornflower
+			"#f5deb3", // wheat
+			"#ff69b4"  // hotpink
 		];
 		const SET_SIZE = 4;
 		const LEVELS = {
@@ -303,41 +304,39 @@
 		}
 
 		document.querySelector(".new-game").addEventListener("click", newGame);
-		const howToPlayPopup = document.getElementById("how-to-play-popup");
-		const howToPlayBackdrop = document.getElementById("how-to-play-backdrop");
-		const settingsPopup = document.getElementById("settings-popup");
-		const settingsBackdrop = document.getElementById("settings-backdrop");
+		const infoPopup = document.getElementById("info-popup");
+		const infoBackdrop = document.getElementById("info-backdrop");
 		const outOfMovesPopup = document.getElementById("out-of-moves-popup");
 		const outOfMovesBackdrop = document.getElementById("out-of-moves-backdrop");
 		const outOfMovesQuip = document.getElementById("out-of-moves-quip");
 
-		function notifyParentHowToPlayOpen(isOpen) {
+		function notifyParentInfoOpen(isOpen) {
 			try {
 				if (window.parent && window.parent !== window) {
 					window.parent.postMessage(
-						{ source: "kennethhsu-game", type: "how-to-play", open: isOpen },
+						{ source: "kennethhsu-game", type: "info", open: isOpen },
 						window.location.origin
 					);
 				}
 			} catch (err) { /* ignore */ }
 		}
 
-		function openHowToPlay() {
+		function openInfo() {
 			if (outOfMovesPopup.classList.contains("is-visible")) return;
-			howToPlayBackdrop.classList.add("is-visible");
-			howToPlayBackdrop.setAttribute("aria-hidden", "false");
-			howToPlayPopup.classList.add("is-visible");
-			howToPlayPopup.setAttribute("aria-hidden", "false");
-			notifyParentHowToPlayOpen(true);
+			infoBackdrop.classList.add("is-visible");
+			infoBackdrop.setAttribute("aria-hidden", "false");
+			infoPopup.classList.add("is-visible");
+			infoPopup.setAttribute("aria-hidden", "false");
+			notifyParentInfoOpen(true);
 		}
 
-		function closeHowToPlay() {
-			if (!howToPlayPopup.classList.contains("is-visible"))
+		function closeInfo() {
+			if (!infoPopup.classList.contains("is-visible"))
 				return;
-			howToPlayBackdrop.classList.remove("is-visible");
-			howToPlayBackdrop.setAttribute("aria-hidden", "true");
-			howToPlayPopup.classList.remove("is-visible");
-			howToPlayPopup.setAttribute("aria-hidden", "true");
+			infoBackdrop.classList.remove("is-visible");
+			infoBackdrop.setAttribute("aria-hidden", "true");
+			infoPopup.classList.remove("is-visible");
+			infoPopup.setAttribute("aria-hidden", "true");
 			syncParentOverlayState();
 		}
 
@@ -349,7 +348,7 @@
 			outOfMovesBackdrop.setAttribute("aria-hidden", "false");
 			outOfMovesPopup.classList.add("is-visible");
 			outOfMovesPopup.setAttribute("aria-hidden", "false");
-			notifyParentHowToPlayOpen(true);
+			notifyParentInfoOpen(true);
 		}
 
 		function closeOutOfMovesPopup() {
@@ -364,40 +363,17 @@
 		}
 
 		function isGameOverlayOpen() {
-			return howToPlayPopup.classList.contains("is-visible")
-				|| settingsPopup.classList.contains("is-visible")
+			return infoPopup.classList.contains("is-visible")
 				|| outOfMovesPopup.classList.contains("is-visible");
 		}
 
 		function syncParentOverlayState() {
-			notifyParentHowToPlayOpen(isGameOverlayOpen());
+			notifyParentInfoOpen(isGameOverlayOpen());
 		}
 
-		function openSettings() {
-			if (outOfMovesPopup.classList.contains("is-visible")) return;
-			settingsBackdrop.classList.add("is-visible");
-			settingsBackdrop.setAttribute("aria-hidden", "false");
-			settingsPopup.classList.add("is-visible");
-			settingsPopup.setAttribute("aria-hidden", "false");
-			notifyParentHowToPlayOpen(true);
-		}
-
-		function closeSettings() {
-			if (!settingsPopup.classList.contains("is-visible"))
-				return;
-			settingsBackdrop.classList.remove("is-visible");
-			settingsBackdrop.setAttribute("aria-hidden", "true");
-			settingsPopup.classList.remove("is-visible");
-			settingsPopup.setAttribute("aria-hidden", "true");
-			syncParentOverlayState();
-		}
-
-		document.querySelector(".how-to-play-button").addEventListener("click", openHowToPlay);
-		document.querySelector(".how-to-play-close").addEventListener("click", closeHowToPlay);
-		howToPlayBackdrop.addEventListener("click", closeHowToPlay);
-		document.querySelector(".settings-button").addEventListener("click", openSettings);
-		document.querySelector(".settings-close").addEventListener("click", closeSettings);
-		settingsBackdrop.addEventListener("click", closeSettings);
+		document.querySelector(".info-button").addEventListener("click", openInfo);
+		document.querySelector(".info-close").addEventListener("click", closeInfo);
+		infoBackdrop.addEventListener("click", closeInfo);
 		boxesContainer.addEventListener("click", (event) => {
 			if (outOfMovesPopup.classList.contains("is-visible")) return;
 			const box = event.target.closest(".box");
@@ -417,26 +393,20 @@
 		document.addEventListener("keydown", (event) => {
 			if (event.key !== "Escape") return;
 			if (outOfMovesPopup.classList.contains("is-visible")) return;
-			if (settingsPopup.classList.contains("is-visible")) {
+			if (infoPopup.classList.contains("is-visible")) {
 				event.preventDefault();
-				closeSettings();
-				return;
-			}
-			if (howToPlayPopup.classList.contains("is-visible")) {
-				event.preventDefault();
-				closeHowToPlay();
+				closeInfo();
 			}
 		});
 
 		window.addEventListener("message", (event) => {
 			if (event.origin !== window.location.origin) return;
 			const data = event.data;
-			if (!data || data.source !== "kennethhsu-parent" || data.type !== "close-how-to-play") return;
-			closeHowToPlay();
-			closeSettings();
+			if (!data || data.source !== "kennethhsu-parent" || data.type !== "close-info") return;
+			closeInfo();
 		});
 
-		notifyParentHowToPlayOpen(false);
+		notifyParentInfoOpen(false);
 
 		function realisticConfetti() {
 			if (typeof confetti === "undefined") return;
