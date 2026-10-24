@@ -214,15 +214,6 @@ body.has-background-image::before {
 	background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/background/background.webp");
 }
 
-/* Font Awesome off: footer social links show text labels instead of icon fonts */
-.footer-bar .icon:before {
-	display: none;
-}
-
-.footer-bar .icon > .label {
-	display: inline;
-}
-
 body.is-preload *,
 body.is-preload *:before,
 body.is-preload *:after {
