@@ -199,19 +199,23 @@ body {
 }
 
 body::before {
-	content: "";
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100vw;
-	/* height: 100vh;
-	height: 100dvh; */
-	background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8));
-	background-position: center center;
-	background-size: cover;
-	background-repeat: no-repeat;
-	z-index: -1;
-	/* will-change: transform; */
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+
+    background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8));
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 body.has-background-image::before {
