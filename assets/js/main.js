@@ -18,6 +18,7 @@
 	$(function () {
 		window.setTimeout(function () {
 			$body.removeClass('is-preload');
+			document.dispatchEvent(new CustomEvent('pagereveal'));
 		}, 100);
 	});
 
