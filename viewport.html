@@ -27,18 +27,37 @@
 		/* Article fix: https://dev.to/petermcclung/the-ios-safari-full-height-video-fix-that-actually-works-after-4-hours-of-everything-that-doesnt-1iim */
 		.hero {
 			position: relative;
+			z-index: 1;
 			display: flex;
 			flex-direction: column;
 			justify-content: flex-start;
 			min-height: calc(100lvh + 60px);
 			padding: max(1.25rem, env(safe-area-inset-top)) max(1.25rem, env(safe-area-inset-right)) max(1.25rem, env(safe-area-inset-bottom)) max(1.25rem, env(safe-area-inset-left));
-			overflow: hidden;
+			background-color: transparent;
+		}
+
+		.hero::before {
+			content: "";
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: calc(100lvh + 60px);
+			z-index: -1;
+			pointer-events: none;
 			background-color: #2e3141;
 			background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)),
 				url("images/background/background.webp");
 			background-size: cover;
 			background-position: center;
 			background-repeat: no-repeat;
+			-webkit-transform: translateZ(0);
+			transform: translateZ(0);
+		}
+
+		.hero > * {
+			position: relative;
+			z-index: 1;
 		}
 
 		.hero__label {
@@ -95,6 +114,8 @@
 		}
 
 		.below {
+			position: relative;
+			z-index: 2;
 			padding: 2.5rem 1.25rem 4rem;
 			padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
 			background: #353849;
