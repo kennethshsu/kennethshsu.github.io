@@ -206,17 +206,12 @@ body::before {
 	width: 100vw;
 	height: 100vh;
 	height: 100dvh;
-	z-index: -1;
-	pointer-events: none;
-	will-change: transform;
-	-webkit-transform: translateZ(0);
-	transform: translateZ(0);
-	background-color: #2e3141;
 	background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8));
 	background-position: center center;
-	-webkit-background-size: auto, cover;
-	background-size: auto, cover;
+	background-size: cover;
 	background-repeat: no-repeat;
+	z-index: -1;
+	will-change: transform;
 }
 
 body.has-background-image::before {
@@ -1966,11 +1961,10 @@ button:disabled,
 	-ms-transition: background-color 0.2s ease-in-out;
 	transition: background-color 0.2s ease-in-out;
 	background-color: rgba(53, 56, 73, 0.95);
-	box-sizing: border-box;
-	height: calc(3.5em + env(safe-area-inset-top, 0px));
+	height: 3.5em;
 	left: 0;
 	line-height: 3.5em;
-	padding: env(safe-area-inset-top, 0px) max(1.25em, env(safe-area-inset-right, 0px)) 0 max(1.25em, env(safe-area-inset-left, 0px));
+	padding: 0 1.25em;
 	position: fixed;
 	top: 0;
 	width: 100%;
@@ -2001,8 +1995,8 @@ button:disabled,
 	letter-spacing: 0.1em;
 	line-height: 3em;
 	position: absolute;
-	right: max(0.7em, env(safe-area-inset-right, 0px));
-	top: calc(0.7em + env(safe-area-inset-top, 0px));
+	right: 0.7em;
+	top: 0.7em;
 }
 
 #header nav a {
@@ -2301,9 +2295,8 @@ body.is-menu-visible #menu .inner {
 	-webkit-flex-direction: column;
 	-ms-flex-direction: column;
 	flex-direction: column;
-	padding: calc(10em + env(safe-area-inset-top, 0px)) max(0px, env(safe-area-inset-right, 0px)) 0 max(0px, env(safe-area-inset-left, 0px));
+	padding: 10em 0 0 0;
 	min-height: 100vh;
-	min-height: 100svh;
 	position: relative;
 	z-index: 2;
 }
@@ -2364,7 +2357,7 @@ body.is-menu-visible #menu .inner {
 	-webkit-flex: 0 0 auto;
 	-ms-flex: 0 0 auto;
 	flex: 0 0 auto;
-	padding: 1.5em 0 calc(4em + env(safe-area-inset-bottom, 0px)) 0;
+	padding: 1.5em 0 4em 0;
 	color: rgba(255, 255, 255, 0.6);
 	font-size: 2.5em;
 	line-height: 1;
@@ -2389,7 +2382,7 @@ body.is-menu-visible #menu .inner {
 @media screen and (max-width: 980px) {
 
 	#banner {
-		padding: calc(12em + env(safe-area-inset-top, 0px)) max(3em, env(safe-area-inset-right, 0px)) 0 max(3em, env(safe-area-inset-left, 0px));
+		padding: 12em 3em 0 3em;
 		margin-bottom: 0;
 	}
 
@@ -2402,12 +2395,12 @@ body.is-menu-visible #menu .inner {
 @media screen and (max-width: 736px) {
 
 	#banner {
-		padding: calc(5em + env(safe-area-inset-top, 0px)) max(2em, env(safe-area-inset-right, 0px)) 0 max(2em, env(safe-area-inset-left, 0px));
+		padding: 5em 2em 0 2em;
 		margin-bottom: 0;
 	}
 
 	#banner .banner-scroll-hint {
-		padding-bottom: calc(3em + env(safe-area-inset-bottom, 0px));
+		padding-bottom: 3em;
 	}
 
 	#banner .logo {
@@ -2879,7 +2872,7 @@ body.is-menu-visible #menu .inner {
 /* Footer */
 
 #footer .inner {
-	padding: 5em max(0px, env(safe-area-inset-right, 0px)) calc(3em + env(safe-area-inset-bottom, 0px)) max(0px, env(safe-area-inset-left, 0px));
+	padding: 5em 0 3em 0;
 	display: -moz-flex;
 	display: -webkit-flex;
 	display: -ms-flex;
@@ -2970,7 +2963,7 @@ body.is-menu-visible #menu .inner {
 	}
 
 	#footer .inner {
-		padding: 3em max(3em, env(safe-area-inset-right, 0px)) calc(1em + env(safe-area-inset-bottom, 0px)) max(3em, env(safe-area-inset-left, 0px));
+		padding: 3em 3em 1em 3em;
 		display: block;
 		width: 100%;
 	}
@@ -2999,7 +2992,7 @@ body.is-menu-visible #menu .inner {
 	}
 
 	#footer .inner {
-		padding: 2em max(2em, env(safe-area-inset-right, 0px)) calc(0.1em + env(safe-area-inset-bottom, 0px)) max(2em, env(safe-area-inset-left, 0px));
+		padding: 2em 2em 0.1em 2em;
 	}
 
 	#footer .inner form {
