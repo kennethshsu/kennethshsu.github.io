@@ -23,11 +23,12 @@
 	});
 
 	function loadBackgroundImage() {
-		if ($body.hasClass('has-background-image'))
+		if (document.documentElement.classList.contains('has-background-image'))
 			return;
 		var img = new Image();
 		img.src = 'images/background/background.webp';
 		img.onload = function () {
+			document.documentElement.classList.add('has-background-image');
 			$body.addClass('has-background-image');
 		};
 	}
