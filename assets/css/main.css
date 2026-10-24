@@ -201,10 +201,10 @@ body {
 body::before {
     content: "";
     position: fixed;
-    top: 0;
+    top: calc(-1 * env(safe-area-inset-top, 20px));
+    bottom: calc(-1 * env(safe-area-inset-bottom, 20px));
     left: 0;
     right: 0;
-    bottom: 0;
     z-index: -1;
 
     background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8));
