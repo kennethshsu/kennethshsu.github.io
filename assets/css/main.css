@@ -204,14 +204,14 @@ body::before {
 	top: 0;
 	left: 0;
 	width: 100vw;
-	height: 100vh;
-	height: 100dvh;
+	/* height: 100vh;
+	height: 100dvh; */
 	background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8));
 	background-position: center center;
 	background-size: cover;
 	background-repeat: no-repeat;
 	z-index: -1;
-	will-change: transform;
+	/* will-change: transform; */
 }
 
 body.has-background-image::before {
