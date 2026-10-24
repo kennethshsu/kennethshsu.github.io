@@ -214,6 +214,38 @@ body.has-background-image::before {
 	background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/background/background.webp");
 }
 
+/* Touch devices: fixed full-page backgrounds parallax and leave gaps on iOS Safari. */
+@media (hover: none) and (pointer: coarse) {
+	body::before {
+		display: none;
+	}
+
+	#banner {
+		min-height: 100vh;
+		min-height: 100svh;
+		min-height: -webkit-fill-available;
+		isolation: isolate;
+	}
+
+	#banner::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		pointer-events: none;
+		background-color: #2e3141;
+		background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8));
+		-webkit-background-size: auto, cover;
+		background-size: auto, cover;
+		background-position: center, center;
+		background-repeat: no-repeat;
+	}
+
+	body.has-background-image #banner::before {
+		background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/background/background.webp");
+	}
+}
+
 /* Font Awesome off: footer social links show text labels instead of icon fonts */
 .footer-bar .icon:before {
 	display: none;
@@ -2302,6 +2334,7 @@ body.is-menu-visible #menu .inner {
 	flex-direction: column;
 	padding: 10em 0 0 0;
 	min-height: 100vh;
+	min-height: 100svh;
 	position: relative;
 	z-index: 2;
 }
