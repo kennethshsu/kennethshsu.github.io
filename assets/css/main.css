@@ -209,18 +209,19 @@ body {
 	position: relative;
 	z-index: 0;
 	min-height: 100%;
-	background-color: var(--page-bg-color);
+	background-color: transparent;
 }
 
-/* Full-viewport photo layer (100lvh + 60px addresses iOS bottom toolbar) */
+/* One fixed photo layer — bleed into top/bottom safe areas (no second strip) */
 body::before {
 	content: "";
 	position: fixed;
-	left: 0;
-	right: 0;
-	width: 100%;
 	top: calc(-1 * env(safe-area-inset-top, 0px));
-	height: calc(100lvh + 60px + env(safe-area-inset-top, 0px));
+	right: 0;
+	bottom: calc(-1 * env(safe-area-inset-bottom, 0px));
+	left: 0;
+	width: 100%;
+	min-height: calc(100lvh + 60px);
 	z-index: -1;
 	pointer-events: none;
 	background-color: var(--page-bg-color);
@@ -232,25 +233,6 @@ body::before {
 	transform: translate3d(0, 0, 0);
 	-webkit-backface-visibility: hidden;
 	backface-visibility: hidden;
-}
-
-/* Real DOM twin in index — Safari often tints the address bar from elements, not ::before */
-.safari-address-bar-fill {
-	position: fixed;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	width: 100%;
-	height: calc(60px + env(safe-area-inset-bottom, 0px));
-	z-index: 5;
-	pointer-events: none;
-	background-color: var(--page-bg-color);
-	background-image: var(--page-bg-layer);
-	background-position: center bottom;
-	background-size: cover;
-	background-repeat: no-repeat;
-	-webkit-transform: translate3d(0, 0, 0);
-	transform: translate3d(0, 0, 0);
 }
 
 body.is-preload *,
