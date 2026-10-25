@@ -29,17 +29,12 @@
 		img.src = 'images/background/background.webp';
 		img.onload = function () {
 			$body.addClass('has-background-image');
+			document.documentElement.classList.add('has-background-image');
 		};
 	}
 
 	$(function () {
-		var run = function () {
-			loadBackgroundImage();
-		};
-		if (window.requestIdleCallback)
-			window.requestIdleCallback(run, { timeout: 2500 });
-		else
-			window.setTimeout(run, 400);
+		loadBackgroundImage();
 	});
 
 	// Header.

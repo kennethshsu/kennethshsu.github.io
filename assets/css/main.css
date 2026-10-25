@@ -182,13 +182,21 @@ body {
 
 :root {
 	--wrapper-slope: 6.5em;
+	--page-bg-color: #2e3141;
+	--page-bg-layer: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8));
+}
+
+html.has-background-image,
+body.has-background-image {
+	--page-bg-layer: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)),
+		url("../../images/background/background.webp");
 }
 
 html {
 	box-sizing: border-box;
 	scroll-behavior: smooth;
 	height: 100%;
-	background-color: #2e3141;
+	background-color: var(--page-bg-color);
 }
 
 *,
@@ -201,9 +209,10 @@ body {
 	position: relative;
 	z-index: 0;
 	min-height: 100%;
-	background-color: #2e3141;
+	background-color: var(--page-bg-color);
 }
 
+/* Full-viewport photo layer (100lvh + 60px addresses iOS bottom toolbar) */
 body::before {
 	content: "";
 	position: fixed;
@@ -211,11 +220,11 @@ body::before {
 	right: 0;
 	width: 100%;
 	top: calc(-1 * env(safe-area-inset-top, 0px));
-	bottom: calc(-1 * env(safe-area-inset-bottom, 0px));
+	height: calc(100lvh + 60px + env(safe-area-inset-top, 0px));
 	z-index: -1;
 	pointer-events: none;
-	background-color: #2e3141;
-	background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8));
+	background-color: var(--page-bg-color);
+	background-image: var(--page-bg-layer);
 	background-position: center center;
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -225,8 +234,23 @@ body::before {
 	backface-visibility: hidden;
 }
 
-body.has-background-image::before {
-	background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/background/background.webp");
+/* Real DOM twin in index — Safari often tints the address bar from elements, not ::before */
+.safari-address-bar-fill {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	height: calc(60px + env(safe-area-inset-bottom, 0px));
+	z-index: 5;
+	pointer-events: none;
+	background-color: var(--page-bg-color);
+	background-image: var(--page-bg-layer);
+	background-position: center bottom;
+	background-size: cover;
+	background-repeat: no-repeat;
+	-webkit-transform: translate3d(0, 0, 0);
+	transform: translate3d(0, 0, 0);
 }
 
 body.is-preload *,
