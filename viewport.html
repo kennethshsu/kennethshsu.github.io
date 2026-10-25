@@ -4,6 +4,7 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 	<meta name="theme-color" content="#2e3141" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 	<title>Viewport test — iOS Safari full-height fix</title>
 	<style>
 		*,
@@ -14,14 +15,42 @@
 
 		html {
 			margin: 0;
+			height: 100%;
 			background-color: #2e3141;
 		}
 
 		body {
 			margin: 0;
+			position: relative;
+			z-index: 0;
+			min-height: 100%;
 			font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 			color: #f0f0f5;
 			line-height: 1.5;
+			background-color: #2e3141;
+		}
+
+		/* Fixed full-bleed layer: extend into top safe area (status bar), match article height at bottom */
+		body::before {
+			content: "";
+			position: fixed;
+			left: 0;
+			right: 0;
+			width: 100%;
+			top: calc(-1 * env(safe-area-inset-top, 0px));
+			height: calc(100lvh + 60px + env(safe-area-inset-top, 0px));
+			z-index: -1;
+			pointer-events: none;
+			background-color: #2e3141;
+			background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)),
+				url("images/background/background.webp");
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+			-webkit-transform: translate3d(0, 0, 0);
+			transform: translate3d(0, 0, 0);
+			-webkit-backface-visibility: hidden;
+			backface-visibility: hidden;
 		}
 
 		/* Article fix: https://dev.to/petermcclung/the-ios-safari-full-height-video-fix-that-actually-works-after-4-hours-of-everything-that-doesnt-1iim */
@@ -34,25 +63,6 @@
 			min-height: calc(100lvh + 60px);
 			padding: max(1.25rem, env(safe-area-inset-top)) max(1.25rem, env(safe-area-inset-right)) max(1.25rem, env(safe-area-inset-bottom)) max(1.25rem, env(safe-area-inset-left));
 			background-color: transparent;
-		}
-
-		.hero::before {
-			content: "";
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: calc(100lvh + 60px);
-			z-index: -1;
-			pointer-events: none;
-			background-color: #2e3141;
-			background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)),
-				url("images/background/background.webp");
-			background-size: cover;
-			background-position: center;
-			background-repeat: no-repeat;
-			-webkit-transform: translateZ(0);
-			transform: translateZ(0);
 		}
 
 		.hero > * {
