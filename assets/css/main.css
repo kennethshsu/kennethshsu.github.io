@@ -2304,6 +2304,7 @@ body.is-menu-visible #menu .inner {
 /* Banner */
 
 #banner {
+	--banner-scroll-gap: 1.125em;
 	display: -moz-flex;
 	display: -webkit-flex;
 	display: -ms-flex;
@@ -2315,18 +2316,18 @@ body.is-menu-visible #menu .inner {
 	padding: 10em 0 0 0;
 	min-height: calc(100lvh + 60px);
 	/* Bleed photo under the first section’s margin + diagonal slope (fixed bg stays put while scrolling) */
-	padding-bottom: calc(var(--wrapper-slope) * 2 + 2em + env(safe-area-inset-bottom, 0px));
+	padding-bottom: calc(var(--wrapper-slope) * 2 + var(--banner-scroll-gap) + env(safe-area-inset-bottom, 0px));
 	margin-bottom: calc(-2 * var(--wrapper-slope));
 	position: relative;
 	z-index: 2;
 }
 
 #banner .inner {
-	-moz-flex: 1 1 auto;
-	-webkit-flex: 1 1 auto;
-	-ms-flex: 1 1 auto;
-	flex: 1 1 auto;
-	margin: 0 auto;
+	-moz-flex: 0 1 auto;
+	-webkit-flex: 0 1 auto;
+	-ms-flex: 0 1 auto;
+	flex: 0 1 auto;
+	margin: auto auto 0 auto;
 	width: 55em;
 }
 
@@ -2377,7 +2378,8 @@ body.is-menu-visible #menu .inner {
 	-webkit-flex: 0 0 auto;
 	-ms-flex: 0 0 auto;
 	flex: 0 0 auto;
-	padding: 1.5em 0 calc(4em + env(safe-area-inset-bottom, 0px)) 0;
+	margin-top: var(--banner-scroll-gap);
+	padding: 0 0 calc(var(--banner-scroll-gap) + env(safe-area-inset-bottom, 0px)) 0;
 	color: rgba(255, 255, 255, 0.6);
 	font-size: 2.5em;
 	line-height: 1;
@@ -2419,8 +2421,12 @@ body.is-menu-visible #menu .inner {
 		margin-bottom: 0;
 	}
 
+	#banner {
+		--banner-scroll-gap: 0.875em;
+	}
+
 	#banner .banner-scroll-hint {
-		padding-bottom: calc(3em + env(safe-area-inset-bottom, 0px));
+		padding-bottom: calc(var(--banner-scroll-gap) + env(safe-area-inset-bottom, 0px));
 	}
 
 	#banner .logo {
