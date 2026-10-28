@@ -222,14 +222,20 @@
 		});
 	});
 
-	var PUZZLE_URL = 'game.html';
+	var EMBED_URLS = {
+		game: 'game.html'
+	};
+
+	var embedKind = null;
+	var puzzleInfoOpen = false;
 
 	var PAGE_MODAL_PAGES = {
 		technical_projects: 'technical_projects.html',
 		keynote: 'keynote.html',
 		publications: 'publications.html',
 		volunteerism: 'volunteerism.html',
-		backpacking: 'backpacking.html'
+		backpacking: 'backpacking.html',
+		wedding: 'wedding.html'
 	};
 
 	var pageModalCache = {};
@@ -237,7 +243,7 @@
 
 	function overlayIsVisible() {
 		return pageModalLoading
-			|| $('#puzzle-popup').hasClass('is-visible')
+			|| $('#embed-popup').hasClass('is-visible')
 			|| $('#page-popup').hasClass('is-visible');
 	}
 
@@ -336,8 +342,8 @@
 		if (opts.onlyIfRequested && parsePageModalHash(window.location.hash) !== id)
 			return;
 
-		if ($('#puzzle-popup').hasClass('is-visible'))
-			hidePuzzle();
+		if ($('#embed-popup').hasClass('is-visible'))
+			hideEmbedPopup();
 
 		pageModalLoading = true;
 		syncOverlayBackdrop();
@@ -393,24 +399,71 @@
 			hidePageModal();
 	}
 
-	function puzzleFrameLoaded(frame) {
+	function getEmbedFrame() {
+		return document.getElementById('embed-popup-frame');
+	}
+
+	function embedFrameMatches(url) {
+		var frame = getEmbedFrame();
 		if (!frame || !frame.src || frame.src === 'about:blank')
 			return false;
 		try {
-			return new URL(frame.src, window.location.href).pathname.endsWith('game.html');
+			return new URL(frame.src, window.location.href).href === new URL(url, window.location.href).href;
 		} catch (e) {
-			return frame.src.indexOf('game.html') !== -1;
+			return frame.src.indexOf(url) !== -1;
 		}
 	}
 
-	function preloadPuzzleFrame() {
-		var frame = document.getElementById('puzzle-frame');
-		if (!frame || puzzleFrameLoaded(frame))
+	function preloadEmbedFrame(kind) {
+		var url = EMBED_URLS[kind];
+		if (!url)
 			return;
-		frame.src = PUZZLE_URL;
+		var frame = getEmbedFrame();
+		if (!frame || embedFrameMatches(url))
+			return;
+		frame.src = url;
+		embedKind = kind;
 	}
 
-	var puzzleInfoOpen = false;
+	function openEmbedPopup(kind, opts) {
+		opts = opts || {};
+		var url = EMBED_URLS[kind];
+		if (!url)
+			return;
+
+		if ($('#page-popup').hasClass('is-visible'))
+			hidePageModal();
+
+		var frame = getEmbedFrame();
+		if (!frame)
+			return;
+
+		if (embedKind !== kind || !embedFrameMatches(url))
+			frame.src = url;
+
+		embedKind = kind;
+		puzzleInfoOpen = false;
+
+		$('#embed-popup').removeClass('game-help-open');
+
+		frame.title = 'Puzzle';
+		$('#embed-popup').attr('aria-label', 'Puzzle').addClass('is-visible').attr('aria-hidden', 'false');
+		syncOverlayBackdrop();
+
+		if (kind === 'game' && opts.openPuzzleInfo)
+			requestOpenPuzzleInfo();
+	}
+
+	function hideEmbedPopup() {
+		if (embedKind === 'game' && puzzleInfoOpen)
+			return;
+		var wasOpen = $('#embed-popup').hasClass('is-visible');
+		$('#embed-popup').removeClass('is-visible').attr('aria-hidden', 'true');
+		puzzleInfoOpen = false;
+		$('#embed-popup').removeClass('game-help-open');
+		if (wasOpen)
+			syncOverlayBackdrop();
+	}
 
 	window.addEventListener('message', function (event) {
 		if (event.origin !== window.location.origin)
@@ -418,23 +471,14 @@
 		var data = event.data;
 		if (!data || data.source !== 'kennethhsu-game' || data.type !== 'info')
 			return;
+		if (embedKind !== 'game')
+			return;
 		puzzleInfoOpen = !!data.open;
-		$('#puzzle-popup').toggleClass('game-help-open', puzzleInfoOpen);
+		$('#embed-popup').toggleClass('game-help-open', puzzleInfoOpen);
 	});
 
-	function hidePuzzle() {
-		if (puzzleInfoOpen)
-			return;
-		var wasOpen = $('#puzzle-popup').hasClass('is-visible');
-		$('#puzzle-popup').removeClass('is-visible');
-		puzzleInfoOpen = false;
-		$('#puzzle-popup').removeClass('game-help-open');
-		if (wasOpen)
-			syncOverlayBackdrop();
-	}
-
-	function postMessageToPuzzleFrame(message) {
-		var frame = document.getElementById('puzzle-frame');
+	function postMessageToEmbedFrame(message) {
+		var frame = getEmbedFrame();
 		if (!frame || !frame.contentWindow)
 			return;
 		try {
@@ -443,19 +487,19 @@
 	}
 
 	function requestClosePuzzleInfo() {
-		postMessageToPuzzleFrame({ source: 'kennethhsu-parent', type: 'close-info' });
+		postMessageToEmbedFrame({ source: 'kennethhsu-parent', type: 'close-info' });
 	}
 
 	function requestOpenPuzzleInfo() {
-		var frame = document.getElementById('puzzle-frame');
+		var frame = getEmbedFrame();
 		if (!frame)
 			return;
 
 		function send() {
-			postMessageToPuzzleFrame({ source: 'kennethhsu-parent', type: 'open-info' });
+			postMessageToEmbedFrame({ source: 'kennethhsu-parent', type: 'open-info' });
 		}
 
-		if (puzzleFrameLoaded(frame))
+		if (embedFrameMatches(EMBED_URLS.game))
 			send();
 		else
 			frame.addEventListener('load', send, { once: true });
@@ -464,13 +508,13 @@
 	$(document).on('click', '.popup-banner-close', function () {
 		hidePopupBanners($(this).closest('.popup-banner'));
 	});
-	$('#puzzle-popup-close').on('click', hidePuzzle);
+	$('#embed-popup-close').on('click', hideEmbedPopup);
 	$('#page-popup-close').on('click', function () {
 		hidePageModal();
 	});
 	$('#popup-banner-backdrop').on('click', function () {
 		hidePageModal();
-		hidePuzzle();
+		hideEmbedPopup();
 	});
 
 	$(document).on('click', 'a[data-page-modal]', function (event) {
@@ -491,7 +535,7 @@
 
 	$window.on('load', function () {
 		var runPreload = function () {
-			preloadPuzzleFrame();
+			preloadEmbedFrame('game');
 		};
 		if (window.requestIdleCallback)
 			window.requestIdleCallback(runPreload, { timeout: 3000 });
@@ -504,15 +548,12 @@
 	});
 
 	$('.puzzle-invite').on('click', function () {
-		preloadPuzzleFrame();
-		$('#puzzle-popup').addClass('is-visible');
-		syncOverlayBackdrop();
-		requestOpenPuzzleInfo();
+		openEmbedPopup('game', { openPuzzleInfo: true });
 	});
 
 	$(document).on('keydown', function (event) {
 		if (event.keyCode == 27) {
-			if ($('#puzzle-popup').hasClass('is-visible') && puzzleInfoOpen) {
+			if ($('#embed-popup').hasClass('is-visible') && embedKind === 'game' && puzzleInfoOpen) {
 				event.preventDefault();
 				requestClosePuzzleInfo();
 				return;
@@ -526,7 +567,10 @@
 				hidePageModal();
 				return;
 			}
-			hidePuzzle();
+			if ($('#embed-popup').hasClass('is-visible')) {
+				hideEmbedPopup();
+				return;
+			}
 		}
 	});
 

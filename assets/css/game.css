@@ -290,7 +290,7 @@ main.game-ended .box {
 	transition: opacity 0.4s ease, visibility 0s;
 }
 
-/* Open/close motion aligned with #puzzle-popup in main.css */
+/* Open/close motion aligned with #embed-popup in main.css */
 .info-popup {
 	width: min(22rem, calc(100% - 2rem));
 	padding: 2.5rem 1.5rem 1.5rem;
